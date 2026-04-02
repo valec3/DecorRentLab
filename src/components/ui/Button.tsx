@@ -12,6 +12,7 @@ interface ButtonProps extends Omit<BaseButtonProps, keyof HTMLMotionProps<'butto
   children: ReactNode;
   loading?: boolean;
   magnetic?: boolean;
+  disabled?: boolean;
   className?: string;
 }
 
@@ -34,11 +35,11 @@ export function Button({
   const baseStyles = 'inline-flex items-center justify-center font-medium transition-all duration-200 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
   
   const variants = {
-    primary: 'bg-dorado text-white hover:bg-dorado-oscuro focus:ring-dorado shadow-soft hover:shadow-medium',
-    secondary: 'bg-white text-dorado border-2 border-dorado hover:bg-dorado hover:text-white focus:ring-dorado',
-    whatsapp: 'bg-whatsapp text-white hover:bg-green-600 focus:ring-whatsapp shadow-soft hover:shadow-medium',
+    primary: 'bg-dorado-metal text-white inner-glow focus:ring-dorado shadow-soft hover:shadow-glow',
+    secondary: 'bg-white text-dorado border border-dorado/30 hover:border-dorado focus:ring-dorado shadow-soft',
+    whatsapp: 'bg-whatsapp text-white hover:bg-green-600 focus:ring-whatsapp shadow-soft hover:shadow-glow',
     outline: 'bg-transparent text-carbon border border-borde hover:bg-crema-oscuro focus:ring-borde',
-    ghost: 'bg-transparent text-gris-calido hover:text-carbon hover:bg-crema-oscuro'
+    ghost: 'bg-transparent text-gris-calido hover:text-carbon hover:bg-crema-oscuro font-light tracking-wide'
   };
 
   const sizes = {
@@ -51,7 +52,7 @@ export function Button({
     <motion.button
       className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`}
       disabled={disabled || loading}
-      {...(motionProps as any)}
+      {...motionProps}
       {...(props as any)}
     >
       {loading && (

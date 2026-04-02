@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Menu, X } from 'lucide-react';
+import Image from 'next/image';
 
 const navLinks = [
   { href: '/', label: 'Home' },
@@ -27,29 +28,39 @@ export function Header() {
     <header 
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         isScrolled 
-          ? 'bg-white/95 backdrop-blur-xl shadow-soft py-3' 
-          : 'bg-crema/80 backdrop-blur-md py-4 md:py-5'
-      }`}
+          ? 'bg-white/95 backdrop-blur-xl shadow-premium-sm' 
+          : 'bg-crema/95 backdrop-blur-md border-b border-black/5'
+      } ${isMenuOpen ? 'h-auto bg-white' : ''}`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between">
+      <div className="w-full max-w-[1600px] mx-auto px-6 md:px-10 lg:px-16">
+        <div className="flex items-center justify-between h-20 md:h-24">
           {/* Logo */}
-          <Link href="/" className="flex-shrink-0 group">
-            <h1 className="font-serif text-2xl md:text-3xl text-carbon tracking-wide group-hover:text-dorado transition-colors duration-300">
-              Decor<span className="text-dorado transition-colors duration-300">Rent</span>Lab
+          <Link href="/" className="shrink-0 group flex items-center gap-2">
+            <Image
+              src="/logo-main.png"
+              alt="Decor Rent Lab"
+              width={160} // Dimensión base recomendada
+              height={60}
+              priority // Asegura que el logo cargue de primero
+              className="h-10 lg:h-12 w-auto object-contain" // "h-14" lo hace encajar perfecto en el header de "h-20"
+            />
+            <h1 className='text-[25px]! lg:text-[35px]! font-serif font-bold text-carbon tracking-tight'>
+              Decor<span className="text-dorado">Rent</span>Lab
             </h1>
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-10">
+          <nav className="hidden xl:flex items-center gap-12">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="relative text-sm uppercase tracking-[0.15em] text-gris-calido hover:text-carbon transition-colors duration-300 group"
+                className={`relative text-[10px] uppercase tracking-[0.25em] font-bold transition-all duration-300 group ${
+                  isScrolled ? 'text-gris-calido hover:text-carbon' : 'text-carbon/70 hover:text-carbon'
+                }`}
               >
                 {link.label}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-dorado transition-all duration-300 group-hover:w-full" />
+                <span className="absolute -bottom-1.5 left-0 w-0 h-0.5 bg-dorado transition-all duration-300 group-hover:w-full" />
               </Link>
             ))}
           </nav>
@@ -81,11 +92,11 @@ export function Header() {
 
         {/* Mobile Menu */}
         <div 
-          className={`md:hidden overflow-hidden transition-all duration-500 ${
-            isMenuOpen ? 'max-h-96 opacity-100 mt-4' : 'max-h-0 opacity-0'
+          className={`md:hidden overflow-hidden transition-all duration-500 ease-in-out ${
+            isMenuOpen ? 'max-h-[500px] opacity-100 mb-6' : 'max-h-0 opacity-0'
           }`}
         >
-          <nav className="flex flex-col gap-2 pb-4">
+          <nav className="flex flex-col gap-1 border-t border-borde pt-4">
             {navLinks.map((link, index) => (
               <Link
                 key={link.href}

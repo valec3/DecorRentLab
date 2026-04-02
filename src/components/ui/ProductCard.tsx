@@ -3,7 +3,6 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight } from "lucide-react";
 import { Producto } from "@/types";
 import { Badge } from "./Badge";
 import { motion } from "framer-motion";
@@ -27,17 +26,19 @@ export function ProductCard({ producto }: ProductCardProps) {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.9 }}
       whileHover={{ y: -8 }}
-      className="group bg-white rounded-4xl overflow-hidden border border-borde shadow-soft hover:shadow-strong transition-all duration-500"
+      className="group bg-white rounded-4xl overflow-hidden border border-borde/60 shadow-soft hover:shadow-strong transition-all duration-700 relative"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
+      <div className="absolute inset-x-0 bottom-0 h-1/2 bg-linear-to-t from-dorado/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+      
       <Link href={`/producto/${producto.slug}`}>
-        <div className="relative aspect-4/5 overflow-hidden bg-crema-oscuro">
+        <div className="relative aspect-4/3 overflow-hidden bg-crema-oscuro/50">
           <Image
             src={producto.imagenes[0]}
             alt={producto.nombre}
             fill
-            className={`object-cover transition-all duration-1000 ease-out ${
+            className={`object-cover border-b border-borde/20 transition-all duration-1000 ease-out ${
               isHovered && hasSecondImage
                 ? "opacity-0 scale-110 blur-sm"
                 : "opacity-100 scale-100 blur-0"
@@ -49,50 +50,34 @@ export function ProductCard({ producto }: ProductCardProps) {
               src={producto.imagenes[1]}
               alt={`${producto.nombre} - segunda imagen`}
               fill
-              className={`object-cover transition-all duration-1000 ease-out ${
+              className={`object-cover border-b border-borde/20 transition-all duration-1000 ease-out ${
                 isHovered ? "opacity-100 scale-105 blur-0" : "opacity-0 scale-100 blur-sm"
               }`}
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             />
           )}
 
-          {/* Overlay Gradient */}
-          <div className="absolute inset-0 bg-linear-to-t from-carbon/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-
-          {/* Badges */}
-          <div className="absolute top-4 left-4 flex flex-col gap-2 z-10">
+          <div className="absolute top-3 left-3 flex flex-col gap-1.5 z-10">
             {producto.destacado && (
-              <motion.div initial={{ x: -20, opacity: 0 }} animate={{ x: 0, opacity: 1 }}>
-                 <Badge variant="featured">Destacado</Badge>
+              <motion.div initial={{ x: -10, opacity: 0 }} animate={{ x: 0, opacity: 1 }}>
+                 <Badge variant="featured" className="px-2 py-0.5 text-[7px]">Destacado</Badge>
               </motion.div>
             )}
             {!producto.disponible && (
-               <motion.div initial={{ x: -20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: 0.1 }}>
-                <Badge variant="unavailable">No disponible</Badge>
+               <motion.div initial={{ x: -10, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: 0.1 }}>
+                <Badge variant="unavailable" className="px-2 py-0.5 text-[7px]">No disponible</Badge>
               </motion.div>
             )}
           </div>
 
-          {/* Action Button Reveal */}
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <motion.div 
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={isHovered ? { scale: 1, opacity: 1 } : { scale: 0.8, opacity: 0 }}
-              transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-              className="w-16 h-16 glass-light rounded-full flex items-center justify-center shadow-glow border border-white/40"
-            >
-              <ArrowRight className="w-7 h-7 text-carbon" />
-            </motion.div>
-          </div>
-
           {/* Price Tag (Floating) */}
-          <div className="absolute bottom-4 right-4 z-10">
+          <div className="absolute top-3 right-3 z-10">
             <motion.div 
-              initial={{ y: 10, opacity: 0 }}
+              initial={{ y: 5, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
-              className="glass px-4 py-2 rounded-2xl border border-white/20 shadow-medium"
+              className="glass px-3 py-1.5 rounded-lg border border-white/20 shadow-premium-sm"
             >
-              <span className="text-carbon font-serif font-medium">
+              <span className="text-carbon font-serif font-light text-sm">
                 ${producto.precio?.toLocaleString("es-AR") || "Consultar"}
               </span>
             </motion.div>
@@ -100,18 +85,18 @@ export function ProductCard({ producto }: ProductCardProps) {
         </div>
       </Link>
 
-      <div className="p-6">
-        <div className="mb-3">
-          <span className="text-[10px] text-dorado uppercase tracking-[0.25em] font-bold">
+      <div className="p-5 relative z-10">
+        <div className="mb-2">
+          <span className="text-dorado tracking-premium font-bold text-[8px]">
             {producto.categoriaSlug.replace(/-/g, " ")}
           </span>
         </div>
 
-        <h3 className="font-serif text-xl text-carbon mb-2 group-hover:text-dorado transition-colors duration-500 line-clamp-1">
+        <h3 className="font-serif text-xl text-carbon mb-2 group-hover:text-dorado transition-colors duration-500 line-clamp-1 leading-tight">
           {producto.nombre}
         </h3>
 
-        <p className="text-gris-calido text-sm mb-6 line-clamp-2 leading-relaxed h-10">
+        <p className="text-gris-calido text-[12px] font-light mb-6 line-clamp-1 leading-relaxed italic">
           {producto.descripcionCorta}
         </p>
 

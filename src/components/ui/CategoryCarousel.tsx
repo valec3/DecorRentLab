@@ -59,8 +59,7 @@ export function CategoryCarousel({ categorias }: CategoryCarouselProps) {
     >
       <div 
         ref={scrollRef}
-        className="flex gap-6 overflow-x-hidden pb-4 px-2 cursor-grab select-none"
-        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+        className="flex gap-6 overflow-x-auto md:overflow-x-hidden pb-4 px-2 cursor-grab select-none scrollbar-hide md:scroll-smooth"
         onMouseDown={handleMouseDown}
         onMouseUp={handleMouseUp}
         onMouseMove={handleMouseMove}
@@ -70,19 +69,21 @@ export function CategoryCarousel({ categorias }: CategoryCarouselProps) {
           <Link 
             key={categoria.id} 
             href={`/catalogo/${categoria.slug}`}
-            className="flex-shrink-0 group"
+            className="shrink-0 group"
           >
-            <div className="relative w-28 h-28 md:w-36 md:h-36 lg:w-40 lg:h-40 rounded-full overflow-hidden border-4 border-white shadow-md hover:shadow-2xl transition-all duration-500 hover:scale-110 ring-4 ring-transparent group-hover:ring-dorado/20">
-              <Image
-                src={categoria.imagenCover}
-                alt={categoria.nombre}
-                fill
-                className="object-cover"
-                draggable={false}
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            <div className="relative w-24 h-24 md:w-32 md:h-32 lg:w-36 lg:h-36 p-1 rounded-full border border-dorado/10 group-hover:border-dorado/30 transition-all duration-700">
+              <div className="relative w-full h-full rounded-full overflow-hidden border border-white shadow-premium-sm group-hover:shadow-premium-md transition-all duration-700 group-hover:scale-[1.02]">
+                <Image
+                  src={categoria.imagenCover}
+                  alt={categoria.nombre}
+                  fill
+                  className="object-cover transition-transform duration-1000 group-hover:scale-105"
+                  draggable={false}
+                />
+                <div className="absolute inset-0 bg-linear-to-t from-carbon/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              </div>
             </div>
-            <p className="text-center mt-3 text-xs md:text-sm font-medium text-carbon max-w-32 mx-auto group-hover:text-dorado transition-colors duration-300 line-clamp-2">
+            <p className="text-center mt-3 text-[9px] md:text-[11px] font-medium text-carbon tracking-premium max-w-32 mx-auto group-hover:text-dorado transition-colors duration-500 line-clamp-2">
               {categoria.nombre}
             </p>
           </Link>

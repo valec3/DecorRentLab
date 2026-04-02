@@ -27,7 +27,7 @@ export default function Home() {
 
 
   return (
-    <div className="pt-16 md:pt-20 overflow-x-hidden">
+    <div className="overflow-x-hidden">
       {/* Hero Section with Parallax */}
       <section ref={targetRef} className="relative min-h-screen flex items-center justify-center overflow-hidden">
         <motion.div 
@@ -41,35 +41,36 @@ export default function Home() {
             className="object-cover"
             priority
           />
-          <div className="absolute inset-0 bg-linear-to-b from-black/40 via-black/20 to-crema" />
+          <div className="absolute inset-0 bg-linear-to-b from-black/70 via-black/40 to-crema/20" />
+          <div className="absolute inset-0 bg-black/20" />
         </motion.div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 relative z-10 text-center">
-          <ScrollReveal delay={0.2} direction="down">
-            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-light text-dorado font-bold tracking-[0.3em] uppercase text-[10px] mb-8 border border-white/20 shadow-glow">
-              <Sparkles className="w-3 h-3" />
+          <ScrollReveal delay={0.2} direction="down" width="100%">
+            <span className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full glass-dark text-dorado font-bold tracking-premium text-[9px] mb-10 border border-white/10 shadow-glow">
+              <Sparkles className="w-3 h-3 text-dorado" />
               Alquiler de Decoración Premium
             </span>
           </ScrollReveal>
           
-          <ScrollReveal delay={0.4}>
-            <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl text-white mb-8 leading-[1.1]">
-              Eleva tu <span className="italic font-display text-white/90">evento</span> a una <br />
-              <span className="text-dorado drop-shadow-sm">obra de arte</span>
+          <ScrollReveal delay={0.4} width="100%">
+            <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl text-white mb-8 leading-[1.1] drop-shadow-2xl">
+              Alquiler de <span className="italic font-display text-white/95 text-4xl md:text-6xl lg:text-7xl block mb-2">Decoración</span>
+              <span className="text-dorado drop-shadow-glow">Premium para Eventos</span>
             </h1>
           </ScrollReveal>
 
-          <ScrollReveal delay={0.6}>
-            <p className="text-white/80 text-lg md:text-2xl mb-12 max-w-2xl mx-auto font-light tracking-wide">
-              Elegancia atemporal y diseño exclusivo para celebraciones que 
-              perduran en la memoria.
+          <ScrollReveal delay={0.6} width="100%">
+            <p className="text-white text-lg md:text-2xl mb-12 max-w-3xl mx-auto font-light tracking-wide drop-shadow-xl text-center">
+              Mobiliario exclusivo, ambientación de lujo y piezas curadas para que 
+              tu celebración sea inolvidable.
             </p>
           </ScrollReveal>
 
-          <ScrollReveal delay={0.8}>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
+          <ScrollReveal delay={0.8} width="100%">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-6 w-full max-w-lg mx-auto">
               <Link href="/catalogo">
-                <Button size="lg" className="px-10 py-5 text-lg" magnetic>
+                <Button size="lg" className="w-full sm:w-auto px-8 md:px-10 py-5 text-base md:text-lg whitespace-nowrap" magnetic>
                   Explorar Catálogo
                   <ArrowRight className="ml-2 w-5 h-5" />
                 </Button>
@@ -82,7 +83,7 @@ export default function Home() {
                 <Button
                   variant="outline"
                   size="lg"
-                  className="px-10 py-5 text-lg glass-light text-white border-white/40 hover:bg-white/10"
+                  className="w-full sm:w-auto px-8 md:px-10 py-5 text-base md:text-lg whitespace-nowrap glass-dark text-white border-white/20 hover:bg-white/10"
                 >
                   <MessageSquare className="mr-2 w-5 h-5" />
                   Hablar con un asesor
@@ -103,13 +104,13 @@ export default function Home() {
       </section>
 
       {/* Categories Carousel Section */}
-      <section className="py-24 bg-crema">
+      <section className="py-20 bg-crema">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
             <ScrollReveal direction="right" width="100%">
               <div className="text-center md:text-left">
-                <span className="text-dorado text-xs uppercase tracking-[0.3em] font-bold mb-4 block">Colecciones</span>
-                <h2 className="font-serif text-4xl md:text-5xl text-carbon">
+                <span className="text-dorado text-[10px] tracking-premium font-bold mb-5 block">Colecciones</span>
+                <h2 className="font-serif text-4xl md:text-6xl text-carbon leading-tight">
                   Explora por <span className="italic font-display text-carbon/80">Categoría</span>
                 </h2>
               </div>
@@ -131,11 +132,11 @@ export default function Home() {
       </section>
 
       {/* How it Works - Refined */}
-      <section className="py-24 bg-white relative overflow-hidden">
+      <section className="py-20 bg-white relative overflow-hidden">
         <div className="absolute top-0 right-0 w-1/3 h-full bg-crema-oscuro/30 skew-x-12 translate-x-1/2" />
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center mb-20">
+          <div className="text-center mb-12">
             <ScrollReveal direction="down" width="100%">
               <h2 className="font-serif text-4xl md:text-5xl text-carbon mb-6">
                 Tu visión, <span className="italic font-display">nuestra gestión</span>
@@ -180,13 +181,13 @@ export default function Home() {
       </section>
 
       {/* Featured Products with ScrollReveal */}
-      <section className="py-24 bg-crema-oscuro">
+      <section className="py-20 bg-crema-oscuro">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
             <ScrollReveal direction="right" width="100%">
               <div className="text-center md:text-left">
-                <span className="text-dorado text-xs uppercase tracking-[0.3em] font-bold mb-4 block">Exclusivos</span>
-                <h2 className="font-serif text-4xl md:text-5xl text-carbon">
+                <span className="text-dorado text-[10px] tracking-premium font-bold mb-5 block">Exclusivos</span>
+                <h2 className="font-serif text-4xl md:text-6xl text-carbon leading-tight">
                   Piezas <span className="italic font-display text-carbon/80">Destacadas</span>
                 </h2>
               </div>
@@ -211,9 +212,9 @@ export default function Home() {
       </section>
 
       {/* Philosophy Section */}
-      <section className="py-32 bg-white">
+      <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <ScrollReveal direction="right" distance={50} height="100%" width="100%">
               <div className="relative group h-full">
                 <div className="absolute -inset-4 bg-dorado/5 rounded-4xl blur-2xl group-hover:bg-dorado/10 transition-colors duration-700" />
@@ -238,12 +239,12 @@ export default function Home() {
               </div>
             </ScrollReveal>
 
-            <div className="space-y-10">
-              <ScrollReveal direction="left">
-                <span className="text-dorado text-xs uppercase tracking-[0.3em] font-bold">Nuestra Filosofía</span>
-                <h2 className="font-serif text-4xl md:text-6xl text-carbon leading-[1.1] mt-6">
-                  Creamos atmósferas que <span className="italic font-display">cuentan historias</span>
-                </h2>
+              <div className="space-y-8">
+                <ScrollReveal direction="left">
+                  <span className="text-dorado text-[10px] tracking-premium font-bold mb-5 block">Nuestra Filosofía</span>
+                  <h2 className="font-serif text-4xl md:text-6xl text-carbon leading-[1.1] mt-6">
+                    Creamos atmósferas que <span className="italic font-display">cuentan historias</span>
+                  </h2>
                 <p className="text-xl text-gris-calido font-light leading-relaxed mt-8">
                   En Decor Rent Lab, no solo alquilamos objetos; proporcionamos los elementos necesarios para 
                   materializar tus sueños más sofisticados.
@@ -283,9 +284,9 @@ export default function Home() {
       </section>
 
       {/* Testimonials - Refined */}
-      <section className="py-24 bg-crema relative overflow-hidden">
+      <section className="py-20 bg-crema relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <div className="text-center mb-12">
             <ScrollReveal direction="down" width="100%">
                <span className="text-dorado text-xs uppercase tracking-[0.3em] font-bold block mb-4">Experiencias</span>
                <h2 className="font-serif text-4xl md:text-5xl text-carbon mb-2">
@@ -300,10 +301,10 @@ export default function Home() {
       </section>
 
       {/* FAQ - Minimalist */}
-      <section className="py-32 bg-white">
+      <section className="py-24 bg-white">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <ScrollReveal direction="down" width="100%">
-            <div className="text-center mb-16">
+            <div className="text-center mb-12">
               <h2 className="font-serif text-4xl text-carbon mb-6">Preguntas <span className="italic font-display">Clave</span></h2>
               <p className="text-gris-calido">Todo lo que necesitás saber antes de empezar el viaje con nosotros.</p>
             </div>
