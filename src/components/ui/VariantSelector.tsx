@@ -2,7 +2,6 @@
 
 import { useState, useMemo, useEffect } from 'react';
 import { Variante } from '@/types';
-import { Check } from 'lucide-react';
 
 interface VariantSelectorProps {
   variantes: Variante[];
@@ -10,8 +9,6 @@ interface VariantSelectorProps {
 }
 
 export function VariantSelector({ variantes, onSelectionChange }: VariantSelectorProps) {
-  const [selected, setSelected] = useState<{ [key: string]: string }>({});
-
   const groupedVariantes = useMemo(() => {
     const grupos: Record<string, Variante[]> = {};
     if (variantes) {
@@ -25,16 +22,28 @@ export function VariantSelector({ variantes, onSelectionChange }: VariantSelecto
     return grupos;
   }, [variantes]);
 
-  useEffect(() => {
-    const initialSelection: { [key: string]: string } = {};
+  const initialSelection = useMemo(() => {
+    const selection: { [key: string]: string } = {};
     Object.keys(groupedVariantes).forEach((tipo) => {
       if (groupedVariantes[tipo].length > 0) {
-        initialSelection[tipo] = groupedVariantes[tipo][0].valor;
+        selection[tipo] = groupedVariantes[tipo][0].valor;
       }
     });
+    return selection;
+  }, [groupedVariantes]);
+
+  const [selected, setSelected] = useState(initialSelection);
+  const [prevVariantes, setPrevVariantes] = useState(variantes);
+
+  // Reset local state if variants prop changes
+  if (variantes !== prevVariantes) {
     setSelected(initialSelection);
-    onSelectionChange(initialSelection);
-  }, [groupedVariantes, onSelectionChange]);
+    setPrevVariantes(variantes);
+  }
+
+  useEffect(() => {
+    onSelectionChange(selected);
+  }, [selected, onSelectionChange]);
 
   const handleSelect = (tipo: string, valor: string) => {
     const newSelection = { ...selected, [tipo]: valor };

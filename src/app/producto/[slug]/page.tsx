@@ -13,7 +13,7 @@ import { VariantSelector } from '@/components/ui/VariantSelector';
 export default function ProductoPage() {
   const params = useParams();
   const slug = params.slug as string;
-  const producto = getProductoBySlug(slug);
+  const producto = useMemo(() => getProductoBySlug(slug), [slug]);
 
   if (!producto) {
     notFound();

@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { X, ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useCallback } from 'react';
 
 interface LightboxProps {
   images: string[];
@@ -30,6 +31,14 @@ export function Lightbox({ images, title, isOpen, onClose, initialIndex = 0 }: L
     };
   }, [isOpen]);
 
+  const goToPrevious = useCallback(() => {
+    setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+  }, [images.length]);
+
+  const goToNext = useCallback(() => {
+    setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+  }, [images.length]);
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!isOpen) return;
@@ -40,15 +49,7 @@ export function Lightbox({ images, title, isOpen, onClose, initialIndex = 0 }: L
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, currentIndex]);
-
-  const goToPrevious = () => {
-    setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
-  };
-
-  const goToNext = () => {
-    setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
-  };
+  }, [isOpen, goToPrevious, goToNext, onClose]);
 
   if (!isOpen) return null;
 

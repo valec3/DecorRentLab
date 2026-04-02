@@ -64,6 +64,8 @@ export default function Catalogo() {
     if (type === 'categoria') {
       setSelectedCategoria(null);
     }
+    console.log(value);
+    
   };
 
   return (

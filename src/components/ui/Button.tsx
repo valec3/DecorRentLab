@@ -1,15 +1,14 @@
 'use client';
 
-import { ButtonHTMLAttributes, ReactNode } from 'react';
 import { motion, HTMLMotionProps } from 'framer-motion';
 import { MagneticWrapper } from './MagneticWrapper';
 
-type BaseButtonProps = ButtonHTMLAttributes<HTMLButtonElement>;
+import { ReactNode } from 'react';
 
-interface ButtonProps extends Omit<BaseButtonProps, keyof HTMLMotionProps<'button'>> {
+interface ButtonProps extends HTMLMotionProps<'button'> {
   variant?: 'primary' | 'secondary' | 'whatsapp' | 'outline' | 'ghost';
   size?: 'sm' | 'md' | 'lg';
-  children: ReactNode;
+  children?: ReactNode;
   loading?: boolean;
   magnetic?: boolean;
   disabled?: boolean;
@@ -53,7 +52,7 @@ export function Button({
       className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`}
       disabled={disabled || loading}
       {...motionProps}
-      {...(props as any)}
+      {...(props as HTMLMotionProps<'button'>)}
     >
       {loading && (
         <svg className="animate-spin -ml-1 mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24">
