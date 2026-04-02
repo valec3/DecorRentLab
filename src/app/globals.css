@@ -12,9 +12,11 @@
     --verde-savia: #7d9b76;
     --borde: #e8e2d9;
     --whatsapp: #25d366;
-    --shadow-soft: 0 4px 20px rgba(45, 41, 38, 0.08);
-    --shadow-medium: 0 8px 30px rgba(45, 41, 38, 0.12);
-    --shadow-strong: 0 12px 40px rgba(45, 41, 38, 0.15);
+    --shadow-soft: 0 4px 20px rgba(45, 41, 38, 0.05);
+    --shadow-medium: 0 10px 40px rgba(45, 41, 38, 0.1);
+    --shadow-strong: 0 20px 60px rgba(45, 41, 38, 0.15);
+    --shadow-glow: 0 0 40px rgba(201, 166, 107, 0.3);
+    --shadow-inner: inset 0 2px 4px rgba(0, 0, 0, 0.05);
     --shadow-glow: 0 0 40px rgba(201, 166, 107, 0.2);
 }
 
@@ -228,15 +230,24 @@ h3 {
 
 /* Glass Effect */
 .glass {
-    background: rgba(253, 251, 247, 0.85);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background: rgba(253, 251, 247, 0.7);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.125);
+}
+
+.glass-dark {
+    background: rgba(45, 41, 38, 0.8);
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .glass-light {
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(16px) saturate(140%);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 /* Gradient Text */
@@ -372,6 +383,7 @@ h3 {
 .line-clamp-2 {
     display: -webkit-box;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
@@ -379,6 +391,7 @@ h3 {
 .line-clamp-3 {
     display: -webkit-box;
     -webkit-line-clamp: 3;
+    line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
@@ -387,4 +400,92 @@ h3 {
 .backdrop-smooth {
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
+}
+
+/* Prose Premium for HTML rendering */
+.prose-premium {
+    color: var(--carbon);
+    font-family: inherit;
+    line-height: 1.8;
+}
+
+.prose-premium h1, 
+.prose-premium h2, 
+.prose-premium h3 {
+    font-family: var(--font-serif);
+    color: var(--carbon);
+    margin: 1.5em 0 0.8em;
+    font-weight: 500;
+    line-height: 1.2;
+}
+
+.prose-premium h2 { font-size: 1.875rem; }
+.prose-premium h3 { font-size: 1.5rem; }
+
+.prose-premium p { 
+    margin-bottom: 1.25em; 
+    color: var(--gris-calido);
+}
+
+.prose-premium strong { 
+    font-weight: 700; 
+    color: var(--carbon); 
+}
+
+.prose-premium em { 
+    font-style: italic; 
+}
+
+.prose-premium ul { 
+    list-style-type: none; 
+    padding-left: 1.5rem; 
+    margin-bottom: 1.5em; 
+}
+
+.prose-premium ul li { 
+    position: relative; 
+    margin-bottom: 0.5em; 
+}
+
+.prose-premium ul li::before { 
+    content: "•"; 
+    color: var(--dorado); 
+    position: absolute; 
+    left: -1.25rem; 
+    font-weight: bold;
+}
+
+.prose-premium blockquote { 
+    border-left: 3px solid var(--dorado); 
+    padding: 0.5rem 0 0.5rem 1.5rem; 
+    font-style: italic; 
+    color: var(--gris-calido); 
+    margin: 2.5rem 0;
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+}
+
+.prose-premium pre { 
+    background: var(--crema-oscuro); 
+    padding: 1.5rem; 
+    border-radius: 8px; 
+    overflow-x: auto; 
+    margin: 2rem 0;
+    border: 1px solid var(--borde);
+}
+
+.prose-premium code { 
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 0.875em; 
+    background: rgba(201, 166, 107, 0.08); 
+    padding: 0.2em 0.4em; 
+    border-radius: 4px; 
+    color: var(--carbon);
+}
+
+.prose-premium pre code {
+    background: transparent;
+    padding: 0;
+    border-radius: 0;
+    color: inherit;
 }

@@ -66,7 +66,7 @@ export function Testimonials() {
         {testimonials.map((testimonial) => (
           <div 
             key={testimonial.id}
-            className="flex-shrink-0 w-[350px] md:w-[400px]"
+            className="shrink-0 w-[350px] md:w-[400px]"
           >
             <div className="bg-white rounded-3xl p-8 border border-borde shadow-soft hover:shadow-medium transition-all duration-500 h-full">
               <Quote className="w-10 h-10 text-dorado/30 mb-4" />
@@ -80,7 +80,7 @@ export function Testimonials() {
               </div>
 
               <p className="text-gris-calido leading-relaxed mb-6 italic">
-                "{testimonial.text}"
+                &quot;{testimonial.text}&quot;
               </p>
 
               <div className="flex items-center gap-4 pt-4 border-t border-borde">
