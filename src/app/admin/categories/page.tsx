@@ -3,6 +3,7 @@ import { CategoryTable } from "@/modules/admin/categories/components/CategoryTab
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import Link from "next/link";
+export const dynamic = "force-dynamic";
 
 export default async function AdminCategoriesPage() {
   const categories = await fetchAdminCategories();

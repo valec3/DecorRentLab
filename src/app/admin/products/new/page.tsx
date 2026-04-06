@@ -2,6 +2,7 @@ import { fetchAdminCategories } from "@/modules/admin/categories/actions";
 import { ProductForm } from "@/modules/admin/products/components/ProductForm";
 import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
+export const dynamic = "force-dynamic";
 
 export default async function NewProductPage() {
   const categorias = await fetchAdminCategories();

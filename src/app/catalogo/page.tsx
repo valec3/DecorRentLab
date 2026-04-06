@@ -9,7 +9,7 @@ import { ProductCard } from '@/components/custom/ProductCard';
 import { Button } from '@/components/custom/Button';
 import { useSearchParams } from 'next/navigation';
 
-export default function Catalogo() {
+function CatalogoContent() {
   const searchParams = useSearchParams();
   
   // Estados de datos
@@ -273,3 +273,19 @@ export default function Catalogo() {
     </div>
   );
 }
+
+import { Suspense } from 'react';
+
+export default function Catalogo() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center pt-20 text-gris-calido bg-crema">
+        <Loader2 className="w-12 h-12 animate-spin mb-4 text-dorado" />
+        <p className="font-light tracking-widest text-sm uppercase">Cargando catálogo...</p>
+      </div>
+    }>
+      <CatalogoContent />
+    </Suspense>
+  );
+}
+
