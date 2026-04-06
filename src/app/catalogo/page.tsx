@@ -1,49 +1,76 @@
 'use client';
 
-import { useState, useMemo } from 'react';
-import { Search, SlidersHorizontal, X, ChevronDown } from 'lucide-react';
-import { categorias, productos } from '@/data/mock';
+import { useState, useMemo, useEffect } from 'react';
+import { Search, SlidersHorizontal, X, ChevronDown, Loader2 } from 'lucide-react';
+import { Producto, Categoria } from '@/types';
+import { PaginatedResult } from '@/services/supabase/products/interfaces';
 import { CategoryCarousel } from '@/components/ui/CategoryCarousel';
 import { ProductCard } from '@/components/ui/ProductCard';
 import { Button } from '@/components/ui/Button';
+import { useSearchParams, useRouter } from 'next/navigation';
 
 export default function Catalogo() {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategoria, setSelectedCategoria] = useState<string | null>(null);
+  const searchParams = useSearchParams();
+  
+  // Estados de datos
+  const [productos, setProductos] = useState<Producto[]>([]);
+  const [categorias, setCategorias] = useState<Categoria[]>([]);
+  const [pagination, setPagination] = useState<PaginatedResult<Producto> | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Estados de filtros (Sincronizados con URL opcionalmente)
+  const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || '');
+  const [selectedCategoria, setSelectedCategoria] = useState<string | null>(searchParams.get('categoria'));
   const [sortBy, setSortBy] = useState('destacados');
-  const [showFiltros, setShowFiltros] = useState(false);
+  const [page, setPage] = useState(1);
+  const perPage = 9;
 
-  const filteredProductos = useMemo(() => {
-    let result = [...productos];
+  // Cargar Categorías iniciales
+  useEffect(() => {
+    const fetchCats = async () => {
+      try {
+        const res = await fetch('/api/categories');
+        const cats = await res.json();
+        if (Array.isArray(cats)) setCategorias(cats);
+      } catch (err) {
+        console.error("Error loading categories", err);
+      }
+    };
+    fetchCats();
+  }, []);
 
-    if (searchQuery) {
-      const query = searchQuery.toLowerCase();
-      result = result.filter(
-        (p) =>
-          p.nombre.toLowerCase().includes(query) ||
-          p.descripcionCorta.toLowerCase().includes(query)
-      );
-    }
+  // Cargar Productos cuando cambian los filtros o la página
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const params = new URLSearchParams();
+        params.set('page', page.toString());
+        params.set('perPage', perPage.toString());
+        if (selectedCategoria) params.set('categoria', selectedCategoria);
+        if (searchQuery) params.set('search', searchQuery);
 
-    if (selectedCategoria) {
-      result = result.filter((p) => p.categoriaSlug === selectedCategoria);
-    }
+        const res = await fetch(`/api/products?${params.toString()}`);
+        if (!res.ok) throw new Error('Failed to fetch');
+        
+        const result = await res.json();
+        setProductos(result.data);
+        setPagination(result);
+      } catch (err) {
+        setError('No se pudieron cargar los productos. Por favor, reintenta.');
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    switch (sortBy) {
-      case 'nombre':
-        result.sort((a, b) => a.nombre.localeCompare(b.nombre));
-        break;
-      case 'destacados':
-        result.sort((a, b) => (b.destacado ? 1 : 0) - (a.destacado ? 1 : 0));
-        break;
-      case 'precio':
-        result.sort((a, b) => (a.precio || 0) - (b.precio || 0));
-        break;
-    }
+    const timer = setTimeout(fetchProducts, searchParams.get('q') === searchQuery ? 0 : 500);
+    return () => clearTimeout(timer);
+  }, [page, selectedCategoria, searchQuery, searchParams]);
 
-    return result;
-  }, [searchQuery, selectedCategoria, sortBy]);
-
+  // Actualizar filtros activos para la UI
   const activeFilters = useMemo(() => {
     const filters: { type: string; value: string; label: string }[] = [];
     if (selectedCategoria) {
@@ -53,19 +80,19 @@ export default function Catalogo() {
       }
     }
     return filters;
-  }, [selectedCategoria]);
+  }, [selectedCategoria, categorias]);
 
   const clearFilters = () => {
     setSelectedCategoria(null);
     setSearchQuery('');
+    setPage(1);
   };
 
-  const removeFilter = (type: string, value: string) => {
+  const removeFilter = (type: string) => {
     if (type === 'categoria') {
       setSelectedCategoria(null);
+      setPage(1);
     }
-    console.log(value);
-    
   };
 
   return (
@@ -77,13 +104,20 @@ export default function Catalogo() {
             Nuestro Catálogo
           </h1>
           <p className="text-gris-calido text-lg">
-            {productos.length} piezas de decoración premium para tu evento
+            {pagination?.count || 0} piezas de decoración premium para tu evento
           </p>
         </div>
 
         {/* Categories Carousel */}
         <div className="mb-10">
-          <CategoryCarousel categorias={categorias} />
+          <CategoryCarousel 
+            categorias={categorias} 
+            selectedSlug={selectedCategoria} 
+            onSelect={(slug) => {
+              setSelectedCategoria(slug);
+              setPage(1);
+            }} 
+          />
         </div>
 
         {/* Search Bar */}
@@ -94,7 +128,10 @@ export default function Catalogo() {
               type="text"
               placeholder="Buscar productos..."
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setPage(1);
+              }}
               className="w-full pl-12 pr-4 py-3 bg-white border border-borde rounded-full text-carbon placeholder-gris-calido focus:border-dorado focus:outline-none transition-colors"
             />
           </div>
@@ -110,7 +147,7 @@ export default function Catalogo() {
               >
                 {filter.label}
                 <button
-                  onClick={() => removeFilter(filter.type, filter.value)}
+                  onClick={() => removeFilter(filter.type)}
                   className="hover:text-carbon"
                 >
                   <X className="w-3 h-3" />
@@ -129,7 +166,7 @@ export default function Catalogo() {
 
           <div className="flex items-center gap-4">
             <button
-              onClick={() => setShowFiltros(!showFiltros)}
+              onClick={() => {}}
               className="md:hidden flex items-center gap-2 px-4 py-2 bg-white border border-borde rounded-full text-sm"
             >
               <SlidersHorizontal className="w-4 h-4" />
@@ -153,18 +190,74 @@ export default function Catalogo() {
 
         {/* Products Grid */}
         <div>
-          {filteredProductos.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredProductos.map((producto, index) => (
-                <div
-                  key={producto.id}
-                  className="animate-fade-in"
-                  style={{ animationDelay: `${index * 50}ms` }}
-                >
-                  <ProductCard producto={producto} />
-                </div>
-              ))}
+          {loading ? (
+            <div className="flex flex-col items-center justify-center py-20 text-gris-calido">
+              <Loader2 className="w-10 h-10 animate-spin mb-4 text-dorado" />
+              <p className="font-light tracking-widest text-xs uppercase">Actualizando catálogo...</p>
             </div>
+          ) : error ? (
+            <div className="text-center py-16 bg-white rounded-2xl border border-red-100">
+              <p className="text-red-500 mb-4">{error}</p>
+              <Button variant="outline" onClick={() => setPage(page)}>Reintentar</Button>
+            </div>
+          ) : productos.length > 0 ? (
+            <>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {productos.map((producto, index) => (
+                  <div
+                    key={producto.id}
+                    className="animate-fade-in"
+                    style={{ animationDelay: `${index * 50}ms` }}
+                  >
+                    <ProductCard producto={producto} />
+                  </div>
+                ))}
+              </div>
+
+              {/* Controles de Paginación */}
+              {pagination && pagination.totalPages > 1 && (
+                <div className="mt-16 flex items-center justify-center gap-4">
+                  <Button 
+                    variant="outline" 
+                    disabled={page === 1}
+                    onClick={() => {
+                      setPage(page - 1);
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
+                  >
+                    Anterior
+                  </Button>
+                  <div className="flex gap-2">
+                    {Array.from({ length: pagination.totalPages }, (_, i) => i + 1).map(num => (
+                      <button
+                        key={num}
+                        onClick={() => {
+                          setPage(num);
+                          window.scrollTo({ top: 0, behavior: 'smooth' });
+                        }}
+                        className={`w-10 h-10 rounded-full text-sm font-medium transition-colors ${
+                          page === num 
+                            ? 'bg-dorado text-white' 
+                            : 'bg-white border border-borde text-carbon hover:border-dorado'
+                        }`}
+                      >
+                        {num}
+                      </button>
+                    ))}
+                  </div>
+                  <Button 
+                    variant="outline" 
+                    disabled={page === pagination.totalPages}
+                    onClick={() => {
+                      setPage(page + 1);
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
+                  >
+                    Siguiente
+                  </Button>
+                </div>
+              )}
+            </>
           ) : (
             <div className="text-center py-16 bg-white rounded-2xl border border-borde">
               <p className="text-gris-calido mb-4">

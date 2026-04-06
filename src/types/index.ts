@@ -7,7 +7,7 @@ export interface Categoria {
 }
 
 export interface Variante {
-  tipo: "material" | "medida" | "color";
+  tipo: "material" | "medida" | "color" | "acabado";
   nombre: string;
   valor: string;
   precioAdicional?: number;
@@ -27,7 +27,13 @@ export interface Producto {
   descripcionCorta: string;
   descripcionLarga: string;
   variantes?: Variante[];
-  precio?: number;
+  precioVenta?: number;
+  precioAlquiler?: number;
+  promocion?: {
+    precioOriginalVenta?: number;
+    precioOriginalAlquiler?: number;
+    etiqueta?: string;
+  };
   peso?: string;
   garantia?: string;
   tiempoMontaje?: string;
@@ -52,4 +58,83 @@ export interface ContactoForm {
   tipoEvento: string;
   fecha: string;
   mensaje: string;
+}
+
+export interface FaqItem {
+  question: string;
+  answer: string;
+}
+
+export interface TestimonialItem {
+  id: number;
+  name: string;
+  event: string;
+  text: string;
+  image: string;
+  rating: number;
+}
+
+export interface HeroContent {
+  title: string;
+  subtitle: string;
+  description: string;
+  backgroundImage: string;
+  primaryButtonText: string;
+  whatsappMessage: string;
+}
+
+export interface ServiceItem {
+  title: string;
+  description: string;
+}
+
+export interface ValueItem {
+  title: string;
+  description: string;
+}
+
+export interface AboutContent {
+  title: string;
+  description: string;
+  mainImage: string;
+  historyTitle: string;
+  historyParagraphs: string[];
+  servicesTitle: string;
+  services: ServiceItem[];
+  valuesTitle: string;
+  values: ValueItem[];
+}
+
+export interface StepItem {
+  title: string;
+  description: string;
+}
+
+export interface PhilosophyItem {
+  title: string;
+  description: string;
+}
+
+export interface HomeContent {
+  hero: HeroContent;
+  howItWorks: {
+    title: string;
+    description: string;
+    steps: StepItem[];
+  };
+  philosophy: {
+    title: string;
+    description: string;
+    image: string;
+    stats: {
+      value: string;
+      label: string;
+    };
+    items: PhilosophyItem[];
+  };
+  cta: {
+    title: string;
+    description: string;
+    whatsappMessage: string;
+  };
 }

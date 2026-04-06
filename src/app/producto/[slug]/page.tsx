@@ -1,54 +1,96 @@
 'use client';
 
-import { useState, useMemo } from 'react';
-import { notFound, useParams } from 'next/navigation';
+import { useState, useMemo, useEffect } from 'react';
+import { useParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { Minus, Plus, ZoomIn, MessageCircle } from 'lucide-react';
-import { getProductoBySlug, getCategoriaBySlug, getProductosByCategoria } from '@/data/mock';
+import { 
+  Minus, 
+  Plus, 
+  ZoomIn, 
+  MessageCircle, 
+  Loader2,
+  ChevronRight
+} from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Producto } from '@/types';
 import Link from 'next/link';
 import { ProductCard } from '@/components/ui/ProductCard';
 import { Lightbox } from '@/components/ui/Lightbox';
 import { VariantSelector } from '@/components/ui/VariantSelector';
+import { Button } from '@/components/ui/Button';
 
 export default function ProductoPage() {
   const params = useParams();
+  const router = useRouter();
   const slug = params.slug as string;
-  const producto = useMemo(() => getProductoBySlug(slug), [slug]);
+  
+  // Estados de carga y datos
+  const [producto, setProducto] = useState<Producto | null>(null);
+  const [relacionados, setRelacionados] = useState<Producto[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
-  if (!producto) {
-    notFound();
-  }
-
+  // Estados de UI (Interacción)
   const [selectedImage, setSelectedImage] = useState(0);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [cantidad, setCantidad] = useState(1);
+  const [mode, setMode] = useState<'alquiler' | 'venta'>('alquiler');
   const [selectedVariants, setSelectedVariants] = useState<{ [key: string]: string }>({});
-  const categoria = getCategoriaBySlug(producto.categoriaSlug);
-  const relacionados = getProductosByCategoria(producto.categoriaSlug)
-    .filter((p) => p.id !== producto.id)
-    .slice(0, 4);
 
-  const hasVariants = producto.variantes && producto.variantes.length > 0;
+  // Carga de datos
+  useEffect(() => {
+    const fetchProducto = async () => {
+      try {
+        const res = await fetch(`/api/products/${slug}`);
+        if (!res.ok) throw new Error('Not found');
+        
+        const data = await res.json();
+        setProducto(data);
+        setMode(data.precioAlquiler ? 'alquiler' : 'venta');
+        
+        // Cargar relacionados
+        const resRel = await fetch(`/api/products?categoria=${data.categoriaSlug}&perPage=5`);
+        const relData = await resRel.json();
+        if (relData.data) {
+          setRelacionados(relData.data.filter((p: Producto) => p.id !== data.id).slice(0, 4));
+        }
+      } catch (err) {
+        console.error("Error fetching product:", err);
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProducto();
+  }, [slug]);
 
+  // Cálculo de precio total (SIEMPRE se llama, pero depende de producto)
+  const precioBase = mode === 'alquiler' ? producto?.precioAlquiler : producto?.precioVenta;
+  
   const precioTotal = useMemo(() => {
-    let total = (producto.precio || 0) * cantidad;
-    if (hasVariants && producto.variantes) {
+    if (!producto) return 0;
+    let total = (precioBase || 0) * cantidad;
+    
+    if (producto.variantes && producto.variantes.length > 0) {
       Object.entries(selectedVariants).forEach(([tipo, valor]) => {
-        const variante = (producto.variantes || []).find(v => v.tipo === tipo && v.valor === valor);
+        const variante = producto.variantes?.find(v => v.tipo === tipo && v.valor === valor);
         if (variante?.precioAdicional) {
           total += variante.precioAdicional * cantidad;
         }
       });
     }
     return total;
-  }, [producto.precio, cantidad, selectedVariants, hasVariants, producto.variantes]);
+  }, [producto, precioBase, cantidad, selectedVariants]);
 
-  const buildWhatsappMessage = () => {
+  // Mensaje de WhatsApp
+  const whatsappUrl = useMemo(() => {
+    if (!producto) return '';
     let message = `Hola Decor Rent Lab, me interesa cotizar:\n\n`;
     message += `📦 *${producto.nombre}*\n`;
-    message += `💰 Precio base: $${producto.precio?.toLocaleString('es-AR')}/evento\n`;
+    message += `🏷️ Modo: *${mode === 'alquiler' ? 'Alquiler' : 'Compra/Venta'}*\n`;
+    message += `💰 Precio base: $${precioBase?.toLocaleString('es-AR')}${mode === 'alquiler' ? '/evento' : ''}\n`;
     
-    if (hasVariants && Object.keys(selectedVariants).length > 0) {
+    if (Object.keys(selectedVariants).length > 0) {
       message += `\n✨ Opciones seleccionadas:\n`;
       Object.entries(selectedVariants).forEach(([tipo, valor]) => {
         message += `- ${tipo.charAt(0).toUpperCase() + tipo.slice(1)}: ${valor}\n`;
@@ -57,30 +99,50 @@ export default function ProductoPage() {
     
     message += `\n📅 Cantidad: ${cantidad} unidad${cantidad > 1 ? 'es' : ''}`;
     
-    if (precioTotal > 0 && hasVariants) {
+    if (precioTotal > 0 && (producto.variantes?.length || 0) > 0) {
       message += `\n💵 Total estimado: $${precioTotal.toLocaleString('es-AR')}`;
     }
     
-    message += `\n\nPor favor confirmen disponibilidad. ¡Gracias!`;
-    
-    return message;
-  };
+    message += `\n\nPor favor confirmen disponibilidad y detalles. ¡Gracias!`;
+    return `https://wa.me/5491112345678?text=${encodeURIComponent(message)}`;
+  }, [producto, mode, precioBase, selectedVariants, cantidad, precioTotal]);
 
-  const whatsappUrl = `https://wa.me/5491112345678?text=${encodeURIComponent(buildWhatsappMessage())}`;
+  // Estados de Carga / Error
+  if (loading) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center pt-20 text-gris-calido bg-crema">
+        <Loader2 className="w-12 h-12 animate-spin mb-4 text-dorado" />
+        <p className="font-light tracking-widest text-sm uppercase">Cargando detalles de la pieza...</p>
+      </div>
+    );
+  }
 
+  if (error || !producto) {
+    return (
+      <div className="pt-32 pb-16 text-center bg-crema min-h-screen px-4">
+        <h1 className="text-4xl font-serif text-carbon mb-4">Pieza no encontrada</h1>
+        <p className="text-gris-calido mb-8">Lo sentimos, no pudimos encontrar el producto que buscas o hubo un problema de conexión.</p>
+        <Button variant="primary" onClick={() => router.push('/catalogo')}>
+          Ir al catálogo
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-crema">
       <div className="max-w-7xl mx-auto px-6 py-12 md:py-20">
+        {/* Breadcrumbs */}
         <nav className="flex items-center space-x-2 text-xs uppercase tracking-widest text-gris-calido mb-8">
           <Link href="/catalogo" className="hover:text-dorado transition-colors">Catálogo</Link>
           <span className="text-gris-calido/50">/</span>
-          <Link href={`/catalogo/${producto.categoriaSlug}`} className="hover:text-dorado transition-colors">{categoria?.nombre}</Link>
+          <Link href={`/catalogo?categoria=${producto.categoriaSlug}`} className="hover:text-dorado transition-colors">{producto.categoriaSlug}</Link>
           <span className="text-gris-calido/50">/</span>
           <span className="text-carbon">{producto.nombre}</span>
         </nav>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 xl:gap-24">
+          {/* Imágenes */}
           <div className="lg:col-span-1">
             <div className="flex gap-4">
               <div 
@@ -88,7 +150,7 @@ export default function ProductoPage() {
                 onClick={() => setIsLightboxOpen(true)}
               >
                 <Image
-                  src={producto.imagenes[selectedImage]}
+                  src={producto.imagenes[selectedImage] || ''}
                   alt={producto.nombre}
                   fill
                   className="object-cover hover:scale-105 transition-transform duration-700"
@@ -156,27 +218,103 @@ export default function ProductoPage() {
             )}
           </div>
 
+          {/* Detalles */}
           <div className="lg:col-span-1 flex flex-col pt-10 lg:pt-0">
             <div className="sticky top-32">
               <div className="mb-2 inline-block px-3 py-1 bg-dorado/10 text-dorado text-xs uppercase tracking-widest rounded-sm">
-                {categoria?.nombre}
+                {producto.categoriaSlug}
               </div>
               
               <h1 className="font-serif text-5xl md:text-6xl text-carbon mb-4 leading-tight">
                 {producto.nombre}
               </h1>
               
-              <p className="text-2xl text-dorado font-medium mb-12">
-                ${precioTotal > 0 ? precioTotal.toLocaleString('es-AR') : 'Consultar'}
-                <span className="text-gris-calido text-base font-normal"> / evento</span>
-              </p>
+              {/* Selectores de Modo y Promociones */}
+              <div className="flex flex-col gap-4 mb-8">
+                <div className="flex gap-4">
+                  {producto.precioAlquiler && (
+                    <button 
+                      onClick={() => setMode('alquiler')}
+                      className={`flex-1 p-5 rounded-2xl border-2 transition-all text-left relative overflow-hidden ${mode === 'alquiler' ? 'border-dorado bg-dorado/5 shadow-premium-sm' : 'border-borde bg-white hover:border-dorado/30'}`}
+                    >
+                      <div className="flex justify-between items-start mb-2">
+                        <span className="text-[10px] uppercase tracking-widest text-gris-calido">Alquiler</span>
+                        {producto.promocion?.precioOriginalAlquiler && (
+                          <span className="bg-red-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-sm">
+                            -{Math.round((1 - producto.precioAlquiler / producto.promocion.precioOriginalAlquiler) * 100)}%
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex items-baseline gap-2">
+                        <span className="text-2xl font-serif text-carbon">${producto.precioAlquiler.toLocaleString('es-AR')}</span>
+                        {producto.promocion?.precioOriginalAlquiler && (
+                          <span className="text-xs text-gris-calido line-through opacity-60">
+                            ${producto.promocion.precioOriginalAlquiler.toLocaleString('es-AR')}
+                          </span>
+                        )}
+                      </div>
+                    </button>
+                  )}
+                  {producto.precioVenta && (
+                    <button 
+                      onClick={() => setMode('venta')}
+                      className={`flex-1 p-5 rounded-2xl border-2 transition-all text-left relative overflow-hidden ${mode === 'venta' ? 'border-dorado bg-dorado/5 shadow-premium-sm' : 'border-borde bg-white hover:border-dorado/30'}`}
+                    >
+                      <div className="flex justify-between items-start mb-2">
+                        <span className="text-[10px] uppercase tracking-widest text-gris-calido">Compra</span>
+                        {producto.promocion?.precioOriginalVenta && (
+                          <span className="bg-red-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-sm">
+                            -{Math.round((1 - producto.precioVenta / producto.promocion.precioOriginalVenta) * 100)}%
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex items-baseline gap-2">
+                        <span className="text-2xl font-serif text-carbon">${producto.precioVenta.toLocaleString('es-AR')}</span>
+                        {producto.promocion?.precioOriginalVenta && (
+                          <span className="text-xs text-gris-calido line-through opacity-60">
+                            ${producto.promocion.precioOriginalVenta.toLocaleString('es-AR')}
+                          </span>
+                        )}
+                      </div>
+                    </button>
+                  )}
+                </div>
 
+                {/* Banner de Oferta Detallado */}
+                {(() => {
+                  const pOriginal = mode === 'alquiler' 
+                    ? producto.promocion?.precioOriginalAlquiler 
+                    : producto.promocion?.precioOriginalVenta;
+                  
+                  if (!pOriginal || !precioBase) return null;
+
+                  return (
+                    <div className="bg-red-50 border border-red-100 p-4 rounded-xl flex items-center justify-between">
+                      <div className="flex-1">
+                        <span className="text-[10px] uppercase tracking-widest text-red-500 font-bold block mb-1">
+                          {producto.promocion?.etiqueta || 'Precio Especial'}
+                        </span>
+                        <div className="flex items-center gap-3">
+                          <span className="text-gris-calido line-through text-sm">
+                            ${pOriginal.toLocaleString('es-AR')}
+                          </span>
+                          <span className="text-red-600 font-bold text-lg">
+                            -${Math.round((1 - precioBase / pOriginal) * 100)}% OFF
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })()}
+              </div>
+
+              {/* Opciones y Cantidad */}
               <div className="space-y-10">
-                {hasVariants && (
+                {producto.variantes && producto.variantes.length > 0 && (
                   <div className="space-y-4">
                     <span className="text-xs uppercase tracking-widest text-gris-calido">Selecciona opciones</span>
                     <VariantSelector 
-                      variantes={producto.variantes || []} 
+                      variantes={producto.variantes} 
                       onSelectionChange={setSelectedVariants}
                     />
                   </div>
@@ -203,14 +341,34 @@ export default function ProductoPage() {
                   </div>
                 </div>
 
-                <div className="pt-4 space-y-4">
+                {/* Total y CTA */}
+                <div className="pt-6 border-t border-borde">
+                  <div className="flex items-end justify-between mb-6">
+                    <div className="flex flex-col">
+                      <span className="text-xs uppercase tracking-widest text-gris-calido mb-1">Total Estimado</span>
+                      <span className="text-sm text-gris-calido italic">
+                        {cantidad} x {mode === 'alquiler' ? 'Alquiler' : 'Venta'}
+                      </span>
+                    </div>
+                    <div className="text-right">
+                      <motion.span 
+                        key={precioTotal}
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="text-4xl font-serif text-carbon block"
+                      >
+                        ${precioTotal.toLocaleString('es-AR')}
+                      </motion.span>
+                    </div>
+                  </div>
+
                   <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="block">
-                    <button className="w-full py-5 bg-dorado hover:bg-dorado/80 text-white rounded-md flex flex-col items-center justify-center transition-all shadow-sm active:scale-95">
+                    <button className="w-full py-5 bg-dorado hover:bg-dorado/80 text-white rounded-xl shadow-premium hover:shadow-glow transition-all active:scale-[0.98] flex flex-col items-center justify-center">
                       <span className="flex items-center font-bold text-lg">
                         <MessageCircle className="w-5 h-5 mr-2" />
-                        Cotizar por WhatsApp
+                        Solicitar Presupuesto
                       </span>
-                      <span className="text-[10px] uppercase tracking-widest opacity-80 mt-1">Respondemos en menos de 2 horas</span>
+                      <span className="text-[10px] uppercase tracking-widest opacity-80 mt-1">Respuesta inmediata vía WhatsApp</span>
                     </button>
                   </a>
                 </div>
@@ -219,24 +377,18 @@ export default function ProductoPage() {
           </div>
         </div>
 
+        {/* Descripción */}
         <div className="mt-24 pt-16 border-t border-borde max-w-4xl mx-auto">
           <h3 className="font-serif text-3xl md:text-4xl text-carbon mb-8 italic">
             {producto.descripcionCorta}
           </h3>
-          <div className="space-y-1">
-            <div 
-              className="prose-premium max-w-none" 
-              dangerouslySetInnerHTML={{ __html: producto.descripcionLarga }} 
-            />
-          </div>
+          <div className="prose-premium max-w-none text-gris-calido" dangerouslySetInnerHTML={{ __html: producto.descripcionLarga }} />
         </div>
 
-
+        {/* Relacionados */}
         {relacionados.length > 0 && (
           <div className="mt-20">
-            <h2 className="font-serif text-3xl text-carbon mb-10 text-center">
-              También te puede gustar
-            </h2>
+            <h2 className="font-serif text-3xl text-carbon mb-10 text-center">También te puede gustar</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {relacionados.map((prod) => (
                 <ProductCard key={prod.id} producto={prod} />

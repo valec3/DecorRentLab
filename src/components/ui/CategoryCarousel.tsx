@@ -8,9 +8,11 @@ import { Categoria } from '@/types';
 
 interface CategoryCarouselProps {
   categorias: Categoria[];
+  selectedSlug?: string | null;
+  onSelect?: (slug: string | null) => void;
 }
 
-export function CategoryCarousel({ categorias }: CategoryCarouselProps) {
+export function CategoryCarousel({ categorias, selectedSlug, onSelect }: CategoryCarouselProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
@@ -65,29 +67,46 @@ export function CategoryCarousel({ categorias }: CategoryCarouselProps) {
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseUp}
       >
-        {categorias.map((categoria) => (
-          <Link 
-            key={categoria.id} 
-            href={`/catalogo/${categoria.slug}`}
-            className="shrink-0 group"
-          >
-            <div className="relative w-24 h-24 md:w-32 md:h-32 lg:w-36 lg:h-36 p-1 rounded-full border border-dorado/10 group-hover:border-dorado/30 transition-all duration-700">
-              <div className="relative w-full h-full rounded-full overflow-hidden border border-white shadow-premium-sm group-hover:shadow-premium-md transition-all duration-700 group-hover:scale-[1.02]">
-                <Image
-                  src={categoria.imagenCover}
-                  alt={categoria.nombre}
-                  fill
-                  className="object-cover transition-transform duration-1000 group-hover:scale-105"
-                  draggable={false}
-                />
-                <div className="absolute inset-0 bg-linear-to-t from-carbon/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        {categorias.map((categoria) => {
+          const isActive = selectedSlug === categoria.slug;
+          const content = (
+            <div className="shrink-0 group cursor-pointer text-center">
+              <div className={`relative w-24 h-24 md:w-32 md:h-32 lg:w-36 lg:h-36 p-1 rounded-full border transition-all duration-700 ${
+                isActive ? 'border-dorado shadow-glow' : 'border-dorado/10 group-hover:border-dorado/30'
+              }`}>
+                <div className="relative w-full h-full rounded-full overflow-hidden border border-white shadow-premium-sm group-hover:shadow-premium-md transition-all duration-700 group-hover:scale-[1.02]">
+                  <Image
+                    src={categoria.imagenCover}
+                    alt={categoria.nombre}
+                    fill
+                    className={`object-cover transition-transform duration-1000 group-hover:scale-105 ${isActive ? 'scale-110' : ''}`}
+                    draggable={false}
+                  />
+                  <div className={`absolute inset-0 bg-linear-to-t from-carbon/40 via-transparent to-transparent transition-opacity duration-500 ${isActive ? 'opacity-60' : 'opacity-0 group-hover:opacity-100'}`} />
+                </div>
               </div>
+              <p className={`mt-3 text-[10px] md:text-[12px] font-medium tracking-premium max-w-[120px] mx-auto transition-colors duration-500 line-clamp-2 ${
+                isActive ? 'text-dorado' : 'text-carbon group-hover:text-dorado'
+              }`}>
+                {categoria.nombre}
+              </p>
             </div>
-            <p className="text-center mt-3 text-[9px] md:text-[11px] font-medium text-carbon tracking-premium max-w-32 mx-auto group-hover:text-dorado transition-colors duration-500 line-clamp-2">
-              {categoria.nombre}
-            </p>
-          </Link>
-        ))}
+          );
+
+          if (onSelect) {
+            return (
+              <div key={categoria.id} onClick={() => onSelect(categoria.slug)}>
+                {content}
+              </div>
+            );
+          }
+
+          return (
+            <Link key={categoria.id} href={`/catalogo/${categoria.slug}`}>
+              {content}
+            </Link>
+          );
+        })}
       </div>
 
       <button

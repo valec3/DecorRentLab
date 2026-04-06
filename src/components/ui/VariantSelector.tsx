@@ -56,6 +56,7 @@ export function VariantSelector({ variantes, onSelectionChange }: VariantSelecto
       material: 'Material',
       medida: 'Tamaño',
       color: 'Color',
+      acabado: 'Acabado',
     };
     return labels[tipo] || tipo;
   };

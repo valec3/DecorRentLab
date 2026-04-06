@@ -1,9 +1,10 @@
 'use client';
 
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, Truck, Sparkles, MessageSquare } from "lucide-react";
-import { categorias, getProductosDestacados } from "@/data/mock";
+import { ArrowRight, Truck, Sparkles, MessageSquare, Loader2 } from "lucide-react";
+import { Producto, Categoria } from "@/types";
 import { CategoryCarousel } from "@/components/ui/CategoryCarousel";
 import { ProductCard } from "@/components/ui/ProductCard";
 import { Button } from "@/components/ui/Button";
@@ -11,11 +12,37 @@ import { Testimonials } from "@/components/ui/Testimonials";
 import { FAQ } from "@/components/ui/FAQ";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { homeContent } from "@/data/content";
 
 export default function Home() {
-  const productosDestacados = getProductosDestacados();
+  const [productosDestacados, setProductosDestacados] = useState<Producto[]>([]);
+  const [categorias, setCategorias] = useState<Categoria[]>([]);
+  const [loading, setLoading] = useState(true);
   const targetRef = useRef(null);
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [resDestacados, resCats] = await Promise.all([
+          fetch('/api/products?destacado=true&perPage=4'),
+          fetch('/api/categories')
+        ]);
+        
+        const [destacados, cats] = await Promise.all([
+          resDestacados.json(),
+          resCats.json()
+        ]);
+
+        if (destacados.data) setProductosDestacados(destacados.data);
+        if (Array.isArray(cats)) setCategorias(cats);
+      } catch (err) {
+        console.error("Error fetching homepage data:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
   const { scrollYProgress } = useScroll({
     target: targetRef,
     offset: ["start start", "end start"],
@@ -24,7 +51,6 @@ export default function Home() {
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
   const scale = useTransform(scrollYProgress, [0, 0.5], [1, 1.1]);
   const y = useTransform(scrollYProgress, [0, 0.5], [0, 100]);
-
 
   return (
     <div className="overflow-x-hidden">
@@ -35,8 +61,8 @@ export default function Home() {
           className="absolute inset-0 z-0"
         >
           <Image
-            src="/hero.png"
-            alt="Decoración elegante para eventos"
+            src={homeContent.hero.backgroundImage}
+            alt={homeContent.hero.title}
             fill
             className="object-cover"
             priority
@@ -55,15 +81,13 @@ export default function Home() {
           
           <ScrollReveal delay={0.4} width="100%">
             <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl text-white mb-8 leading-[1.1] drop-shadow-2xl">
-              Alquiler de <span className="italic font-display text-white/95 text-4xl md:text-6xl lg:text-7xl block mb-2">Decoración</span>
-              <span className="text-dorado drop-shadow-glow">Premium para Eventos</span>
+              {homeContent.hero.title} <span className="italic font-display text-white/95 text-4xl md:text-6xl lg:text-7xl block mb-2">{homeContent.hero.subtitle}</span>
             </h1>
           </ScrollReveal>
 
           <ScrollReveal delay={0.6} width="100%">
             <p className="text-white text-lg md:text-2xl mb-12 max-w-3xl mx-auto font-light tracking-wide drop-shadow-xl text-center">
-              Mobiliario exclusivo, ambientación de lujo y piezas curadas para que 
-              tu celebración sea inolvidable.
+              {homeContent.hero.description}
             </p>
           </ScrollReveal>
 
@@ -71,12 +95,12 @@ export default function Home() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-6 w-full max-w-lg mx-auto">
               <Link href="/catalogo">
                 <Button size="lg" className="w-full sm:w-auto px-8 md:px-10 py-5 text-base md:text-lg whitespace-nowrap" magnetic>
-                  Explorar Catálogo
+                  {homeContent.hero.primaryButtonText}
                   <ArrowRight className="ml-2 w-5 h-5" />
                 </Button>
               </Link>
               <a
-                href="https://wa.me/5491112345678?text=Hola%20Decor%20Rent%20Lab,%20quiero%20cotizar"
+                href={`https://wa.me/5491112345678?text=${encodeURIComponent(homeContent.hero.whatsappMessage)}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -139,40 +163,28 @@ export default function Home() {
           <div className="text-center mb-12">
             <ScrollReveal direction="down" width="100%">
               <h2 className="font-serif text-4xl md:text-5xl text-carbon mb-6">
-                Tu visión, <span className="italic font-display">nuestra gestión</span>
+                {homeContent.howItWorks.title.split(', ').map((text, i) => (
+                  <span key={i} className={i === 1 ? "italic font-display" : ""}>
+                    {text}{i === 0 ? ", " : ""}
+                  </span>
+                ))}
               </h2>
               <p className="text-gris-calido max-w-xl mx-auto text-lg font-light">
-                Un proceso impecable diseñado para que solo te preocupes por disfrutar.
+                {homeContent.howItWorks.description}
               </p>
             </ScrollReveal>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-            {[
-              {
-                icon: <Sparkles className="w-8 h-8 text-dorado" />,
-                title: "Selección Curada",
-                desc: "Explora elementos seleccionados bajo los más altos estándares de estética premium."
-              },
-              {
-                icon: <MessageSquare className="w-8 h-8 text-dorado" />,
-                title: "Asesoría Experta",
-                desc: "Coordinamos vía WhatsApp cada detalle para asegurar que la visión de tu evento sea perfecta."
-              },
-              {
-                icon: <Truck className="w-8 h-8 text-dorado" />,
-                title: "Logística Sin Estrés",
-                desc: "Nos encargamos de la entrega y el montaje con precisión y cuidado artesanal."
-              }
-            ].map((step, i) => (
+            {homeContent.howItWorks.steps.map((step, i) => (
               <ScrollReveal key={i} delay={i * 0.2}>
                 <div className="group p-10 bg-white border border-borde rounded-[2.5rem] hover:shadow-strong transition-all duration-500 text-center relative overflow-hidden">
                   <div className="absolute top-0 left-0 w-2 h-0 bg-dorado group-hover:h-full transition-all duration-500" />
                   <div className="mb-6 inline-flex p-5 rounded-3xl bg-crema group-hover:scale-110 transition-transform duration-500">
-                    {step.icon}
+                    {i === 0 ? <Sparkles className="w-8 h-8 text-dorado" /> : i === 1 ? <MessageSquare className="w-8 h-8 text-dorado" /> : <Truck className="w-8 h-8 text-dorado" />}
                   </div>
                   <h3 className="font-serif text-2xl text-carbon mb-4">{step.title}</h3>
-                  <p className="text-gris-calido leading-relaxed">{step.desc}</p>
+                  <p className="text-gris-calido leading-relaxed">{step.description}</p>
                 </div>
               </ScrollReveal>
             ))}
@@ -202,8 +214,13 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {productosDestacados.slice(0, 4).map((producto, index) => (
-              <ScrollReveal key={producto.id} delay={index * 0.1}>
+            {loading ? (
+              <div className="col-span-full py-20 flex flex-col items-center justify-center text-gris-calido">
+                <Loader2 className="w-8 h-8 animate-spin mb-4 text-dorado" />
+                <p className="text-xs uppercase tracking-widest font-light">Cargando piezas exclusivas...</p>
+              </div>
+            ) : productosDestacados.map((producto, index) => (
+              <ScrollReveal key={producto.id} delay={index * 0.1} direction="up">
                 <ProductCard producto={producto} />
               </ScrollReveal>
             ))}
@@ -220,8 +237,8 @@ export default function Home() {
                 <div className="absolute -inset-4 bg-dorado/5 rounded-4xl blur-2xl group-hover:bg-dorado/10 transition-colors duration-700" />
                 <div className="relative aspect-square rounded-4xl overflow-hidden shadow-strong border border-borde">
                   <Image
-                    src="/filosofia.png"
-                    alt="Nuestra Filosofía - Decoración elegante"
+                    src={homeContent.philosophy.image}
+                    alt={homeContent.philosophy.title}
                     fill
                     className="object-cover transition-transform duration-1000 group-hover:scale-105"
                     sizes="(max-width: 1024px) 100vw, 50vw"
@@ -233,8 +250,8 @@ export default function Home() {
                   whileInView={{ x: 0, opacity: 1 }}
                   className="absolute -bottom-10 -right-10 glass p-8 rounded-3xl border border-white/20 hidden md:block shadow-glow"
                 >
-                  <span className="block text-4xl font-serif text-dorado mb-1">500+</span>
-                  <span className="text-xs uppercase tracking-widest text-carbon/60">Eventos Exitosos</span>
+                  <span className="block text-4xl font-serif text-dorado mb-1">{homeContent.philosophy.stats.value}</span>
+                  <span className="text-xs uppercase tracking-widest text-carbon/60">{homeContent.philosophy.stats.label}</span>
                 </motion.div>
               </div>
             </ScrollReveal>
@@ -243,28 +260,26 @@ export default function Home() {
                 <ScrollReveal direction="left">
                   <span className="text-dorado text-[10px] tracking-premium font-bold mb-5 block">Nuestra Filosofía</span>
                   <h2 className="font-serif text-4xl md:text-6xl text-carbon leading-[1.1] mt-6">
-                    Creamos atmósferas que <span className="italic font-display">cuentan historias</span>
+                    {homeContent.philosophy.title.split(' que ').map((text, i) => (
+                      <span key={i}>
+                        {i === 1 && "que "}<span className={i === 1 ? "italic font-display" : ""}>{text}</span>
+                      </span>
+                    ))}
                   </h2>
                 <p className="text-xl text-gris-calido font-light leading-relaxed mt-8">
-                  En Decor Rent Lab, no solo alquilamos objetos; proporcionamos los elementos necesarios para 
-                  materializar tus sueños más sofisticados.
+                  {homeContent.philosophy.description}
                 </p>
               </ScrollReveal>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-                {[
-                  { title: "Curaduría", desc: "Objetos seleccionados por su valor estético y calidad." },
-                  { title: "Excelencia", desc: "Compromiso total con la puntualidad y el detalle." },
-                  { title: "Pasión", desc: "Amamos el diseño y se nota en cada montaje." },
-                  { title: "Personalización", desc: "Buscamos la pieza exacta que tu evento requiere." }
-                ].map((item, i) => (
+                {homeContent.philosophy.items.map((item, i) => (
                   <ScrollReveal key={i} delay={i * 0.15}>
                     <div className="space-y-2">
                        <h4 className="font-serif text-xl text-carbon flex items-center gap-2">
                          <div className="w-1.5 h-1.5 rounded-full bg-dorado" />
                          {item.title}
                        </h4>
-                       <p className="text-sm text-gris-calido leading-relaxed">{item.desc}</p>
+                       <p className="text-sm text-gris-calido leading-relaxed">{item.description}</p>
                     </div>
                   </ScrollReveal>
                 ))}
@@ -328,16 +343,19 @@ export default function Home() {
             <div className="relative z-10 max-w-3xl mx-auto">
               <ScrollReveal direction="down">
                 <h2 className="font-serif text-4xl md:text-6xl text-white mb-10 leading-[1.2]">
-                  ¿Hacemos realidad tu <br />
-                  <span className="text-dorado italic font-display">próximo gran evento</span>?
+                  {homeContent.cta.title.split(' tu ').map((text, i) => (
+                    <span key={i}>
+                      {i === 1 && "tu "}<span className={i === 1 ? "text-dorado italic font-display" : ""}>{text}</span>
+                      {i === 0 && <br />}
+                    </span>
+                  ))}
                 </h2>
                 <p className="text-white/60 text-lg md:text-xl mb-12 font-light">
-                  No dejes tu visión al azar. Consultá disponibilidad y obtené una 
-                  cotización personalizada hoy mismo.
+                  {homeContent.cta.description}
                 </p>
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
                   <a
-                    href="https://wa.me/5491112345678?text=Hola%20Decor%20Rent%20Lab,%20quiero%20cotizar"
+                    href={`https://wa.me/5491112345678?text=${encodeURIComponent(homeContent.cta.whatsappMessage)}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-full sm:w-auto"

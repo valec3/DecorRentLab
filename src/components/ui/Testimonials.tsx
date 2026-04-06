@@ -4,40 +4,7 @@ import { useState, useRef } from 'react';
 import Image from 'next/image';
 import { ChevronLeft, ChevronRight, Quote } from 'lucide-react';
 
-const testimonials = [
-  {
-    id: 1,
-    name: 'María González',
-    event: 'Boda',
-    text: 'Increíble experiencia con Decor Rent Lab. La decoración del corazón de flores fue el centro de atención de nuestra boda. Todo perfección.',
-    image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop',
-    rating: 5
-  },
-  {
-    id: 2,
-    name: 'Carolina Sánchez',
-    event: 'Quinceañera',
-    text: 'El mejor descubrimiento para la decoración del evento de mi hija. Las letras LED Infinity fueron un éxito total. Recomendadísimo.',
-    image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop',
-    rating: 5
-  },
-  {
-    id: 3,
-    name: 'Roberto Díaz',
-    event: 'Evento Corporativo',
-    text: 'Profesionalismo absoluto. El equipo entendió perfectamente lo que necesitábamos y el resultado superó expectativas.',
-    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop',
-    rating: 5
-  },
-  {
-    id: 4,
-    name: 'Ana Martínez',
-    event: 'Baby Shower',
-    text: 'Las esferas gigantes fueron mágicas. Todos los invitados quedaron impresionados. Volveré a contratar sin dudas.',
-    image: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop',
-    rating: 5
-  }
-];
+import { testimonials } from '@/data/content';
 
 export function Testimonials() {
   const scrollRef = useRef<HTMLDivElement>(null);
