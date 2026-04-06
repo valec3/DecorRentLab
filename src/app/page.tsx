@@ -5,12 +5,12 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, Truck, Sparkles, MessageSquare, Loader2 } from "lucide-react";
 import { Producto, Categoria } from "@/types";
-import { CategoryCarousel } from "@/components/ui/CategoryCarousel";
-import { ProductCard } from "@/components/ui/ProductCard";
-import { Button } from "@/components/ui/Button";
-import { Testimonials } from "@/components/ui/Testimonials";
-import { FAQ } from "@/components/ui/FAQ";
-import { ScrollReveal } from "@/components/ui/ScrollReveal";
+import { CategoryCarousel } from "@/components/custom/CategoryCarousel";
+import { ProductCard } from "@/components/custom/ProductCard";
+import { Button } from "@/components/custom/Button";
+import { Testimonials } from "@/components/custom/Testimonials";
+import { FAQ } from "@/components/custom/FAQ";
+import { ScrollReveal } from "@/components/custom/ScrollReveal";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { homeContent } from "@/data/content";
 
@@ -94,7 +94,7 @@ export default function Home() {
           <ScrollReveal delay={0.8} width="100%">
             <div className="flex flex-col sm:flex-row items-center justify-center gap-6 w-full max-w-lg mx-auto">
               <Link href="/catalogo">
-                <Button size="lg" className="w-full sm:w-auto px-8 md:px-10 py-5 text-base md:text-lg whitespace-nowrap" magnetic>
+                <Button size="lg" className="w-full sm:w-auto px-8 md:px-10 py-5 text-base md:text-lg whitespace-nowrap">
                   {homeContent.hero.primaryButtonText}
                   <ArrowRight className="ml-2 w-5 h-5" />
                 </Button>
@@ -287,7 +287,7 @@ export default function Home() {
 
               <ScrollReveal delay={0.6}>
                 <Link href="/nosotros">
-                  <Button variant="outline" size="lg" className="rounded-full px-8" magnetic>
+                  <Button variant="outline" size="lg" className="rounded-full px-8">
                     Descubrí nuestra historia
                     <ArrowRight className="ml-2 w-4 h-4" />
                   </Button>
@@ -360,7 +360,7 @@ export default function Home() {
                     rel="noopener noreferrer"
                     className="w-full sm:w-auto"
                   >
-                    <Button variant="primary" size="lg" className="w-full sm:w-auto px-12" magnetic>
+                    <Button variant="primary" size="lg" className="w-full sm:w-auto px-12">
                       Contactar por WhatsApp
                     </Button>
                   </a>

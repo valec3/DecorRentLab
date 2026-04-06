@@ -1,11 +1,11 @@
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import { categorias, getCategoriaBySlug, getProductosByCategoria } from '@/data/mock';
-import { ProductCard } from '@/components/ui/ProductCard';
-import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
+import { ProductCard } from '@/components/custom/ProductCard';
+import { Breadcrumbs } from '@/components/custom/Breadcrumbs';
 
 interface PageProps {
-  params: Promise<{ categoria: string }>;
+  params: Promise<{ categoria: string }>; 
 }
 
 export async function generateStaticParams() {

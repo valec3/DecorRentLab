@@ -14,10 +14,10 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import { Producto } from '@/types';
 import Link from 'next/link';
-import { ProductCard } from '@/components/ui/ProductCard';
-import { Lightbox } from '@/components/ui/Lightbox';
-import { VariantSelector } from '@/components/ui/VariantSelector';
-import { Button } from '@/components/ui/Button';
+import { ProductCard } from '@/components/custom/ProductCard';
+import { Lightbox } from '@/components/custom/Lightbox';
+import { VariantSelector } from '@/components/custom/VariantSelector';
+import { Button } from '@/components/custom/Button';
 
 export default function ProductoPage() {
   const params = useParams();

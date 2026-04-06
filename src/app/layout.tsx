@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
 import { WhatsAppFloat } from "@/components/layout/WhatsAppFloat";
+import { PublicLayoutWrapper } from "@/components/layout/PublicLayoutWrapper";
 import { Geist } from "next/font/google";
 import { cn } from "@/lib/utils";
 
@@ -27,13 +26,11 @@ export default function RootLayout({
   return (
     <html lang="es" className={cn("scroll-smooth", "font-sans", geist.variable)} suppressHydrationWarning>
       <body className="min-h-screen flex flex-col bg-crema text-carbon antialiased">
-        <Header />
-        <main className="flex-1">
+        <PublicLayoutWrapper>
           {children}
-        </main>
-        <Footer />
-        <WhatsAppFloat />
+        </PublicLayoutWrapper>
       </body>
     </html>
   );
 }
+

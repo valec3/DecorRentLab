@@ -6,7 +6,7 @@ import Image from "next/image";
 import { Producto } from "@/types";
 import { Badge } from "./Badge";
 import { motion } from "framer-motion";
-import { Button } from "./Button";
+import { Button } from "@/components/custom/Button";
 
 interface ProductCardProps {
   producto: Producto;

@@ -4,9 +4,9 @@ import { useState, useMemo, useEffect } from 'react';
 import { Search, SlidersHorizontal, X, ChevronDown, Loader2 } from 'lucide-react';
 import { Producto, Categoria } from '@/types';
 import { PaginatedResult } from '@/services/supabase/products/interfaces';
-import { CategoryCarousel } from '@/components/ui/CategoryCarousel';
-import { ProductCard } from '@/components/ui/ProductCard';
-import { Button } from '@/components/ui/Button';
+import { CategoryCarousel } from '@/components/custom/CategoryCarousel';
+import { ProductCard } from '@/components/custom/ProductCard';
+import { Button } from '@/components/custom/Button';
 import { useSearchParams, useRouter } from 'next/navigation';
 
 export default function Catalogo() {
