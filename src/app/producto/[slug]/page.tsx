@@ -8,10 +8,9 @@ import {
   Plus, 
   ZoomIn, 
   MessageCircle, 
-  Loader2,
-  ChevronRight
+  Loader2
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Producto } from '@/types';
 import Link from 'next/link';
 import { ProductCard } from '@/components/custom/ProductCard';

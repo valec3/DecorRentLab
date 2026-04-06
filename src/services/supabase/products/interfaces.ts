@@ -1,4 +1,4 @@
-import { Producto, Variante } from "@/types";
+// No longer importing unused Producto, Variante from types
 
 export interface CategoryRow {
   id: string;

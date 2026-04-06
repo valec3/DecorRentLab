@@ -7,7 +7,7 @@ import { PaginatedResult } from '@/services/supabase/products/interfaces';
 import { CategoryCarousel } from '@/components/custom/CategoryCarousel';
 import { ProductCard } from '@/components/custom/ProductCard';
 import { Button } from '@/components/custom/Button';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 
 export default function Catalogo() {
   const searchParams = useSearchParams();
