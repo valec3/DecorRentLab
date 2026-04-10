@@ -8,7 +8,7 @@ export default async function NewProductPage() {
   const categorias = await fetchAdminCategories();
 
   return (
-    <div className="space-y-6 max-w-5xl mx-auto">
+    <div className="space-y-6 w-full mx-auto">
       <div className="flex items-center gap-4">
         <Link href="/admin/products" className="p-2 hover:bg-slate-100 rounded-full transition-colors text-gris-calido">
           <ChevronLeft size={20} />

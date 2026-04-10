@@ -70,11 +70,12 @@ export default function ProductoPage() {
     if (!producto) return 0;
     let total = (precioBase || 0) * cantidad;
     
-    if (producto.variantes && producto.variantes.length > 0) {
-      Object.entries(selectedVariants).forEach(([tipo, valor]) => {
-        const variante = producto.variantes?.find(v => v.tipo === tipo && v.valor === valor);
-        if (variante?.precioAdicional) {
-          total += variante.precioAdicional * cantidad;
+    if (producto.atributos && producto.atributos.length > 0) {
+      Object.entries(selectedVariants).forEach(([grupoNombre, valor]) => {
+        const grupo = producto.atributos?.find(g => g.nombre === grupoNombre);
+        const opcion = grupo?.opciones.find(o => o.valor === valor);
+        if (opcion?.precioAdicional) {
+          total += opcion.precioAdicional * cantidad;
         }
       });
     }
@@ -98,7 +99,7 @@ export default function ProductoPage() {
     
     message += `\n📅 Cantidad: ${cantidad} unidad${cantidad > 1 ? 'es' : ''}`;
     
-    if (precioTotal > 0 && (producto.variantes?.length || 0) > 0) {
+    if (precioTotal > 0 && (producto.atributos?.length || 0) > 0) {
       message += `\n💵 Total estimado: $${precioTotal.toLocaleString('es-AR')}`;
     }
     
@@ -309,11 +310,11 @@ export default function ProductoPage() {
 
               {/* Opciones y Cantidad */}
               <div className="space-y-10">
-                {producto.variantes && producto.variantes.length > 0 && (
+                {producto.atributos && producto.atributos.length > 0 && (
                   <div className="space-y-4">
-                    <span className="text-xs uppercase tracking-widest text-gris-calido">Selecciona opciones</span>
+                    <span className="text-xs uppercase tracking-widest text-gris-calido font-bold">Personaliza tu pieza</span>
                     <VariantSelector 
-                      variantes={producto.variantes} 
+                      atributos={producto.atributos} 
                       onSelectionChange={setSelectedVariants}
                     />
                   </div>

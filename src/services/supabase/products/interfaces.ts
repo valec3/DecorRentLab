@@ -1,4 +1,4 @@
-// No longer importing unused Producto, Variante from types
+// Definición de tipos para la base de datos (Schema: decor_store)
 
 export interface CategoryRow {
   id: string;
@@ -21,28 +21,34 @@ export interface ProductRow {
   precio_original_venta: number | null;
   precio_original_alquiler: number | null;
   etiqueta_promocion: string | null;
+  imagenes: string[] | null;
+  destacado: boolean;
+  disponible: boolean;
   peso: string | null;
   garantia: string | null;
   tiempo_montaje: string | null;
   ideal_para: string[] | null;
-  imagenes: string[] | null;
-  destacado: boolean;
-  disponible: boolean;
-  material: string | null;
-  medidas: string | null;
-  color: string | null;
   created_at?: string;
   // Joins
   categories?: CategoryRow;
-  product_variants?: VariantRow[];
+  atributo_grupos?: AttributeGroupRow[];
 }
 
-export interface VariantRow {
+export interface AttributeGroupRow {
   id: string;
   producto_id: string;
-  tipo: "material" | "medida" | "color" | "acabado";
-  nombre: string;
-  valor: string;
+  nombre: string; // e.g., 'Color', 'Material'
+  tipo_ui: 'text' | 'color_picker' | 'select';
+  created_at?: string;
+  // Joins
+  atributo_valores?: AttributeValueRow[];
+}
+
+export interface AttributeValueRow {
+  id: string;
+  grupo_id: string;
+  label: string; // e.g., 'Dorado'
+  valor: string; // e.g., '#FFD700'
   precio_adicional: number;
   created_at?: string;
 }

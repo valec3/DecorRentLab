@@ -14,7 +14,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import Link from 'next/link';
+import Link from "next/link";
 
 const columns: ColumnDef<Categoria>[] = [
   {
@@ -49,10 +49,10 @@ const columns: ColumnDef<Categoria>[] = [
     id: "actions",
     cell: ({ row }) => {
       const category = row.original;
- 
+
       return (
         <DropdownMenu>
-          <DropdownMenuTrigger>
+          <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="h-8 w-8 p-0">
               <MoreHorizontal className="h-4 w-4" />
             </Button>
@@ -60,16 +60,45 @@ const columns: ColumnDef<Categoria>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuGroup>
               <DropdownMenuLabel>Acciones</DropdownMenuLabel>
+
               <DropdownMenuItem>
-                <Link href={`/catalogo/${category.slug}`} target="_blank" className="flex items-center w-full">
+                <Link
+                  href={`/catalogo/${category.slug}`}
+                  target="_blank"
+                  className="flex items-center w-full"
+                >
                   <ExternalLink className="mr-2 h-4 w-4" /> Ver en Tienda
                 </Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>Editar Categoría</DropdownMenuItem>
-              <DropdownMenuItem variant="destructive">Eliminar</DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link
+                  href={`/admin/categories/${category.id}`}
+                  className="cursor-pointer"
+                >
+                  Editar Categoría
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                className="text-red-600 focus:bg-red-50 focus:text-red-600"
+                onClick={async () => {
+                  if (
+                    confirm(
+                      "¿Estás seguro de que deseas eliminar esta categoría? Esto podría afectar a los productos asociados.",
+                    )
+                  ) {
+                    const res = await fetch(`/api/categories/${category.id}`, {
+                      method: "DELETE",
+                    });
+                    if (res.ok) window.location.reload();
+                    else alert("Error al eliminar la categoría.");
+                  }
+                }}
+              >
+                Eliminar
+              </DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -84,10 +113,10 @@ interface CategoryTableProps {
 
 export function CategoryTable({ data }: CategoryTableProps) {
   return (
-    <DataTable 
-      columns={columns} 
-      data={data} 
-      searchKey="nombre" 
+    <DataTable
+      columns={columns}
+      data={data}
+      searchKey="nombre"
       searchPlaceholder="Buscar categorías..."
     />
   );

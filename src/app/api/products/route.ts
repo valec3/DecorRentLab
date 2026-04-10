@@ -26,3 +26,17 @@ export async function GET(request: NextRequest) {
     );
   }
 }
+
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json();
+    const result = await productService.createProduct(body);
+    return NextResponse.json(result, { status: 201 });
+  } catch (error) {
+    console.error('API Products POST Error:', error);
+    return NextResponse.json(
+      { message: 'Error creating product' },
+      { status: 500 }
+    );
+  }
+}

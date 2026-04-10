@@ -34,3 +34,38 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+
+
+[
+  {
+    "nombre": "Paneles y Backing"
+  },
+  {
+    "nombre": "Estructuras en Metal"
+  },
+  {
+    "nombre": "Cilindros y Mesas"
+  },
+  {
+    "nombre": "Fundas en Tela"
+  },
+  {
+    "nombre": "Números y Letras LED"
+  },
+  {
+    "nombre": "Altillo y Complementos"
+  },
+  {
+    "nombre": "Sillas y Mesas"
+  },
+  {
+    "nombre": "Esferas Gigantes"
+  },
+  {
+    "nombre": "Pared de Flores"
+  },
+  {
+    "nombre": "Mariposas LED"
+  }
+]

@@ -16,7 +16,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import Link from 'next/link';
+import Link from "next/link";
 
 const columns: ColumnDef<Producto>[] = [
   {
@@ -26,10 +26,16 @@ const columns: ColumnDef<Producto>[] = [
       const p = row.original;
       const fallbackImage = "/placeholder-product.png";
       const src = p.imagenes?.[0] || fallbackImage;
-      
+
       return (
         <div className="relative h-10 w-10 overflow-hidden rounded-md border">
-          <Image src={src} alt={p.nombre} fill className="object-cover" sizes="40px" />
+          <Image
+            src={src}
+            alt={p.nombre}
+            fill
+            className="object-cover"
+            sizes="40px"
+          />
         </div>
       );
     },
@@ -72,7 +78,7 @@ const columns: ColumnDef<Producto>[] = [
           {product.disponible ? (
             <Badge variant="success">Disponible</Badge>
           ) : (
-             <Badge variant="unavailable">Agotado</Badge>
+            <Badge variant="unavailable">Agotado</Badge>
           )}
           {product.destacado && <Badge variant="featured">Dest</Badge>}
         </div>
@@ -83,10 +89,10 @@ const columns: ColumnDef<Producto>[] = [
     id: "actions",
     cell: ({ row }) => {
       const product = row.original;
- 
+
       return (
         <DropdownMenu>
-          <DropdownMenuTrigger>
+          <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="h-8 w-8 p-0">
               <MoreHorizontal className="h-4 w-4" />
             </Button>
@@ -94,19 +100,50 @@ const columns: ColumnDef<Producto>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuGroup>
               <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-              <DropdownMenuItem onClick={() => navigator.clipboard.writeText(product.id)}>
+
+              <DropdownMenuItem
+                onClick={() => navigator.clipboard.writeText(product.id)}
+              >
                 Copiar ID
               </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Link href={`/producto/${product.slug}`} target="_blank" className="flex items-center w-full">
+              <DropdownMenuItem asChild>
+                <Link
+                  href={`/producto/${product.slug}`}
+                  target="_blank"
+                  className="flex items-center w-full"
+                >
                   <ExternalLink className="mr-2 h-4 w-4" /> Ver en Tienda
                 </Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>Editar Producto</DropdownMenuItem>
-              <DropdownMenuItem variant="destructive">Eliminar</DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link
+                  href={`/admin/products/${product.slug}`}
+                  className="cursor-pointer"
+                >
+                  Editar Producto
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                className="text-red-600 focus:bg-red-50 focus:text-red-600"
+                onClick={async () => {
+                  if (
+                    confirm(
+                      "¿Estás seguro de que deseas eliminar este producto?",
+                    )
+                  ) {
+                    const res = await fetch(`/api/products/${product.id}`, {
+                      method: "DELETE",
+                    });
+                    if (res.ok) window.location.reload();
+                    else alert("Error al eliminar el producto.");
+                  }
+                }}
+              >
+                Eliminar
+              </DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -121,10 +158,10 @@ interface ProductTableProps {
 
 export function ProductTable({ data }: ProductTableProps) {
   return (
-    <DataTable 
-      columns={columns} 
-      data={data} 
-      searchKey="nombre" 
+    <DataTable
+      columns={columns}
+      data={data}
+      searchKey="nombre"
       searchPlaceholder="Buscar productos..."
     />
   );

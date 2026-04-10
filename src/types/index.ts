@@ -6,17 +6,18 @@ export interface Categoria {
   imagenCover: string;
 }
 
-export interface Variante {
-  tipo: "material" | "medida" | "color" | "acabado";
-  nombre: string;
-  valor: string;
-  precioAdicional?: number;
-}
-
-export interface VarianteSeleccionada {
-  varianteId: string;
+export interface AtributoValor {
+  id?: string;
+  label: string;
   valor: string;
   precioAdicional: number;
+}
+
+export interface AtributoGrupo {
+  id?: string;
+  nombre: string;
+  tipoUi: 'text' | 'color_picker' | 'select';
+  opciones: AtributoValor[];
 }
 
 export interface Producto {
@@ -26,7 +27,7 @@ export interface Producto {
   categoriaSlug: string;
   descripcionCorta: string;
   descripcionLarga: string;
-  variantes?: Variante[];
+  atributos?: AtributoGrupo[];
   precioVenta?: number;
   precioAlquiler?: number;
   promocion?: {

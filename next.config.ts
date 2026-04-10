@@ -19,8 +19,19 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "images.unsplash.com",
         port: "",
-        
-      }
+      },
+      {
+        protocol: "https",
+        hostname: "api.quierolapromocion.com",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "http",
+        hostname: "api.quierolapromocion.com",
+        port: "",
+        pathname: "/**",
+      },
     ],
   },
 };

@@ -1,129 +1,84 @@
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
-import { Variante } from '@/types';
+import { AtributoGrupo } from '@/types';
 
 interface VariantSelectorProps {
-  variantes: Variante[];
+  atributos: AtributoGrupo[];
   onSelectionChange: (seleccion: { [key: string]: string }) => void;
 }
 
-export function VariantSelector({ variantes, onSelectionChange }: VariantSelectorProps) {
-  const groupedVariantes = useMemo(() => {
-    const grupos: Record<string, Variante[]> = {};
-    if (variantes) {
-      variantes.forEach((v) => {
-        if (!grupos[v.tipo]) {
-          grupos[v.tipo] = [];
-        }
-        grupos[v.tipo].push(v);
-      });
-    }
-    return grupos;
-  }, [variantes]);
-
+export function VariantSelector({ atributos, onSelectionChange }: VariantSelectorProps) {
   const initialSelection = useMemo(() => {
     const selection: { [key: string]: string } = {};
-    Object.keys(groupedVariantes).forEach((tipo) => {
-      if (groupedVariantes[tipo].length > 0) {
-        selection[tipo] = groupedVariantes[tipo][0].valor;
+    atributos.forEach((grupo) => {
+      if (grupo.opciones.length > 0) {
+        selection[grupo.nombre] = grupo.opciones[0].valor;
       }
     });
     return selection;
-  }, [groupedVariantes]);
+  }, [atributos]);
 
   const [selected, setSelected] = useState(initialSelection);
-  const [prevVariantes, setPrevVariantes] = useState(variantes);
+  const [prevAtributos, setPrevAtributos] = useState(atributos);
 
-  // Reset local state if variants prop changes
-  if (variantes !== prevVariantes) {
+  // Sincronizar estado si las props cambian
+  if (atributos !== prevAtributos) {
     setSelected(initialSelection);
-    setPrevVariantes(variantes);
+    setPrevAtributos(atributos);
   }
 
   useEffect(() => {
     onSelectionChange(selected);
   }, [selected, onSelectionChange]);
 
-  const handleSelect = (tipo: string, valor: string) => {
-    const newSelection = { ...selected, [tipo]: valor };
+  const handleSelect = (grupoNombre: string, valor: string) => {
+    const newSelection = { ...selected, [grupoNombre]: valor };
     setSelected(newSelection);
-    onSelectionChange(newSelection);
   };
 
-  const getTipoLabel = (tipo: string) => {
-    const labels: Record<string, string> = {
-      material: 'Material',
-      medida: 'Tamaño',
-      color: 'Color',
-      acabado: 'Acabado',
-    };
-    return labels[tipo] || tipo;
-  };
+  const isColorSelector = (tipoUi: string) => tipoUi === 'color_picker';
 
-  const getColorClass = (valor: string) => {
-    const colorMap: Record<string, string> = {
-      'Dorado': 'bg-[#C9A66B]',
-      'Plata': 'bg-gray-300',
-      'Rosa': 'bg-pink-300',
-      'Blanco': 'bg-white border-2 border-gray-200',
-      'Negro': 'bg-gray-900',
-      'Verde esmeralda': 'bg-green-700',
-      'Burdeos': 'bg-red-900',
-      'Azul navy': 'bg-blue-900',
-      'Oro rosa': 'bg-rose-300',
-      'Natural': 'bg-amber-200',
-      'Transparente': 'bg-white/50 border-2 border-gray-200',
-    };
-    return colorMap[valor] || 'bg-gray-200';
-  };
-
-  if (!variantes || variantes.length === 0) {
+  if (!atributos || atributos.length === 0) {
     return null;
   }
 
-  const isColorType = (tipo: string) => {
-    return tipo === 'color' || (groupedVariantes[tipo]?.[0]?.valor && 
-      ['Dorado', 'Plata', 'Rosa', 'Blanco', 'Negro', 'Verde esmeralda', 'Burdeos', 'Azul navy', 'Oro rosa', 'Natural', 'Transparente'].includes(groupedVariantes[tipo][0].valor));
-  };
-
   return (
-    <div className="space-y-6">
-      {Object.entries(groupedVariantes).map(([tipo, vars]) => {
-        const isColor = isColorType(tipo);
+    <div className="space-y-8">
+      {atributos.map((grupo) => {
+        const isColor = isColorSelector(grupo.tipoUi);
         
         return (
-          <div key={tipo}>
-            <h4 className="text-xs uppercase tracking-widest text-gris-calido mb-3">
-              {getTipoLabel(tipo)}
+          <div key={grupo.id || grupo.nombre} className="space-y-3">
+            <h4 className="text-[10px] uppercase tracking-[0.2em] text-gris-calido/70 font-semibold mb-3">
+              {grupo.nombre}
             </h4>
-            <div className={`flex flex-wrap gap-2 ${isColor ? 'flex-nowrap' : ''}`}>
-              {vars.map((variante, index) => {
-                const isSelected = selected[tipo] === variante.valor;
+            <div className="flex flex-wrap gap-3">
+              {grupo.opciones.map((opcion) => {
+                const isSelected = selected[grupo.nombre] === opcion.valor;
                 
                 return (
                   <button
-                    key={`${tipo}-${index}`}
-                    onClick={() => handleSelect(tipo, variante.valor)}
-                    className={`relative px-4 py-2.5 rounded-full text-sm transition-all duration-200 whitespace-nowrap ${
+                    key={opcion.id || opcion.valor}
+                    onClick={() => handleSelect(grupo.nombre, opcion.valor)}
+                    className={`group relative flex items-center gap-2 px-5 py-3 rounded-xl transition-all duration-300 border-2 ${
                       isSelected
-                        ? 'bg-dorado text-white shadow-md'
-                        : 'bg-white border border-borde text-carbon hover:border-dorado hover:bg-crema-oscuro'
+                        ? 'bg-carbon text-white border-carbon shadow-premium-sm scale-105'
+                        : 'bg-white border-borde text-carbon hover:border-dorado/50 hover:bg-crema-oscuro'
                     }`}
                   >
-                    <span className="flex items-center gap-2">
-                      {isColor && (
-                        <span 
-                          className={`w-4 h-4 rounded-full flex-shrink-0 ${getColorClass(variante.valor)}`}
-                        />
-                      )}
-                      {variante.valor}
-                      {variante.precioAdicional && variante.precioAdicional > 0 && (
-                        <span className="text-xs opacity-80">
-                          +${variante.precioAdicional.toLocaleString('es-AR')}
-                        </span>
-                      )}
-                    </span>
+                    {isColor && (
+                       <span 
+                         className="w-4 h-4 rounded-full border border-black/10 shadow-inner"
+                         style={{ backgroundColor: opcion.valor }}
+                       />
+                    )}
+                    <span className="text-sm font-medium">{opcion.label}</span>
+                    {opcion.precioAdicional > 0 && (
+                      <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-sm ${isSelected ? 'bg-white/20 text-white' : 'bg-dorado/10 text-dorado'}`}>
+                        +${opcion.precioAdicional.toLocaleString('es-AR')}
+                      </span>
+                    )}
                   </button>
                 );
               })}
