@@ -1,0 +1,32 @@
+# Workflow name shown in GitHub Actions UI
+name: Lint
+
+# Trigger: runs on every push to main branch
+on:
+  push:
+    branches: [main]
+
+jobs:
+  lint:
+    # Run on a fresh Ubuntu VM
+    runs-on: ubuntu-latest
+
+    steps:
+      # Clone the repository into the runner so we can work with the code
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Install Bun (the project's package manager) on the runner
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      # Install all dependencies from bun.lock so the environment matches local dev
+      - name: Install dependencies
+        run: bun install
+
+      # Run the lint script defined in package.json ("eslint")
+      # Exits with a non-zero code if there are errors, failing the workflow
+      - name: Run linter
+        run: bun run lint

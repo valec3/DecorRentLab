@@ -23,7 +23,7 @@ export default async function EditProductPage({
   }
 
   return (
-    <div className="space-y-6 max-w-5xl mx-auto">
+    <div className="space-y-6 w-full mx-auto">
       <div className="flex items-center gap-4">
         <Link
           href="/admin/products"
@@ -36,7 +36,7 @@ export default async function EditProductPage({
             Editar Producto
           </h1>
           <p className="text-gris-calido mt-1">
-            Actualiza la información del producto "{product.nombre}".
+            Actualiza la información del producto &quot;{product.nombre}&quot;.
           </p>
         </div>
       </div>

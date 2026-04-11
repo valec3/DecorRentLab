@@ -12,6 +12,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { createBrowserClient } from "@supabase/ssr";
+import { User } from "@supabase/supabase-js";
 
 export default function AdminLayout({
   children,
@@ -21,7 +22,7 @@ export default function AdminLayout({
   const pathname = usePathname();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
 
   const supabase = createBrowserClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -69,7 +70,7 @@ export default function AdminLayout({
 
   if (loading) {
     return (
-      <div className="h-screen w-full flex items-center justify-center bg-slate-50">
+      <div className="h-screen w-full flex items-center justify-center bg-crema">
         <Loader2 className="animate-spin text-dorado" size={40} />
       </div>
     );
@@ -84,7 +85,7 @@ export default function AdminLayout({
   ];
 
   return (
-    <div className="flex h-screen overflow-hidden w-full bg-slate-50 text-carbon font-sans">
+    <div className="flex h-screen overflow-hidden w-full bg-crema text-carbon font-sans">
       {/* Sidebar (30% Dark) */}
       <aside className="w-72 bg-carbon flex flex-col shadow-2xl z-20">
         <div className="h-20 flex items-center px-8 border-b border-white/5">
@@ -138,7 +139,7 @@ export default function AdminLayout({
       </aside>
 
       {/* Main Content Area (70% Light) */}
-      <main className="flex-1 overflow-y-auto w-full bg-[#fcfcfc] dark:bg-carbon relative">
+      <main className="flex-1 overflow-y-auto w-full bg-crema relative">
         <div className="p-10 w-full mx-auto">
           {children}
         </div>

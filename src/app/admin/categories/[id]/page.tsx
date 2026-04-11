@@ -35,7 +35,7 @@ export default async function EditCategoryPage({
             Editar Categoría
           </h1>
           <p className="text-gris-calido mt-1">
-            Actualiza los detalles de la categoría "{category.nombre}".
+            Actualiza los detalles de la categoría &quot;{category.nombre}&quot;.
           </p>
         </div>
       </div>

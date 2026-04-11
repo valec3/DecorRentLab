@@ -1,5 +1,5 @@
 import { ProductRepository } from "./repository";
-import { Producto, Categoria, AtributoGrupo } from "@/types";
+import { Producto, Categoria } from "@/types";
 import {
   ProductRow,
   PaginatedResult,
@@ -129,33 +129,38 @@ export class ProductService {
     };
   }
 
-  private mapProductToRow(product: Partial<Producto>): any {
-    const row: any = {};
-    if (product.nombre) row.nombre = product.nombre;
-    if (product.slug) row.slug = product.slug;
-    if (product.descripcionCorta)
+  private mapProductToRow(product: Partial<Producto>): Partial<ProductRow> & { categoria_slug_temp?: string; atributos?: AtributoGrupo[] } {
+    const row: Partial<ProductRow> & { categoria_slug_temp?: string; atributos?: AtributoGrupo[] } = {};
+    
+    if (product.nombre !== undefined) row.nombre = product.nombre;
+    if (product.slug !== undefined) row.slug = product.slug;
+    if (product.descripcionCorta !== undefined)
       row.descripcion_corta = product.descripcionCorta;
-    if (product.descripcionLarga)
+    if (product.descripcionLarga !== undefined)
       row.descripcion_larga = product.descripcionLarga;
     if (product.precioAlquiler !== undefined)
       row.precio_alquiler = product.precioAlquiler;
     if (product.precioVenta !== undefined)
       row.precio_venta = product.precioVenta;
 
-    if (product.promocion) {
-      row.precio_original_venta = product.promocion.precioOriginalVenta;
-      row.precio_original_alquiler = product.promocion.precioOriginalAlquiler;
-      row.etiqueta_promocion = product.promocion.etiqueta;
+    if (product.promocion !== undefined) {
+      row.precio_original_venta = product.promocion?.precioOriginalVenta;
+      row.precio_original_alquiler = product.promocion?.precioOriginalAlquiler;
+      row.etiqueta_promocion = product.promocion?.etiqueta;
     }
 
     if (product.disponible !== undefined) row.disponible = product.disponible;
     if (product.destacado !== undefined) row.destacado = product.destacado;
-    if (product.imagenes) row.imagenes = product.imagenes;
-    if (product.categoriaSlug) {
+    if (product.imagenes !== undefined) row.imagenes = product.imagenes;
+    if (product.categoriaSlug !== undefined) {
       row.categoria_slug_temp = product.categoriaSlug;
     }
 
-    // El manejo de atributos en create/update se simplificó para el MVP según instrucciones
+    // Mapear atributos para que el repositorio los procese
+    if (product.atributos !== undefined) {
+      row.atributos = product.atributos;
+    }
+
     return row;
   }
 }

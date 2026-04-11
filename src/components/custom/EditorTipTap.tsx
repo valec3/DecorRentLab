@@ -1,5 +1,10 @@
 import { SimpleEditor } from '@/components/tiptap-templates/simple/simple-editor'
 
-export default function EditorTipTap() {
-  return <SimpleEditor />
+interface EditorTipTapProps {
+  value?: string;
+  onChange?: (content: string) => void;
+}
+
+export default function EditorTipTap({ value, onChange }: EditorTipTapProps) {
+  return <SimpleEditor initialContent={value} onContentChange={onChange} />
 }

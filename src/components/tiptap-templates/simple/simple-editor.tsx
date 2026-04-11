@@ -5,7 +5,6 @@ import { EditorContent, EditorContext, useEditor } from "@tiptap/react"
 
 // --- Tiptap Core Extensions ---
 import { StarterKit } from "@tiptap/starter-kit"
-import { Image } from "@tiptap/extension-image"
 import { TaskItem, TaskList } from "@tiptap/extension-list"
 import { TextAlign } from "@tiptap/extension-text-align"
 import { Typography } from "@tiptap/extension-typography"
@@ -24,19 +23,16 @@ import {
 } from "@/components/tiptap-ui-primitive/toolbar"
 
 // --- Tiptap Node ---
-import { ImageUploadNode } from "@/components/tiptap-node/image-upload-node/image-upload-node-extension"
 import { HorizontalRule } from "@/components/tiptap-node/horizontal-rule-node/horizontal-rule-node-extension"
 import "@/components/tiptap-node/blockquote-node/blockquote-node.scss"
 import "@/components/tiptap-node/code-block-node/code-block-node.scss"
 import "@/components/tiptap-node/horizontal-rule-node/horizontal-rule-node.scss"
 import "@/components/tiptap-node/list-node/list-node.scss"
-import "@/components/tiptap-node/image-node/image-node.scss"
 import "@/components/tiptap-node/heading-node/heading-node.scss"
 import "@/components/tiptap-node/paragraph-node/paragraph-node.scss"
 
 // --- Tiptap UI ---
 import { HeadingDropdownMenu } from "@/components/tiptap-ui/heading-dropdown-menu"
-import { ImageUploadButton } from "@/components/tiptap-ui/image-upload-button"
 import { ListDropdownMenu } from "@/components/tiptap-ui/list-dropdown-menu"
 import { BlockquoteButton } from "@/components/tiptap-ui/blockquote-button"
 import { CodeBlockButton } from "@/components/tiptap-ui/code-block-button"
@@ -67,7 +63,6 @@ import { useCursorVisibility } from "@/hooks/use-cursor-visibility"
 // --- Components ---
 
 // --- Lib ---
-import { handleImageUpload, MAX_FILE_SIZE } from "@/lib/tiptap-utils"
 
 // --- Styles ---
 import "@/components/tiptap-templates/simple/simple-editor.scss"
@@ -85,8 +80,6 @@ const MainToolbarContent = ({
 }) => {
   return (
     <>
-      <Spacer />
-
       <ToolbarGroup>
         <UndoRedoButton action="undo" />
         <UndoRedoButton action="redo" />
@@ -136,12 +129,6 @@ const MainToolbarContent = ({
         <TextAlignButton align="justify" />
       </ToolbarGroup>
 
-      <ToolbarSeparator />
-
-      <ToolbarGroup>
-        <ImageUploadButton text="Add" />
-      </ToolbarGroup>
-
       <Spacer />
 
       {isMobile && <ToolbarSeparator />}
@@ -179,7 +166,13 @@ const MobileToolbarContent = ({
   </>
 )
 
-export function SimpleEditor() {
+export function SimpleEditor({
+  initialContent,
+  onContentChange,
+}: {
+  initialContent?: string
+  onContentChange?: (content: string) => void
+}) {
   const isMobile = useIsBreakpoint()
   const { height } = useWindowSize()
   const [mobileView, setMobileView] = useState<"main" | "highlighter" | "link">(
@@ -189,6 +182,9 @@ export function SimpleEditor() {
 
   const editor = useEditor({
     immediatelyRender: false,
+    onUpdate: ({ editor }) => {
+      onContentChange?.(editor.getHTML())
+    },
     editorProps: {
       attributes: {
         autocomplete: "off",
@@ -216,27 +212,24 @@ export function SimpleEditor() {
       Superscript,
       Subscript,
       Selection,
-      ImageUploadNode.configure({
-        accept: "image/*",
-        maxSize: MAX_FILE_SIZE,
-        limit: 3,
-        upload: handleImageUpload,
-        onError: (error) => console.error("Upload failed:", error),
-      }),
     ],
-    content,
+    content: initialContent !== undefined ? initialContent : content,
   })
 
+  const [toolbarHeight, setToolbarHeight] = useState(0)
+  
   const rect = useCursorVisibility({
     editor,
-    overlayHeight: toolbarRef.current?.getBoundingClientRect().height ?? 0,
+    overlayHeight: toolbarHeight,
   })
 
   useEffect(() => {
-    if (!isMobile && mobileView !== "main") {
-      setMobileView("main")
+    if (toolbarRef.current) {
+      setToolbarHeight(toolbarRef.current.getBoundingClientRect().height)
     }
-  }, [isMobile, mobileView])
+  }, [toolbarRef])
+
+  const effectiveView = isMobile ? mobileView : "main"
 
   return (
     <div className="simple-editor-wrapper">
@@ -251,7 +244,7 @@ export function SimpleEditor() {
               : {}),
           }}
         >
-          {mobileView === "main" ? (
+          {effectiveView === "main" ? (
             <MainToolbarContent
               onHighlighterClick={() => setMobileView("highlighter")}
               onLinkClick={() => setMobileView("link")}
@@ -259,7 +252,7 @@ export function SimpleEditor() {
             />
           ) : (
             <MobileToolbarContent
-              type={mobileView === "highlighter" ? "highlighter" : "link"}
+              type={effectiveView === "highlighter" ? "highlighter" : "link"}
               onBack={() => setMobileView("main")}
             />
           )}

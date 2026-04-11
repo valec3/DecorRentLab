@@ -3,7 +3,6 @@ import {
   ProductRow,
   CategoryRow,
   ProductFilters,
-  VariantRow,
 } from "./interfaces";
 
 export class ProductRepository {
@@ -91,7 +90,8 @@ export class ProductRepository {
   async createProduct(
     product: Partial<ProductRow> & {
       categoria_slug_temp?: string;
-      product_variants?: Partial<VariantRow>[];
+      product_variants?: never;
+      atributos?: AtributoGrupo[];
     },
   ): Promise<ProductRow> {
     const db = await this.getDb();
@@ -105,12 +105,14 @@ export class ProductRepository {
       if (cat) product.categoria_id = cat.id;
     }
 
-    // Separamos las variantes de los datos del producto
-    const {
-      product_variants,
-      categoria_slug_temp: _unused,
-      ...insertData
-    } = product;
+    // Limpiar campos que no pertenecen a la tabla products
+    const insertData = { ...product };
+    const cleanData = insertData as Record<string, unknown>;
+    delete cleanData.categoria_slug_temp;
+    delete cleanData.product_variants;
+    delete cleanData.atributos;
+    delete cleanData.categories;
+    delete cleanData.atributo_grupos;
 
     const { data: newProduct, error } = await db
 
@@ -156,7 +158,8 @@ export class ProductRepository {
     idOrSlug: string,
     product: Partial<ProductRow> & {
       categoria_slug_temp?: string;
-      product_variants?: Partial<VariantRow>[];
+      product_variants?: never;
+      atributos?: AtributoGrupo[];
     },
   ): Promise<ProductRow> {
     const db = await this.getDb();
@@ -174,12 +177,15 @@ export class ProductRepository {
       if (cat) product.categoria_id = cat.id;
     }
 
-    // Separamos las variantes
-    const {
-      product_variants,
-      categoria_slug_temp: _unused2,
-      ...updateData
-    } = product;
+    // Limpiar campos que no pertenecen a la tabla products
+    const updateData = { ...product };
+    const cleanUpdateData = updateData as Record<string, unknown>;
+    delete cleanUpdateData.categoria_slug_temp;
+    delete cleanUpdateData.product_variants;
+    delete cleanUpdateData.atributos;
+    delete cleanUpdateData.categories;
+    delete cleanUpdateData.atributo_grupos;
+
     let query = db.from("products").update(updateData);
 
     if (isUuid) query = query.eq("id", idOrSlug);

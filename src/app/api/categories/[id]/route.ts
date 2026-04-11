@@ -19,6 +19,7 @@ export async function GET(
 
     return NextResponse.json(category);
   } catch (error) {
+    console.error(error);
     return NextResponse.json(
       { message: "Error fetching category" },
       { status: 500 },
@@ -35,7 +36,7 @@ export async function PATCH(
     const body = await request.json();
     const result = await productService.updateCategory(id, body);
     return NextResponse.json(result);
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { message: "Error updating category" },
       { status: 500 },
@@ -51,7 +52,7 @@ export async function DELETE(
     const { id } = await params;
     await productService.deleteCategory(id);
     return new NextResponse(null, { status: 204 });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { message: "Error deleting category" },
       { status: 500 },
