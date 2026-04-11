@@ -277,7 +277,7 @@ export function ProductForm({ initialData, categorias }: ProductFormProps) {
         {/* Columna Izquierda: Información y Descripción (70%) */}
         <div className="lg:col-span-8 space-y-12">
           {/* Card: Info Básica */}
-          <section className="bg-white p-10 rounded-[2.5rem] border border-slate-200/60 shadow-premium-sm space-y-8">
+          <section className="bg-white p-6 md:p-10 rounded-[2.5rem] border border-slate-200/60 shadow-premium-sm space-y-8">
             <div className="flex items-center gap-4 border-b border-slate-50 pb-6">
                <div className="w-10 h-10 rounded-2xl bg-carbon/5 flex items-center justify-center text-carbon">
                  <Layers size={20} />
@@ -308,7 +308,7 @@ export function ProductForm({ initialData, categorias }: ProductFormProps) {
           </section>
 
           {/* Card: Descripción Enriquecida - PRIORIDAd */}
-          <section className="bg-white p-10 rounded-[2.5rem] border border-slate-200/60 shadow-premium-sm space-y-6">
+          <section className="bg-white p-6 md:p-10 rounded-[2.5rem] border border-slate-200/60 shadow-premium-sm space-y-6">
             <div className="flex items-center justify-between border-b border-slate-50 pb-6">
                <div className="flex items-center gap-4">
                  <div className="w-10 h-10 rounded-2xl bg-dorado/5 flex items-center justify-center text-dorado">
@@ -328,7 +328,7 @@ export function ProductForm({ initialData, categorias }: ProductFormProps) {
           </section>
 
           {/* Card: Variantes */}
-          <section className="bg-white p-10 rounded-[2.5rem] border border-slate-200/60 shadow-premium-sm space-y-8">
+          <section className="bg-white p-6 md:p-10 rounded-[2.5rem] border border-slate-200/60 shadow-premium-sm space-y-8">
             <div className="flex items-center justify-between border-b border-slate-50 pb-6">
               <div className="flex items-center gap-4">
                 <div className="w-10 h-10 rounded-2xl bg-carbon/5 flex items-center justify-center text-carbon">
@@ -542,7 +542,7 @@ export function ProductForm({ initialData, categorias }: ProductFormProps) {
       </div>
 
       {/* Footer Flotante de Acciones */}
-      <div className="fixed bottom-10 left-[calc(288px+2.5rem)] right-10 z-30 bg-white/80 backdrop-blur-xl p-4 rounded-[2rem] border border-slate-200 shadow-premium-lg flex justify-between items-center px-10 animate-in slide-in-from-bottom-10 duration-700">
+      <div className="fixed bottom-6 lg:bottom-10 left-4 right-4 lg:left-[calc(288px+2.5rem)] lg:right-10 z-30 bg-white/90 backdrop-blur-xl p-4 md:p-6 rounded-[2rem] border border-slate-200 shadow-premium-lg flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0 lg:px-10 animate-in slide-in-from-bottom-10 duration-700">
         <div className="flex flex-col">
           <span className="text-[10px] font-bold uppercase tracking-widest text-gris-calido/50">Estado del guardado</span>
           <span className="text-xs font-bold text-carbon">{formData.id ? 'Editando Artículo' : 'Nuevo Artículo'}</span>

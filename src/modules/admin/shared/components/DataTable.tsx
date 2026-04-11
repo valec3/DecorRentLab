@@ -70,8 +70,9 @@ export function DataTable<TData, TValue>({
           />
         </div>
       )}
-      <div className="rounded-md border bg-white shadow-soft">
-        <Table>
+      <div className="rounded-md border bg-white shadow-soft overflow-x-auto">
+        <div className="min-w-[800px] lg:min-w-0">
+          <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
@@ -118,7 +119,8 @@ export function DataTable<TData, TValue>({
               </TableRow>
             )}
           </TableBody>
-        </Table>
+          </Table>
+        </div>
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
         <Button

@@ -7,6 +7,8 @@ import {
   LogOut,
   LayoutDashboard,
   Loader2,
+  Menu,
+  X,
 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -23,6 +25,7 @@ export default function AdminLayout({
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const supabase = createBrowserClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -85,16 +88,33 @@ export default function AdminLayout({
   ];
 
   return (
-    <div className="flex h-screen overflow-hidden w-full bg-crema text-carbon font-sans">
+    <div className="flex h-screen overflow-hidden w-full bg-crema text-carbon font-sans relative">
+      {/* Mobile Sidebar Overlay */}
+      {isSidebarOpen && (
+        <div 
+          className="lg:hidden fixed inset-0 bg-carbon/40 backdrop-blur-sm z-40 transition-opacity duration-300"
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
+
       {/* Sidebar (30% Dark) */}
-      <aside className="w-72 bg-carbon flex flex-col shadow-2xl z-20">
-        <div className="h-20 flex items-center px-8 border-b border-white/5">
+      <aside className={cn(
+        "fixed lg:relative w-72 h-full bg-carbon flex flex-col shadow-2xl z-50 transition-transform duration-300 ease-in-out transform",
+        isSidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+      )}>
+        <div className="h-20 flex items-center justify-between px-8 border-b border-white/5">
           <Link
             href="/admin"
             className="font-serif font-bold text-2xl text-white tracking-tight"
           >
             Decor<span className="text-dorado">Admin</span>
           </Link>
+          <button 
+            className="lg:hidden text-white/60 hover:text-white"
+            onClick={() => setIsSidebarOpen(false)}
+          >
+            <X size={24} />
+          </button>
         </div>
         <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
           {navItems.map((item) => {
@@ -105,6 +125,7 @@ export default function AdminLayout({
               <Link
                 key={item.href}
                 href={item.href}
+                onClick={() => setIsSidebarOpen(false)}
                 className={cn(
                   "flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-2xl transition-all duration-300",
                   isActive
@@ -139,8 +160,21 @@ export default function AdminLayout({
       </aside>
 
       {/* Main Content Area (70% Light) */}
-      <main className="flex-1 overflow-y-auto w-full bg-crema relative">
-        <div className="p-10 w-full mx-auto">
+      <main className="flex-1 overflow-y-auto w-full bg-crema relative h-full">
+        {/* Mobile Header Trigger */}
+        <div className="lg:hidden h-16 px-6 border-b border-slate-100 flex items-center bg-white sticky top-0 z-30 shadow-sm">
+          <button 
+            onClick={() => setIsSidebarOpen(true)}
+            className="p-2 -ml-2 text-carbon hover:bg-slate-50 rounded-xl transition-colors"
+          >
+            <Menu size={24} />
+          </button>
+          <span className="ml-4 font-serif font-bold text-lg text-carbon">
+            Decor<span className="text-dorado">Admin</span>
+          </span>
+        </div>
+
+        <div className="p-4 md:p-8 lg:p-10 w-full mx-auto">
           {children}
         </div>
       </main>
