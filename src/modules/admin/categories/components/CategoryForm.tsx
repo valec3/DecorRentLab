@@ -7,6 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Loader2, Save } from "lucide-react";
 import { useRouter } from "next/navigation";
 
+import { slugify } from "@/lib/utils";
+
 interface CategoryFormProps {
   initialData?: Categoria | null;
 }
@@ -19,6 +21,15 @@ export function CategoryForm({ initialData }: CategoryFormProps) {
     slug: initialData?.slug || "",
     descripcion: initialData?.descripcion || "",
   });
+
+  const handleNameChange = (val: string) => {
+    const newSlug = !initialData ? slugify(val) : formData.slug;
+    setFormData({ ...formData, nombre: val, slug: newSlug });
+  };
+
+  const handleSlugChange = (val: string) => {
+    setFormData({ ...formData, slug: slugify(val) });
+  };
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -54,7 +65,7 @@ export function CategoryForm({ initialData }: CategoryFormProps) {
           <label className="text-xs font-bold uppercase tracking-wider text-gris-calido/70 ml-1">Nombre</label>
           <Input 
             value={formData.nombre}
-            onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
+            onChange={(e) => handleNameChange(e.target.value)}
             placeholder="Ej: Paneles Shimmer"
             required
           />
@@ -64,10 +75,11 @@ export function CategoryForm({ initialData }: CategoryFormProps) {
           <label className="text-xs font-bold uppercase tracking-wider text-gris-calido/70 ml-1">Slug (URL Path)</label>
           <Input 
             value={formData.slug}
-            onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
+            onChange={(e) => handleSlugChange(e.target.value)}
             placeholder="paneles-shimmer"
             required
           />
+          <p className="text-[10px] text-gris-calido px-1 italic">Solo letras, números y guiones. Sin símbolos ni espacios.</p>
         </div>
 
         <div className="space-y-2">

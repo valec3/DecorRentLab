@@ -29,19 +29,9 @@ interface ProductFormProps {
 
 const VARIANTES_FIJAS = ["Color", "Material", "Acabado", "Tamaño"] as const;
 
-// Helper para generar slugs
-const slugify = (text: string) => {
-  return text
-    .toString()
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/\s+/g, "-")
-    .replace(/[^\w-]+/g, "")
-    .replace(/--+/g, "-")
-    .replace(/^-+/, "")
-    .replace(/-+$/, "");
-};
+import { slugify } from "@/lib/utils";
+
+// Helper para generar slugs eliminado. Usando el de @/lib/utils
 
 export function ProductForm({ initialData, categorias }: ProductFormProps) {
   const router = useRouter();
@@ -73,8 +63,8 @@ export function ProductForm({ initialData, categorias }: ProductFormProps) {
     precioVentaNormal: initialData?.promocion?.precioOriginalVenta || initialData?.precioVenta || 0,
     precioAlquilerNormal: initialData?.promocion?.precioOriginalAlquiler || initialData?.precioAlquiler || 0,
     // Calculamos el descuento actual para mostrarlo en el input
-    descuentoVenta: initialData?.promocion?.precioOriginalVenta ? (initialData.promocion.precioOriginalVenta - initialData.precioVenta) : 0,
-    descuentoAlquiler: initialData?.promocion?.precioOriginalAlquiler ? (initialData.promocion.precioOriginalAlquiler - initialData.precioAlquiler) : 0,
+    descuentoVenta: initialData?.promocion?.precioOriginalVenta ? (initialData.promocion.precioOriginalVenta - (initialData.precioVenta || 0)) : 0,
+    descuentoAlquiler: initialData?.promocion?.precioOriginalAlquiler ? (initialData.promocion.precioOriginalAlquiler - (initialData.precioAlquiler || 0)) : 0,
     
     categoriaSlug: initialData?.categoriaSlug || "",
     disponible: initialData?.disponible ?? true,
@@ -150,7 +140,7 @@ export function ProductForm({ initialData, categorias }: ProductFormProps) {
       const opcion = { ...newOpciones[opcionIndex], [field]: value };
 
       if (field === 'label' && grupo.tipoUi !== 'color_picker') {
-        opcion.valor = value;
+        opcion.valor = String(value);
       }
 
       newOpciones[opcionIndex] = opcion;

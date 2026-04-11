@@ -77,10 +77,10 @@ const columns: ColumnDef<Categoria>[] = [
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem asChild>
+              <DropdownMenuItem className="p-0">
                 <Link
                   href={`/admin/categories/${category.id}`}
-                  className="cursor-pointer"
+                  className="flex items-center w-full px-1.5 py-1 cursor-pointer"
                 >
                   Editar Categoría
                 </Link>

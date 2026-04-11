@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
-import { categorias, getCategoriaBySlug, getProductosByCategoria } from '@/data/mock';
+import { categoryService } from '@/services/supabase/categories/service';
+import { productService } from '@/services/supabase/products/service';
 import { ProductCard } from '@/components/custom/ProductCard';
 import { Breadcrumbs } from '@/components/custom/Breadcrumbs';
 
@@ -9,14 +10,15 @@ interface PageProps {
 }
 
 export async function generateStaticParams() {
-  return categorias.map((cat) => ({
+  const categories = await categoryService.getCategories();
+  return categories.map((cat) => ({
     categoria: cat.slug,
   }));
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { categoria } = await params;
-  const cat = getCategoriaBySlug(categoria);
+  const cat = await categoryService.getCategory(categoria);
   
   if (!cat) {
     return { title: 'Categoría no encontrada' };
@@ -30,13 +32,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function CategoriaPage({ params }: PageProps) {
   const { categoria } = await params;
-  const cat = getCategoriaBySlug(categoria);
+  const cat = await categoryService.getCategory(categoria);
 
   if (!cat) {
     notFound();
   }
 
-  const productos = getProductosByCategoria(categoria);
+  const { data: productos } = await productService.getPaginatedProducts(1, 100, {
+    categoriaSlug: categoria
+  });
 
   return (
     <div className="pt-24 pb-16 bg-crema min-h-screen">

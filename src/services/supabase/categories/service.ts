@@ -1,6 +1,6 @@
 import { CategoryRepository } from "./repository";
-import { Categoria } from "@/types";
 import { CategoryRow } from "./interfaces";
+import { Categoria } from "@/types";
 
 export class CategoryService {
   private repository: CategoryRepository;
@@ -30,6 +30,9 @@ export class CategoryService {
    * Crea una nueva categoría.
    */
   async createCategory(category: Partial<Categoria>): Promise<Categoria> {
+    if (category.slug && !/^[a-z0-9-]+$/.test(category.slug)) {
+      throw new Error("Invalid slug format. Only lowercase, numbers and hyphens are allowed.");
+    }
     const row = await this.repository.createCategory({
       nombre: category.nombre,
       slug: category.slug,
@@ -43,6 +46,9 @@ export class CategoryService {
    * Actualiza una categoría existente.
    */
   async updateCategory(id: string, category: Partial<Categoria>): Promise<Categoria> {
+    if (category.slug && !/^[a-z0-9-]+$/.test(category.slug)) {
+      throw new Error("Invalid slug format. Only lowercase, numbers and hyphens are allowed.");
+    }
     const row = await this.repository.updateCategory(id, {
       nombre: category.nombre,
       slug: category.slug,

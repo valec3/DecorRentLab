@@ -12,6 +12,7 @@ import { Highlight } from "@tiptap/extension-highlight"
 import { Subscript } from "@tiptap/extension-subscript"
 import { Superscript } from "@tiptap/extension-superscript"
 import { Selection } from "@tiptap/extensions"
+import { Image } from "@tiptap/extension-image"
 
 // --- UI Primitives ---
 import { Button } from "@/components/tiptap-ui-primitive/button"

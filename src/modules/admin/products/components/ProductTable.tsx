@@ -110,11 +110,11 @@ const columns: ColumnDef<Producto>[] = [
               >
                 Copiar ID
               </DropdownMenuItem>
-              <DropdownMenuItem asChild>
+              <DropdownMenuItem className="p-0">
                 <Link
                   href={`/producto/${product.slug}`}
                   target="_blank"
-                  className="flex items-center w-full"
+                  className="flex items-center w-full px-1.5 py-1"
                 >
                   <ExternalLink className="mr-2 h-4 w-4" /> Ver en Tienda
                 </Link>
@@ -122,10 +122,10 @@ const columns: ColumnDef<Producto>[] = [
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem asChild>
+              <DropdownMenuItem className="p-0">
                 <Link
                   href={`/admin/products/${product.slug}`}
-                  className="cursor-pointer"
+                  className="flex items-center w-full px-1.5 py-1 cursor-pointer"
                 >
                   Editar Producto
                 </Link>

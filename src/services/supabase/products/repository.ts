@@ -4,6 +4,7 @@ import {
   CategoryRow,
   ProductFilters,
 } from "./interfaces";
+import { AtributoGrupo } from "@/types";
 
 export class ProductRepository {
   private async getDb() {
