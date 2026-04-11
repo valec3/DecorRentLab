@@ -7,6 +7,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { productService } from "@/services/supabase/products/service";
+import { categoryService } from "@/services/supabase/categories/service";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
@@ -14,7 +15,7 @@ export const dynamic = "force-dynamic";
 
 export default async function AdminDashboard() {
   const productsResult = await productService.getPaginatedProducts(1, 100);
-  const categories = await productService.getCategories();
+  const categories = await categoryService.getCategories();
 
   const stats = [
     {

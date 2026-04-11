@@ -1,13 +1,6 @@
-// Definición de tipos para la base de datos (Schema: decor_store)
+import { CategoryRow } from "../categories/interfaces";
 
-export interface CategoryRow {
-  id: string;
-  nombre: string;
-  slug: string;
-  descripcion: string | null;
-  imagen_cover: string | null;
-  created_at?: string;
-}
+export { type CategoryRow };
 
 export interface ProductRow {
   id: string;

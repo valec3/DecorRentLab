@@ -1,5 +1,5 @@
 import { CategoryForm } from "@/modules/admin/categories/components/CategoryForm";
-import { productService } from "@/services/supabase/products/service";
+import { categoryService } from "@/services/supabase/categories/service";
 import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
 import { notFound } from "next/navigation";
@@ -14,8 +14,7 @@ export default async function EditCategoryPage({
   params,
 }: EditCategoryPageProps) {
   const { id } = await params;
-  const categories = await productService.getCategories();
-  const category = categories.find((c) => c.id === id);
+  const category = await categoryService.getCategory(id);
 
   if (!category) {
     notFound();

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { productService } from "@/services/supabase/products/service";
+import { categoryService } from "@/services/supabase/categories/service";
 
 export async function GET(
   _request: NextRequest,
@@ -7,8 +7,7 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-    const categories = await productService.getCategories();
-    const category = categories.find((c) => c.id === id);
+    const category = await categoryService.getCategory(id);
 
     if (!category) {
       return NextResponse.json(
@@ -34,7 +33,7 @@ export async function PATCH(
   try {
     const { id } = await params;
     const body = await request.json();
-    const result = await productService.updateCategory(id, body);
+    const result = await categoryService.updateCategory(id, body);
     return NextResponse.json(result);
   } catch {
     return NextResponse.json(
@@ -50,7 +49,7 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
-    await productService.deleteCategory(id);
+    await categoryService.deleteCategory(id);
     return new NextResponse(null, { status: 204 });
   } catch {
     return NextResponse.json(

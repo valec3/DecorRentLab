@@ -73,20 +73,6 @@ export class ProductService {
   }
 
   /**
-   * Categorías
-   */
-  async getCategories(): Promise<Categoria[]> {
-    const rows = await this.repository.getCategories();
-    return rows.map((row) => ({
-      id: row.id,
-      nombre: row.nombre,
-      slug: row.slug,
-      descripcion: row.descripcion || "",
-      imagenCover: row.imagen_cover || "",
-    }));
-  }
-
-  /**
    * Mapeadores
    */
   private mapRowToProduct(row: ProductRow): Producto {
