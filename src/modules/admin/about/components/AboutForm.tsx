@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { AboutContent, ServiceItem, ValueItem } from "@/types";
 import { Button } from "@/components/ui/button";
@@ -14,8 +15,11 @@ import {
   Info,
   History,
   Briefcase,
-  Star
+  Star,
+  UploadCloud,
+  X
 } from "lucide-react";
+import { uploadImageFile } from "@/services/custom/files";
 
 interface AboutFormProps {
   initialData: AboutContent;
@@ -23,18 +27,55 @@ interface AboutFormProps {
 
 export function AboutForm({ initialData }: AboutFormProps) {
   const router = useRouter();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [formData, setFormData] = useState<AboutContent>(initialData);
+  const [localFile, setLocalFile] = useState<{ file: File; preview: string } | null>(null);
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    
+    if (localFile) URL.revokeObjectURL(localFile.preview);
+    
+    setLocalFile({
+      file,
+      preview: URL.createObjectURL(file),
+    });
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
+  const removeLocalImage = () => {
+    if (localFile) URL.revokeObjectURL(localFile.preview);
+    setLocalFile(null);
+  };
+
+  const removeImage = () => {
+    setFormData((prev) => ({ ...prev, mainImage: "" }));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
     try {
+      let finalImageUrl = formData.mainImage;
+      
+      if (localFile) {
+        setUploading(true);
+        finalImageUrl = await uploadImageFile(localFile.file);
+      }
+
+      const payload = {
+        ...formData,
+        mainImage: finalImageUrl,
+      };
+
       const response = await fetch("/api/about", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(payload),
       });
 
       if (!response.ok) throw new Error("Error al actualizar");
@@ -46,6 +87,7 @@ export function AboutForm({ initialData }: AboutFormProps) {
       alert("Hubo un problema al guardar los cambios");
     } finally {
       setLoading(false);
+      setUploading(false);
     }
   };
 
@@ -102,13 +144,49 @@ export function AboutForm({ initialData }: AboutFormProps) {
             />
           </div>
           <div className="space-y-2">
-            <label className="text-xs font-bold uppercase tracking-widest text-gris-calido ml-1">URL Imagen Principal</label>
-            <Input
-              value={formData.mainImage}
-              onChange={(e) => setFormData({ ...formData, mainImage: e.target.value })}
-              className="h-12 rounded-xl"
-              placeholder="URL de la imagen"
-              required
+            <label className="text-xs font-bold uppercase tracking-widest text-gris-calido ml-1">Imagen Principal</label>
+            <div className={`relative aspect-video rounded-2xl overflow-hidden border-2 border-dashed transition-all ${(!formData.mainImage && !localFile) ? 'border-slate-200 bg-slate-50' : 'border-transparent'}`}>
+              {(formData.mainImage || localFile) ? (
+                <>
+                  <Image 
+                    src={localFile ? localFile.preview : formData.mainImage} 
+                    alt="Imagen Principal" 
+                    fill 
+                    className="object-cover"
+                    unoptimized={!!localFile}
+                  />
+                  {uploading && (
+                    <div className="absolute inset-0 bg-white/60 backdrop-blur-sm flex items-center justify-center">
+                      <Loader2 className="animate-spin text-dorado w-10 h-10" />
+                    </div>
+                  )}
+                  <button 
+                    type="button" 
+                    onClick={localFile ? removeLocalImage : removeImage} 
+                    className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm text-red-500 p-2 rounded-xl shadow-lg hover:bg-red-50 transition-all border border-slate-100"
+                  >
+                    <X size={20} />
+                  </button>
+                </>
+              ) : (
+                <button 
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="w-full h-full flex flex-col items-center justify-center gap-4 group"
+                >
+                  <div className="w-12 h-12 rounded-2xl bg-white shadow-sm flex items-center justify-center text-slate-300 group-hover:text-dorado group-hover:shadow-md transition-all">
+                    <UploadCloud size={24} />
+                  </div>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-gris-calido/50">Subir Imagen Principal</span>
+                </button>
+              )}
+            </div>
+            <input 
+              type="file" 
+              ref={fileInputRef} 
+              onChange={handleFileSelect} 
+              className="hidden" 
+              accept="image/*" 
             />
           </div>
         </div>
