@@ -5,10 +5,11 @@ import { testimonialService } from "@/services/supabase/testimonials/service";
 // GET /api/testimonials/[id]
 export async function GET(
   _request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   try {
-    const testimonial = await testimonialService.getById(params.id);
+    const testimonial = await testimonialService.getById(id);
     if (!testimonial) {
       return NextResponse.json(
         { message: "Testimonial not found" },
@@ -28,11 +29,12 @@ export async function GET(
 // PATCH /api/testimonials/[id]
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   try {
     const body = await request.json();
-    const updatedTestimonial = await testimonialService.update(params.id, body);
+    const updatedTestimonial = await testimonialService.update(id, body);
     
     revalidatePath("/admin/testimonials");
     revalidatePath("/");
@@ -50,10 +52,11 @@ export async function PATCH(
 // DELETE /api/testimonials/[id]
 export async function DELETE(
   _request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   try {
-    await testimonialService.delete(params.id);
+    await testimonialService.delete(id);
     
     revalidatePath("/admin/testimonials");
     revalidatePath("/");

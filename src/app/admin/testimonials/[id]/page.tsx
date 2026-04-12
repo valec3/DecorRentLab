@@ -4,13 +4,14 @@ import { MessageSquare } from "lucide-react";
 import { notFound } from "next/navigation";
 
 interface EditTestimonialPageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 export default async function EditTestimonialPage({ params }: EditTestimonialPageProps) {
-  const testimonial = await testimonialService.getById(params.id);
+  const { id } = await params;
+  const testimonial = await testimonialService.getById(id);
 
   if (!testimonial) {
     notFound();

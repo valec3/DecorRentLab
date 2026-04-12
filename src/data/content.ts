@@ -29,7 +29,7 @@ export const faqs: FaqItem[] = [
 
 export const testimonials: TestimonialItem[] = [
   {
-    id: 1,
+    id: '1',
     name: 'María González',
     event: 'Boda',
     text: 'Increíble experiencia con Decor Rent Lab. La decoración del corazón de flores fue el centro de atención de nuestra boda. Todo perfección.',
@@ -37,7 +37,7 @@ export const testimonials: TestimonialItem[] = [
     rating: 5
   },
   {
-    id: 2,
+    id: '2',
     name: 'Carolina Sánchez',
     event: 'Quinceañera',
     text: 'El mejor descubrimiento para la decoración del evento de mi hija. Las letras LED Infinity fueron un éxito total. Recomendadísimo.',
@@ -45,7 +45,7 @@ export const testimonials: TestimonialItem[] = [
     rating: 5
   },
   {
-    id: 3,
+    id: '3',
     name: 'Roberto Díaz',
     event: 'Evento Corporativo',
     text: 'Profesionalismo absoluto. El equipo entendió perfectamente lo que necesitábamos y el resultado superó expectativas.',
@@ -53,7 +53,7 @@ export const testimonials: TestimonialItem[] = [
     rating: 5
   },
   {
-    id: 4,
+    id: '4',
     name: 'Ana Martínez',
     event: 'Baby Shower',
     text: 'Las esferas gigantes fueron mágicas. Todos los invitados quedaron impresionados. Volveré a contratar sin dudas.',
