@@ -1,1 +1,0 @@
-feat: consume testimonials from database on home page, refactor Testimonials component to use props

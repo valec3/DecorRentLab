@@ -10,6 +10,7 @@ import {
   Menu,
   X,
   MessageSquare,
+  Info,
 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -87,6 +88,7 @@ export default function AdminLayout({
     { label: "Productos", href: "/admin/products", icon: Package },
     { label: "Categorías", href: "/admin/categories", icon: FolderTree },
     { label: "Testimonios", href: "/admin/testimonials", icon: MessageSquare },
+    { label: "Nosotros", href: "/admin/about", icon: Info },
   ];
 
   return (
