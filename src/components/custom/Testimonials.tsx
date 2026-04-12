@@ -4,9 +4,13 @@ import { useState, useRef } from 'react';
 import Image from 'next/image';
 import { ChevronLeft, ChevronRight, Quote } from 'lucide-react';
 
-import { testimonials } from '@/data/content';
+import { TestimonialItem } from '@/types';
 
-export function Testimonials() {
+interface TestimonialsProps {
+  testimonials: TestimonialItem[];
+}
+
+export function Testimonials({ testimonials }: TestimonialsProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -69,19 +73,23 @@ export function Testimonials() {
         ))}
       </div>
 
-      <button
-        onClick={() => scroll('left')}
-        className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-dorado hover:text-white transition-all duration-300"
-      >
-        <ChevronLeft className="w-6 h-6" />
-      </button>
-      
-      <button
-        onClick={() => scroll('right')}
-        className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-dorado hover:text-white transition-all duration-300"
-      >
-        <ChevronRight className="w-6 h-6" />
-      </button>
+      {testimonials.length > 1 && (
+        <>
+          <button
+            onClick={() => scroll('left')}
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-dorado hover:text-white transition-all duration-300"
+          >
+            <ChevronLeft className="w-6 h-6" />
+          </button>
+          
+          <button
+            onClick={() => scroll('right')}
+            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-dorado hover:text-white transition-all duration-300"
+          >
+            <ChevronRight className="w-6 h-6" />
+          </button>
+        </>
+      )}
     </div>
   );
 }

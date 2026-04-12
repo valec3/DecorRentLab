@@ -45,6 +45,15 @@ Las siguientes migraciones han sido aplicadas al entorno de base de datos:
   - Se corrigió un error de tipado en `src/data/content.ts` donde los IDs de los testimonios eran números en lugar de strings.
   - Los cambios fueron pusheados después de verificar que el build finalizara exitosamente.
 
+#### Consumo de Testimonios Reales (Finalizado)
+- **Acción**: Migración de testimonios mockeados a datos reales de Supabase en la Landing Page.
+- **Motivo**: Requerimiento del usuario para mostrar contenido dinámico gestionado desde el panel admin.
+- **Detalle Técnico**:
+  - Se refactorizó el componente `Testimonials` para recibir datos por props.
+  - Se actualizó `src/app/page.tsx` para consumir la API `/api/testimonials?active=true`.
+  - Se implementó lógica de "Empty State" para ocultar la sección si no hay testimonios activos.
+  - Se optimizó la navegación del carrusel para ocultar controles si hay menos de 2 testimonios.
+
 ---
 
 ## 🧠 Decisiones Arquitectónicas

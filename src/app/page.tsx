@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, Truck, Sparkles, MessageSquare, Loader2 } from "lucide-react";
-import { Producto, Categoria } from "@/types";
+import { Producto, Categoria, TestimonialItem } from "@/types";
 import { CategoryCarousel } from "@/components/custom/CategoryCarousel";
 import { ProductCard } from "@/components/custom/ProductCard";
 import { Button } from "@/components/custom/Button";
@@ -17,24 +17,28 @@ import { homeContent } from "@/data/content";
 export default function Home() {
   const [productosDestacados, setProductosDestacados] = useState<Producto[]>([]);
   const [categorias, setCategorias] = useState<Categoria[]>([]);
+  const [testimonios, setTestimonios] = useState<TestimonialItem[]>([]);
   const [loading, setLoading] = useState(true);
   const targetRef = useRef(null);
   
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [resDestacados, resCats] = await Promise.all([
+        const [resDestacados, resCats, resTestimonios] = await Promise.all([
           fetch('/api/products?destacado=true&perPage=4'),
-          fetch('/api/categories')
+          fetch('/api/categories'),
+          fetch('/api/testimonials?active=true')
         ]);
         
-        const [destacados, cats] = await Promise.all([
+        const [destacados, cats, listTestimonios] = await Promise.all([
           resDestacados.json(),
-          resCats.json()
+          resCats.json(),
+          resTestimonios.json()
         ]);
 
         if (destacados.data) setProductosDestacados(destacados.data);
         if (Array.isArray(cats)) setCategorias(cats);
+        if (Array.isArray(listTestimonios)) setTestimonios(listTestimonios);
       } catch (err) {
         console.error("Error fetching homepage data:", err);
       } finally {
@@ -299,21 +303,23 @@ export default function Home() {
       </section>
 
       {/* Testimonials - Refined */}
-      <section className="py-20 bg-crema relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <ScrollReveal direction="down" width="100%">
-               <span className="text-dorado text-xs uppercase tracking-[0.3em] font-bold block mb-4">Experiencias</span>
-               <h2 className="font-serif text-4xl md:text-5xl text-carbon mb-2">
-                 La voz de la <span className="italic font-display">elegancia</span>
-               </h2>
+      {testimonios.length > 0 && (
+        <section className="py-20 bg-crema relative overflow-hidden">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <ScrollReveal direction="down" width="100%">
+                <span className="text-dorado text-xs uppercase tracking-[0.3em] font-bold block mb-4">Experiencias</span>
+                <h2 className="font-serif text-4xl md:text-5xl text-carbon mb-2">
+                  La voz de la <span className="italic font-display">elegancia</span>
+                </h2>
+              </ScrollReveal>
+            </div>
+            <ScrollReveal delay={0.3} width="100%">
+              <Testimonials testimonials={testimonios} />
             </ScrollReveal>
           </div>
-          <ScrollReveal delay={0.3} width="100%">
-            <Testimonials />
-          </ScrollReveal>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* FAQ - Minimalist */}
       <section className="py-24 bg-white">
