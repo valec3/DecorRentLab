@@ -35,6 +35,16 @@ Las siguientes migraciones han sido aplicadas al entorno de base de datos:
   - Desarrollo de vistas administrativas (`TestimonialForm`, `TestimonialTable`) usando `fetch` para consistencia.
   - Integración del acceso en el sidebar del administrador.
 
+### 2026-04-12
+
+#### Resolviendo Errores de Build (Finalizado)
+- **Acción**: Ejecución de `npm run build` y corrección de errores de tipado.
+- **Motivo**: Asegurar que la aplicación sea desplegable y cumpla con los estándares de Next.js 15+.
+- **Detalle Técnico**:
+  - Se actualizó `src/app/api/testimonials/[id]/route.ts` y `src/app/admin/testimonials/[id]/page.tsx` para esperar (`await`) el objeto `params`, siguiendo el nuevo patrón asíncrono de Next.js.
+  - Se corrigió un error de tipado en `src/data/content.ts` donde los IDs de los testimonios eran números en lugar de strings.
+  - Los cambios fueron pusheados después de verificar que el build finalizara exitosamente.
+
 ---
 
 ## 🧠 Decisiones Arquitectónicas
