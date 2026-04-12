@@ -82,6 +82,37 @@ export default async function AdminDashboard() {
             </div>
           </div>
         </div>
+
+        {/* Testimonios Quick Access */}
+        <div className="group relative bg-white p-8 rounded-[2.5rem] border border-slate-200/60 shadow-premium-sm hover:shadow-premium-md transition-all duration-500 overflow-hidden">
+          <div className="absolute top-0 right-0 -mr-8 -mt-8 w-32 h-32 bg-dorado/5 rounded-full blur-3xl group-hover:bg-dorado/10 transition-colors" />
+
+          <div className="relative space-y-6">
+            <div className="w-14 h-14 rounded-2xl bg-dorado/10 flex items-center justify-center text-dorado">
+              <LayoutGrid size={28} />
+            </div>
+
+            <div className="space-y-2">
+              <h2 className="text-2xl font-serif font-bold text-carbon">Testimonios</h2>
+              <p className="text-sm text-gris-calido">Gestiona las reseñas y comentarios de tus clientes en la web.</p>
+            </div>
+
+            <div className="flex flex-col gap-3 pt-2">
+              <Link href="/admin/testimonials/new">
+                <button className="w-full flex items-center justify-center gap-2 h-14 bg-carbon text-white rounded-2xl font-bold hover:bg-black transition-all shadow-strong">
+                  <PlusCircle size={20} />
+                  Nuevo Testimonio
+                </button>
+              </Link>
+              <Link href="/admin/testimonials">
+                <button className="w-full flex items-center justify-center gap-2 h-14 border border-slate-100 text-carbon rounded-2xl font-bold hover:bg-slate-50 transition-all">
+                  <LayoutGrid size={20} />
+                  Administrar Reseñas
+                </button>
+              </Link>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Subtle Footer Info */}

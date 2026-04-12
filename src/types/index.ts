@@ -67,12 +67,13 @@ export interface FaqItem {
 }
 
 export interface TestimonialItem {
-  id: number;
+  id: string;
   name: string;
   event: string;
   text: string;
   image: string;
   rating: number;
+  active?: boolean;
 }
 
 export interface HeroContent {
