@@ -1,5 +1,5 @@
 import { ProductRepository } from "./repository";
-import { Producto, Categoria, AtributoGrupo } from "@/types";
+import { Producto, AtributoGrupo } from "@/types";
 import {
   ProductRow,
   PaginatedResult,

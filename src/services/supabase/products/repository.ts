@@ -1,7 +1,6 @@
 import { createClient as createServerSupabase } from "../server";
 import {
   ProductRow,
-  CategoryRow,
   ProductFilters,
 } from "./interfaces";
 import { AtributoGrupo } from "@/types";

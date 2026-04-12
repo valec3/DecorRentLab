@@ -9,7 +9,6 @@ import {
   Loader2,
   Save,
   X,
-  Plus,
   UploadCloud,
   MessageSquare,
   Star,
