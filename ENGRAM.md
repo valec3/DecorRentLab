@@ -25,15 +25,15 @@ Las siguientes migraciones han sido aplicadas al entorno de base de datos:
 - **Acción**: Creación de `RULES.md` y actualización de `AGENTS.md`.
 - **Motivo**: Establecer una fuente de verdad única para la arquitectura `Client -> API -> Service -> Repository` y asegurar que cualquier agente de IA siga estos patrones.
 
-#### 2. Implementación de Gestión de Testimonios
-
-- **Acción**: CRUD completo de testimonios en el panel admin.
-- **Motivo**: Permitir al administrador gestionar las reseñas de los clientes de forma dinámica.
+#### 2. Implementación de Gestión de Testimonios (Finalizado)
+- **Acción**: CRUD completo de testimonios en el panel admin e integración en la navegación.
+- **Motivo**: Permitir al administrador gestionar las reseñas de los clientes de forma dinámica y accesible.
 - **Detalle Técnico**:
-  - Creación de migración **V3** (tabla `testimonials`).
-  - Implementación de capa de servicios y repositorio siguiendo el estándar de capas.
-  - Creación de vistas administrativas en el módulo de administración (`TestimonialForm`, `TestimonialTable`).
-  - Endpoints de API implementados en `/api/testimonials`.
+  - Creación de migración **V3** (tabla `testimonials`) documentada internamente.
+  - Implementación de capa de servicios y repositorio.
+  - Creación de API Routes `/api/testimonials` con revalidación de caché.
+  - Desarrollo de vistas administrativas (`TestimonialForm`, `TestimonialTable`) usando `fetch` para consistencia.
+  - Integración del acceso en el sidebar del administrador.
 
 ---
 
