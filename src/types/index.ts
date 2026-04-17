@@ -45,6 +45,7 @@ export interface Producto {
   material?: string;
   medidas?: string;
   color?: string;
+  created_at?: string;
 }
 
 export interface Filtro {

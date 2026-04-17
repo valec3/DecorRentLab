@@ -1,12 +1,17 @@
-import { supabase } from "../client";
+import { createClient as createServerSupabase } from "../server";
 import { ContactInfoRow } from "./interfaces";
 
 export class ContactRepository {
   private readonly table = "contact_info";
   private readonly schema = "decor_store";
 
+  private async getDb() {
+    return await createServerSupabase();
+  }
+
   async getContactInfo(): Promise<ContactInfoRow | null> {
-    const { data, error } = await supabase
+    const db = await this.getDb();
+    const { data, error } = await db
       .schema(this.schema)
       .from(this.table)
       .select("*")
@@ -22,7 +27,8 @@ export class ContactRepository {
   }
 
   async upsertContactInfo(contact: Partial<ContactInfoRow>): Promise<ContactInfoRow> {
-    const { data, error } = await supabase
+    const db = await this.getDb();
+    const { data, error } = await db
       .schema(this.schema)
       .from(this.table)
       .upsert({ 
@@ -42,7 +48,8 @@ export class ContactRepository {
   }
 
   async updateContactInfo(id: string, contact: Partial<ContactInfoRow>): Promise<ContactInfoRow> {
-    const { data, error } = await supabase
+    const db = await this.getDb();
+    const { data, error } = await db
       .schema(this.schema)
       .from(this.table)
       .update(contact)

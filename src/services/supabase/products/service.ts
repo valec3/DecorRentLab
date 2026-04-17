@@ -112,6 +112,7 @@ export class ProductService {
             precioAdicional: Number(v.precio_adicional),
           })) || [],
         })) || [],
+      created_at: row.created_at,
     };
   }
 

@@ -81,6 +81,14 @@ Las siguientes migraciones han sido aplicadas al entorno de base de datos:
   - Remoción de icono de Instagram y agregado de créditos a "Klein Code" en el footer.
   - Solución de errores de consola (Image src vacío y props no válidas en Button).
 
+#### 5. Corrección de errores de Build (Finalizado)
+- **Acción**: Resolución de errores de tipado que bloqueaban el despliegue.
+- **Motivo**: `npm run build` fallaba debido a inconsistencias de tipos en el Sitemap y el Cliente de Supabase.
+- **Detalle Técnico**:
+  - Se agregó `created_at` a la interfaz `Producto` y se mapeó en `ProductService`.
+  - Se migró `ContactRepository` al uso de `createClient` (SSR) dinámico para evitar errores de nulidad del singleton de Supabase durante el build-time.
+  - Se verificó el éxito del build localmente.
+
 #### 4. Optimización SEO (Finalizado)
 - **Acción**: Refactorización de páginas críticas (Catálogo, Producto, Contacto) a Server Components.
 - **Motivo**: Mejorar el indexado por motores de búsqueda y el rendimiento de carga inicial.
