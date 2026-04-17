@@ -11,6 +11,7 @@ import {
   X,
   MessageSquare,
   Info,
+  Phone,
 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -89,6 +90,7 @@ export default function AdminLayout({
     { label: "Categorías", href: "/admin/categories", icon: FolderTree },
     { label: "Testimonios", href: "/admin/testimonials", icon: MessageSquare },
     { label: "Nosotros", href: "/admin/about", icon: Info },
+    { label: "Contacto", href: "/admin/contact", icon: Phone },
   ];
 
   return (

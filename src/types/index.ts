@@ -140,3 +140,12 @@ export interface HomeContent {
     whatsappMessage: string;
   };
 }
+
+export interface ContactInfo {
+  id: string;
+  phone: string;
+  email: string;
+  address: string;
+  hours: string;
+  whatsappNumber: string;
+}

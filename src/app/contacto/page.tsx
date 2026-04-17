@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Phone, Mail, MapPin, Clock, AlertCircle } from 'lucide-react';
 import { Input, Textarea } from '@/components/custom/Input';
 import { Button } from '@/components/custom/Button';
+import { useContactInfo } from '@/hooks/use-contact-info';
 
 export default function ContactoPage() {
   const [formData, setFormData] = useState({
@@ -15,6 +16,13 @@ export default function ContactoPage() {
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const { data: contactInfo } = useContactInfo();
+
+  const phone = contactInfo?.phone || "+54 9 11 1234-5678";
+  const email = contactInfo?.email || "info@decorentlab.com";
+  const address = contactInfo?.address || "Buenos Aires, Argentina";
+  const hours = contactInfo?.hours || "Lun - Sáb: 9:00 - 19:00";
+  const whatsappNumber = contactInfo?.whatsappNumber || "5491112345678";
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
@@ -47,7 +55,7 @@ Fecha: ${formData.fecha || 'Por definir'}
 Teléfono: ${formData.telefono}
 Mensaje: ${formData.mensaje}`;
 
-    const whatsappUrl = `https://wa.me/5491112345678?text=${encodeURIComponent(mensaje)}`;
+    const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(mensaje)}`;
     window.open(whatsappUrl, '_blank');
   };
 
@@ -78,8 +86,8 @@ Mensaje: ${formData.mensaje}`;
                 </div>
                 <div>
                   <h3 className="font-medium text-carbon">Teléfono</h3>
-                  <a href="tel:+5491112345678" className="text-gris-calido hover:text-carbon">
-                    +54 9 11 1234-5678
+                  <a href={`tel:${phone.replace(/\s+/g, '')}`} className="text-gris-calido hover:text-carbon">
+                    {phone}
                   </a>
                 </div>
               </div>
@@ -90,8 +98,8 @@ Mensaje: ${formData.mensaje}`;
                 </div>
                 <div>
                   <h3 className="font-medium text-carbon">Email</h3>
-                  <a href="mailto:info@decorentlab.com" className="text-gris-calido hover:text-carbon">
-                    info@decorentlab.com
+                  <a href={`mailto:${email}`} className="text-gris-calido hover:text-carbon">
+                    {email}
                   </a>
                 </div>
               </div>
@@ -101,8 +109,8 @@ Mensaje: ${formData.mensaje}`;
                   <MapPin className="w-5 h-5 text-dorado" />
                 </div>
                 <div>
-                  <h3 className="font-medium text-carbon">Zona de Servicio</h3>
-                  <p className="text-gris-calido">Capital Federal y Gran Buenos Aires</p>
+                  <h3 className="font-medium text-carbon">Dirección</h3>
+                  <p className="text-gris-calido">{address}</p>
                 </div>
               </div>
 
@@ -112,7 +120,7 @@ Mensaje: ${formData.mensaje}`;
                 </div>
                 <div>
                   <h3 className="font-medium text-carbon">Horario de Atención</h3>
-                  <p className="text-gris-calido">Lunes a Sábado: 9:00 - 19:00</p>
+                  <p className="text-gris-calido">{hours}</p>
                 </div>
               </div>
             </div>
@@ -126,7 +134,7 @@ Mensaje: ${formData.mensaje}`;
                 Escribinos directamente y te respondemos al instante.
               </p>
               <a
-                href="https://wa.me/5491112345678?text=Hola%20Decor%20Rent%20Lab,%20quiero%20cotizar"
+                href={`https://wa.me/${whatsappNumber}?text=Hola%20Decor%20Rent%20Lab,%20quiero%20cotizar`}
                 target="_blank"
                 rel="noopener noreferrer"
               >

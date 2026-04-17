@@ -58,4 +58,5 @@ export interface ProductFilters {
   categoriaSlug?: string;
   search?: string;
   destacado?: boolean;
+  sortBy?: string;
 }

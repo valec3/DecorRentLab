@@ -1,7 +1,11 @@
 'use client';
 
+import { useContactInfo } from "@/hooks/use-contact-info";
+
 export function WhatsAppFloat() {
-  const phoneNumber = '5491112345678';
+  const { data } = useContactInfo();
+  
+  const phoneNumber = data?.whatsappNumber || '5491112345678';
   const message = 'Hola Decor Rent Lab, quiero cotizar';
   const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
 

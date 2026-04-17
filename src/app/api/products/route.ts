@@ -10,11 +10,13 @@ export async function GET(request: NextRequest) {
     const search = searchParams.get('search') || undefined;
     const categoriaSlug = searchParams.get('categoria') || undefined;
     const destacado = searchParams.get('destacado') === 'true' ? true : undefined;
+    const sortBy = searchParams.get('sortBy') || undefined;
 
     const result = await productService.getPaginatedProducts(page, perPage, {
       search,
       categoriaSlug,
-      destacado
+      destacado,
+      sortBy
     });
 
     return NextResponse.json(result);

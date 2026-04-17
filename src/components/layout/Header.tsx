@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import Image from "next/image";
+import { useContactInfo } from "@/hooks/use-contact-info";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -15,6 +16,9 @@ const navLinks = [
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const { data } = useContactInfo();
+
+  const whatsappNumber = data?.whatsappNumber || "5491112345678";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -70,7 +74,7 @@ export function Header() {
           {/* CTA WhatsApp Desktop */}
           <div className="hidden md:block">
             <a
-              href="https://wa.me/5491112345678?text=Hola%20Decor%20Rent%20Lab,%20quiero%20cotizar"
+              href={`https://wa.me/${whatsappNumber}?text=Hola%20Decor%20Rent%20Lab,%20quiero%20cotizar`}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 bg-whatsapp text-white px-6 py-2.5 rounded-full text-sm font-medium hover:bg-green-600 hover:shadow-lg hover:shadow-green-500/25 transition-all duration-300 hover:-translate-y-0.5"
@@ -111,7 +115,7 @@ export function Header() {
               </Link>
             ))}
             <a
-              href="https://wa.me/5491112345678?text=Hola%20Decor%20Rent%20Lab,%20quiero%20cotizar"
+              href={`https://wa.me/${whatsappNumber}?text=Hola%20Decor%20Rent%20Lab,%20quiero%20cotizar`}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 bg-whatsapp text-white px-6 py-3 rounded-full text-sm font-medium mt-2"

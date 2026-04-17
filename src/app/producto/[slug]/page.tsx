@@ -17,6 +17,7 @@ import { ProductCard } from '@/components/custom/ProductCard';
 import { Lightbox } from '@/components/custom/Lightbox';
 import { VariantSelector } from '@/components/custom/VariantSelector';
 import { Button } from '@/components/custom/Button';
+import { useContactInfo } from '@/hooks/use-contact-info';
 
 export default function ProductoPage() {
   const params = useParams();
@@ -35,6 +36,9 @@ export default function ProductoPage() {
   const [cantidad, setCantidad] = useState(1);
   const [mode, setMode] = useState<'alquiler' | 'venta'>('alquiler');
   const [selectedVariants, setSelectedVariants] = useState<{ [key: string]: string }>({});
+  const { data: contactInfo } = useContactInfo();
+
+  const whatsappNumber = contactInfo?.whatsappNumber || "5491112345678";
 
   // Carga de datos
   useEffect(() => {
@@ -104,7 +108,7 @@ export default function ProductoPage() {
     }
     
     message += `\n\nPor favor confirmen disponibilidad y detalles. ¡Gracias!`;
-    return `https://wa.me/5491112345678?text=${encodeURIComponent(message)}`;
+    return `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
   }, [producto, mode, precioBase, selectedVariants, cantidad, precioTotal]);
 
   // Estados de Carga / Error

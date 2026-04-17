@@ -5,7 +5,7 @@ import { DataTable } from "../../shared/components/DataTable";
 import { ColumnDef } from "@tanstack/react-table";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { MoreHorizontal, ExternalLink } from "lucide-react";
+import { MoreHorizontal, ExternalLink, ImageIcon } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,8 +16,30 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
+import Image from "next/image";
 
 const columns: ColumnDef<Categoria>[] = [
+  {
+    accessorKey: "imagenCover",
+    header: "",
+    cell: ({ row }) => {
+      const url = row.getValue("imagenCover") as string;
+      return (
+        <div className="relative w-12 h-12 rounded-xl overflow-hidden bg-crema-oscuro border border-borde/20 shadow-sm flex items-center justify-center">
+          {url ? (
+            <Image 
+              src={url} 
+              alt={row.getValue("nombre")} 
+              fill 
+              className="object-cover" 
+            />
+          ) : (
+            <ImageIcon className="w-5 h-5 text-gris-calido/30" />
+          )}
+        </div>
+      );
+    },
+  },
   {
     accessorKey: "nombre",
     header: "Categoría",

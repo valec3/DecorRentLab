@@ -13,12 +13,15 @@ import { FAQ } from "@/components/custom/FAQ";
 import { ScrollReveal } from "@/components/custom/ScrollReveal";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { homeContent } from "@/data/content";
+import { useContactInfo } from "@/hooks/use-contact-info";
 
 export default function Home() {
   const [productosDestacados, setProductosDestacados] = useState<Producto[]>([]);
   const [categorias, setCategorias] = useState<Categoria[]>([]);
   const [testimonios, setTestimonios] = useState<TestimonialItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const { data: contactInfo } = useContactInfo();
+  const whatsappNumber = contactInfo?.whatsappNumber || "5491112345678";
   const targetRef = useRef(null);
   
   useEffect(() => {
@@ -104,7 +107,7 @@ export default function Home() {
                 </Button>
               </Link>
               <a
-                href={`https://wa.me/5491112345678?text=${encodeURIComponent(homeContent.hero.whatsappMessage)}`}
+                href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(homeContent.hero.whatsappMessage)}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -217,7 +220,7 @@ export default function Home() {
             </ScrollReveal>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
             {loading ? (
               <div className="col-span-full py-20 flex flex-col items-center justify-center text-gris-calido">
                 <Loader2 className="w-8 h-8 animate-spin mb-4 text-dorado" />
@@ -361,7 +364,7 @@ export default function Home() {
                 </p>
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
                   <a
-                    href={`https://wa.me/5491112345678?text=${encodeURIComponent(homeContent.cta.whatsappMessage)}`}
+                    href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(homeContent.cta.whatsappMessage)}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-full sm:w-auto"

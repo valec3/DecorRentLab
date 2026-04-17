@@ -38,13 +38,22 @@ export class ProductRepository {
     }
 
     if (filters?.search) {
-      query = query.ilike("nombre", `%${filters.search}%`);
+      query = query.or(`nombre.ilike.%${filters.search}%,descripcion_corta.ilike.%${filters.search}%`);
     }
 
-    // Orden y Paginación
-    const { data, count, error } = await query
-      .order("created_at", { ascending: false })
-      .range(from, to);
+    // Ordenamiento
+    if (filters?.sortBy === 'nombre') {
+      query = query.order('nombre', { ascending: true });
+    } else if (filters?.sortBy === 'precio_asc') {
+      query = query.order('precio_alquiler', { ascending: true, nullsFirst: false });
+    } else if (filters?.sortBy === 'precio_desc') {
+      query = query.order('precio_alquiler', { ascending: false, nullsFirst: false });
+    } else {
+      // Default: destacados primero, luego más recientes
+      query = query.order('destacado', { ascending: false }).order('created_at', { ascending: false });
+    }
+
+    const { data, count, error } = await query.range(from, to);
 
     if (error) {
       console.error("Error fetching products:", error);

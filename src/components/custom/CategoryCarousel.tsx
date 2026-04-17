@@ -76,7 +76,7 @@ export function CategoryCarousel({ categorias, selectedSlug, onSelect }: Categor
               }`}>
                 <div className="relative w-full h-full rounded-full overflow-hidden border border-white shadow-premium-sm group-hover:shadow-premium-md transition-all duration-700 group-hover:scale-[1.02]">
                   <Image
-                    src={categoria.imagenCover}
+                    src={categoria.imagenCover || "https://images.unsplash.com/photo-1594498653385-d5172c532c00?q=80&w=800&auto=format&fit=crop"}
                     alt={categoria.nombre}
                     fill
                     className={`object-cover transition-transform duration-1000 group-hover:scale-105 ${isActive ? 'scale-110' : ''}`}
