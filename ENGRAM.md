@@ -13,6 +13,7 @@ Las siguientes migraciones han sido aplicadas al entorno de base de datos:
 | **V1**  | `init_schema`               | ✅ Ejecutado | Creación del esquema base (`decor_store`), tablas de productos, categorías y atributos. |
 | **V2**  | `add_admin_rls_policies`    | ✅ Ejecutado | Implementación de Row Level Security (RLS) para proteger el acceso administrativo.      |
 | **V3**  | `create_testimonials_table` | ✅ Ejecutado | Creación de la tabla de testimonios con RLS y triggers de actualización.                |
+| **V5**  | `create_contact_info_table` | ✅ Ejecutado | Creación de la tabla `contact_info` para gestión dinámica de datos de contacto y WhatsApp. |
 
 ---
 
@@ -54,9 +55,45 @@ Las siguientes migraciones han sido aplicadas al entorno de base de datos:
   - Se implementó lógica de "Empty State" para ocultar la sección si no hay testimonios activos.
   - Se optimizó la navegación del carrusel para ocultar controles si hay menos de 2 testimonios.
 
+### 2026-04-16
+
+#### 1. Sistema Dinámico de Contacto (Finalizado)
+- **Acción**: Implementación completa de gestión de contacto desde el Admin Panel.
+- **Motivo**: Requerimiento para centralizar el número de WhatsApp y datos de contacto en una sola fuente de verdad (DB).
+- **Detalle Técnico**:
+  - Creación de migración **V5** (tabla `contact_info`).
+  - Implementación de `ContactRepository` y `ContactService` con lógica de `upsert`.
+  - Creación de API `/api/contact` y hook `useContactInfo`.
+  - Integración global en Header, Footer, Hero, CTA y botones de WhatsApp.
+
+#### 2. Mejoras en Buscador y Catálogo (Finalizado)
+- **Acción**: Refactorización del sistema de filtros y ordenamiento.
+- **Motivo**: El usuario reportó que los filtros no funcionaban y eran confusos.
+- **Detalle Técnico**:
+  - Actualización de `ProductRepository` para soportar `sortBy` (nombre, precio, destacados) y búsqueda por nombre/descripción.
+  - Simplificación de la UI del catálogo en una única barra de herramientas.
+  - Corrección de bugs de React Hooks en el componente de Catálogo.
+
+#### 3. Refinamientos UI/UX y Branding
+- **Acción**: Mejoras visuales y corrección de bugs menores.
+- **Detalle Técnico**:
+  - Ajuste de responsive 2-columnas para móviles en "Piezas Destacadas".
+  - Remoción de icono de Instagram y agregado de créditos a "Klein Code" en el footer.
+  - Solución de errores de consola (Image src vacío y props no válidas en Button).
+
+#### 4. Optimización SEO (Finalizado)
+- **Acción**: Refactorización de páginas críticas (Catálogo, Producto, Contacto) a Server Components.
+- **Motivo**: Mejorar el indexado por motores de búsqueda y el rendimiento de carga inicial.
+- **Detalle Técnico**:
+  - Implementación de `generateMetadata` dinámico para productos.
+  - Creación de `robots.ts` y `sitemap.ts` (dinámico para productos).
+  - Separación de lógica interactiva en componentes cliente bajo `src/modules`.
+  - Configuración de metadatos globales (OpenGraph, Twitter, Authors) en `layout.tsx`.
+
 ---
 
 ## 🧠 Decisiones Arquitectónicas
 
 - **Patrón de Capas**: Se mantiene una separación estricta entre la lógica de acceso a datos (Repository) y la lógica de negocio (Service) para facilitar el testing y la migración de proveedores en el futuro.
 - **Mapeo de Datos**: Los servicios son responsables de la transformación `snake_case` (DB) <-> `camelCase` (UI).
+- **Consumo de Datos Globales**: Se utiliza el hook `useContactInfo` para asegurar que los cambios en el Admin Panel se reflejen inmediatamente en todo el sitio sin recargas enviadas por el servidor (SSR) siempre que sea posible.

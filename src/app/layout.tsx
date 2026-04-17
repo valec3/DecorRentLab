@@ -8,14 +8,32 @@ import { cn } from "@/lib/utils";
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 export const metadata: Metadata = {
-  title: "Decor Rent Lab | Alquiler de Decoración para Eventos",
-  description: "Alquiler de elementos decorativos premium para eventos. Paneles, estructuras, letras LED, esferas gigantes y más.",
-  keywords: "decoración eventos, alquiler decoracion, eventos, matrimonio, quinceañeras, corporativa",
-  openGraph: {
-    title: "Decor Rent Lab | Alquiler de Decoración para Eventos",
-    description: "Transforma tu evento con elementos decorativos únicos y elegantes.",
-    type: "website",
+  metadataBase: new URL('https://decorentlab.com.ar'), // Reemplazar con URL real
+  title: {
+    default: "Decor Rent Lab | Alquiler de Decoración Premium para Eventos",
+    template: "%s | Decor Rent Lab"
   },
+  description: "Alquiler de elementos decorativos únicos y premium en Buenos Aires. Paneles, letras LED, esferas gigantes y todo para que tu evento sea inolvidable.",
+  keywords: ["alquiler decoración", "decoración eventos buenos aires", "letras led eventos", "paneles decorativos", "alquiler para bodas", "quinceañeras", "eventos corporativos"],
+  authors: [{ name: "Klein Code" }],
+  creator: "Klein Code",
+  openGraph: {
+    title: "Decor Rent Lab | Alquiler de Decoración Premium",
+    description: "Transformamos tus eventos con decoración de alta gama. Elegancia y estilo en cada detalle.",
+    url: 'https://decorentlab.com.ar',
+    siteName: 'Decor Rent Lab',
+    locale: 'es_AR',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Decor Rent Lab | Decoración Premium',
+    description: 'Alquiler de elementos decorativos únicos para eventos memorables.',
+  },
+  robots: {
+    index: true,
+    follow: true,
+  }
 };
 
 export default function RootLayout({
