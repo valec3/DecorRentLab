@@ -56,7 +56,7 @@ export function ProductDetail({ producto, relacionados }: ProductDetailProps) {
     let message = `Hola Decor Rent Lab, me interesa cotizar:\n\n`;
     message += `📦 *${producto.nombre}*\n`;
     message += `🏷️ Modo: *${mode === 'alquiler' ? 'Alquiler' : 'Compra/Venta'}*\n`;
-    message += `💰 Precio base: $${precioBase?.toLocaleString('es-AR')}${mode === 'alquiler' ? '/evento' : ''}\n`;
+    message += `💰 Precio base: ${precioBase?.toLocaleString('es-ES')} €${mode === 'alquiler' ? '/evento' : ''}\n`;
     
     if (Object.keys(selectedVariants).length > 0) {
       message += `\n✨ Opciones seleccionadas:\n`;
@@ -68,7 +68,7 @@ export function ProductDetail({ producto, relacionados }: ProductDetailProps) {
     message += `\n📅 Cantidad: ${cantidad} unidad${cantidad > 1 ? 'es' : ''}`;
     
     if (precioTotal > 0 && (producto.atributos?.length || 0) > 0) {
-      message += `\n💵 Total estimado: $${precioTotal.toLocaleString('es-AR')}`;
+      message += `\n💵 Total estimado: ${precioTotal.toLocaleString('es-ES')} €`;
     }
     
     message += `\n\nPor favor confirmen disponibilidad y detalles. ¡Gracias!`;
@@ -192,10 +192,10 @@ export function ProductDetail({ producto, relacionados }: ProductDetailProps) {
                         )}
                       </div>
                       <div className="flex items-baseline gap-2">
-                        <span className="text-2xl font-serif text-carbon">${producto.precioAlquiler.toLocaleString('es-AR')}</span>
+                        <span className="text-2xl font-serif text-carbon">{producto.precioAlquiler.toLocaleString('es-ES')} €</span>
                         {producto.promocion?.precioOriginalAlquiler && (
                           <span className="text-xs text-gris-calido line-through opacity-60">
-                            ${producto.promocion.precioOriginalAlquiler.toLocaleString('es-AR')}
+                            {producto.promocion.precioOriginalAlquiler.toLocaleString('es-ES')} €
                           </span>
                         )}
                       </div>
@@ -215,10 +215,10 @@ export function ProductDetail({ producto, relacionados }: ProductDetailProps) {
                         )}
                       </div>
                       <div className="flex items-baseline gap-2">
-                        <span className="text-2xl font-serif text-carbon">${producto.precioVenta.toLocaleString('es-AR')}</span>
+                        <span className="text-2xl font-serif text-carbon">{producto.precioVenta.toLocaleString('es-ES')} €</span>
                         {producto.promocion?.precioOriginalVenta && (
                           <span className="text-xs text-gris-calido line-through opacity-60">
-                            ${producto.promocion.precioOriginalVenta.toLocaleString('es-AR')}
+                            {producto.promocion.precioOriginalVenta.toLocaleString('es-ES')} €
                           </span>
                         )}
                       </div>
@@ -242,7 +242,7 @@ export function ProductDetail({ producto, relacionados }: ProductDetailProps) {
                         </span>
                         <div className="flex items-center gap-3">
                           <span className="text-gris-calido line-through text-sm">
-                            ${pOriginal.toLocaleString('es-AR')}
+                            {pOriginal.toLocaleString('es-ES')} €
                           </span>
                           <span className="text-red-600 font-bold text-lg">
                             -${Math.round((1 - precioBase / pOriginal) * 100)}% OFF
@@ -303,7 +303,7 @@ export function ProductDetail({ producto, relacionados }: ProductDetailProps) {
                         animate={{ opacity: 1, y: 0 }}
                         className="text-4xl font-serif text-carbon block"
                       >
-                        ${precioTotal.toLocaleString('es-AR')}
+                        {precioTotal.toLocaleString('es-ES')} €
                       </motion.span>
                     </div>
                   </div>

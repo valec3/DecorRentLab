@@ -76,7 +76,7 @@ export function VariantSelector({ atributos, onSelectionChange }: VariantSelecto
                     <span className="text-sm font-medium">{opcion.label}</span>
                     {opcion.precioAdicional > 0 && (
                       <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-sm ${isSelected ? 'bg-white/20 text-white' : 'bg-dorado/10 text-dorado'}`}>
-                        +${opcion.precioAdicional.toLocaleString('es-AR')}
+                        +{opcion.precioAdicional.toLocaleString('es-ES')} €
                       </span>
                     )}
                   </button>

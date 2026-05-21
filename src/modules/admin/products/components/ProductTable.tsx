@@ -62,9 +62,9 @@ const columns: ColumnDef<Producto>[] = [
     header: "Precio Alquiler",
     cell: ({ row }) => {
       const amount = parseFloat(row.getValue("precioAlquiler"));
-      const formatted = new Intl.NumberFormat("es-AR", {
+      const formatted = new Intl.NumberFormat("es-ES", {
         style: "currency",
-        currency: "ARS",
+        currency: "EUR",
       }).format(amount);
       return <div className="font-medium">{formatted}</div>;
     },

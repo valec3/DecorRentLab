@@ -39,30 +39,45 @@ export function ProductCard({ producto }: ProductCardProps) {
       <div className="flex flex-col h-full">
         <Link href={`/producto/${producto.slug}`}>
           <div className="relative aspect-4/5 overflow-hidden bg-crema-oscuro/30">
-            <Image
-              src={mainImage}
-              alt={producto.nombre}
-              fill
-              className={`object-cover transition-all duration-1000 ease-out ${
-                isHovered && hasSecondImage
-                  ? "opacity-0 scale-110 blur-sm"
-                  : "opacity-100 scale-100 blur-0"
-              }`}
-              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-            />
-            {hasSecondImage && (
+            {/* Imagen principal */}
+            <motion.div
+              className="absolute inset-0"
+              animate={{
+                opacity: isHovered && hasSecondImage ? 0 : 1,
+                scale: isHovered && hasSecondImage ? 1.07 : 1,
+              }}
+              transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+            >
               <Image
-                src={producto.imagenes[1]}
-                alt={`${producto.nombre} - vista secundaria`}
+                src={mainImage}
+                alt={producto.nombre}
                 fill
-                className={`object-cover transition-all duration-1000 ease-out ${
-                  isHovered ? "opacity-100 scale-105 blur-0" : "opacity-0 scale-100 blur-sm"
-                }`}
+                className="object-cover"
                 sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
               />
+            </motion.div>
+
+            {/* Imagen secundaria (hover) */}
+            {hasSecondImage && (
+              <motion.div
+                className="absolute inset-0"
+                animate={{
+                  opacity: isHovered ? 1 : 0,
+                  scale: isHovered ? 1.07 : 1,
+                }}
+                transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <Image
+                  src={producto.imagenes[1]}
+                  alt={`${producto.nombre} - vista secundaria`}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                />
+              </motion.div>
             )}
-  
-            {/* Badges Minimalistas */}
+
+            {/* Badges */}
             <div className="absolute top-2 left-2 md:top-4 md:left-4 flex flex-col gap-1 z-10">
               {producto.destacado && (
                 <Badge variant="featured" className="opacity-90 text-[7px] md:text-[9px] px-1.5 md:px-2.5">Destacado</Badge>
@@ -81,7 +96,7 @@ export function ProductCard({ producto }: ProductCardProps) {
             </span>
             {producto.precioAlquiler && (
               <span className="font-serif text-dorado-oscuro font-medium text-[10px] md:text-sm">
-                ${producto.precioAlquiler.toLocaleString("es-AR")}
+                {producto.precioAlquiler.toLocaleString("es-ES")} €
               </span>
             )}
           </div>

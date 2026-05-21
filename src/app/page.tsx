@@ -79,26 +79,26 @@ export default function Home() {
         </motion.div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 relative z-10 text-center">
-          <ScrollReveal delay={0.2} direction="down" width="100%">
+          <ScrollReveal delay={0} direction="down" width="100%">
             <span className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full glass-dark text-dorado font-bold tracking-premium text-[9px] mb-10 border border-white/10 shadow-glow">
               <Sparkles className="w-3 h-3 text-dorado" />
               Alquiler de Decoración Premium
             </span>
           </ScrollReveal>
           
-          <ScrollReveal delay={0.4} width="100%">
+          <ScrollReveal delay={0.15} width="100%">
             <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl text-white mb-8 leading-[1.1] drop-shadow-2xl">
               {homeContent.hero.title} <span className="italic font-display text-white/95 text-4xl md:text-6xl lg:text-7xl block mb-2">{homeContent.hero.subtitle}</span>
             </h1>
           </ScrollReveal>
 
-          <ScrollReveal delay={0.6} width="100%">
+          <ScrollReveal delay={0.3} width="100%">
             <p className="text-white text-lg md:text-2xl mb-12 max-w-3xl mx-auto font-light tracking-wide drop-shadow-xl text-center">
               {homeContent.hero.description}
             </p>
           </ScrollReveal>
 
-          <ScrollReveal delay={0.8} width="100%">
+          <ScrollReveal delay={0.45} width="100%">
             <div className="flex flex-col sm:flex-row items-center justify-center gap-6 w-full max-w-lg mx-auto">
               <Link href="/catalogo">
                 <Button size="lg" className="w-full sm:w-auto px-8 md:px-10 py-5 text-base md:text-lg whitespace-nowrap">
@@ -255,6 +255,8 @@ export default function Home() {
                 <motion.div 
                   initial={{ x: 50, opacity: 0 }}
                   whileInView={{ x: 0, opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.8, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
                   className="absolute -bottom-10 -right-10 glass p-8 rounded-3xl border border-white/20 hidden md:block shadow-glow"
                 >
                   <span className="block text-4xl font-serif text-dorado mb-1">{homeContent.philosophy.stats.value}</span>

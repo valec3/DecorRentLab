@@ -98,6 +98,18 @@ Las siguientes migraciones han sido aplicadas al entorno de base de datos:
   - Separación de lógica interactiva en componentes cliente bajo `src/modules`.
   - Configuración de metadatos globales (OpenGraph, Twitter, Authors) en `layout.tsx`.
 
+
+### 2026-05-20
+
+#### Migración de Moneda a Euros (Finalizado)
+- **Acción**: Actualización de la visualización y formateo de precios de Pesos (ARS/$) a Euros (€).
+- **Motivo**: Requerimiento del usuario para adaptar la tienda al mercado europeo.
+- **Detalle Técnico**:
+  - Cambiada la localización del formateo de `es-AR` a `es-ES` para la representación de miles y decimales en Euros.
+  - Actualizados los componentes `ProductCard`, `ProductDetail` y `VariantSelector` para colocar el símbolo `€` pospuesto al valor numérico.
+  - Actualizado el panel de administración (`ProductForm` y `ProductTable`) para dar consistencia al ingreso y visualización de adicionales y precios en Euros (`EUR`).
+  - Adaptado el mensaje generado para WhatsApp en el detalle del producto para que envíe las cotizaciones estimadas en Euros.
+
 ---
 
 ## 🧠 Decisiones Arquitectónicas

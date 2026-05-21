@@ -377,7 +377,7 @@ export function ProductForm({ initialData, categorias }: ProductFormProps) {
                         </div>
 
                         <div className="w-40 flex items-center gap-3 bg-white px-4 rounded-2xl border border-slate-100 h-14 shadow-sm focus-within:border-dorado transition-all">
-                          <span className="text-xs font-bold text-dorado">+$</span>
+                          <span className="text-xs font-bold text-dorado">+€</span>
                           <input 
                             type="number" 
                             className="bg-transparent border-none text-sm w-full focus:ring-0 font-bold text-carbon" 

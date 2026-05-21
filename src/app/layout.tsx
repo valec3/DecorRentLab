@@ -4,11 +4,12 @@ import "./globals.css";
 import { PublicLayoutWrapper } from "@/components/layout/PublicLayoutWrapper";
 import { Geist } from "next/font/google";
 import { cn } from "@/lib/utils";
+import { LocalBusinessSchema } from "@/components/seo/JsonLd";
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://decorentlab.com.ar'), // Reemplazar con URL real
+  metadataBase: new URL('https://decorentlab.com.ar'),
   title: {
     default: "Decor Rent Lab | Alquiler de Decoración Premium para Eventos",
     template: "%s | Decor Rent Lab"
@@ -17,6 +18,9 @@ export const metadata: Metadata = {
   keywords: ["alquiler decoración", "decoración eventos buenos aires", "letras led eventos", "paneles decorativos", "alquiler para bodas", "quinceañeras", "eventos corporativos"],
   authors: [{ name: "Klein Code" }],
   creator: "Klein Code",
+  alternates: {
+    canonical: '/',
+  },
   openGraph: {
     title: "Decor Rent Lab | Alquiler de Decoración Premium",
     description: "Transformamos tus eventos con decoración de alta gama. Elegancia y estilo en cada detalle.",
@@ -24,15 +28,29 @@ export const metadata: Metadata = {
     siteName: 'Decor Rent Lab',
     locale: 'es_AR',
     type: 'website',
+    images: [
+      {
+        url: '/og-image.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Decor Rent Lab — Alquiler de Decoración Premium para Eventos',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Decor Rent Lab | Decoración Premium',
     description: 'Alquiler de elementos decorativos únicos para eventos memorables.',
+    images: ['/og-image.jpg'],
   },
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+    },
   }
 };
 
@@ -43,6 +61,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es" className={cn("scroll-smooth", "font-sans", geist.variable)} suppressHydrationWarning>
+      <head>
+        <LocalBusinessSchema />
+      </head>
       <body className="min-h-screen flex flex-col bg-crema text-carbon antialiased">
         <PublicLayoutWrapper>
           {children}

@@ -16,13 +16,16 @@ export function Testimonials({ testimonials }: TestimonialsProps) {
 
   const scroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
-      const newIndex = direction === 'left' 
+      // Medir el ancho real de la primera tarjeta + gap en lugar de hardcodear 400
+      const firstCard = scrollRef.current.firstElementChild as HTMLElement | null;
+      const cardWidth = firstCard ? firstCard.offsetWidth + 24 : 400; // 24 = gap-6
+      const newIndex = direction === 'left'
         ? Math.max(0, currentIndex - 1)
         : Math.min(testimonials.length - 1, currentIndex + 1);
       setCurrentIndex(newIndex);
       scrollRef.current.scrollTo({
-        left: newIndex * 400,
-        behavior: 'smooth'
+        left: newIndex * cardWidth,
+        behavior: 'smooth',
       });
     }
   };

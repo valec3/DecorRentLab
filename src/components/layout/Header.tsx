@@ -2,31 +2,41 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Menu, X } from "lucide-react";
 import Image from "next/image";
 import { useContactInfo } from "@/hooks/use-contact-info";
+import { usePathname } from "next/navigation";
+import { AnimatePresence, motion } from "framer-motion";
 
 const navLinks = [
-  { href: "/", label: "Home" },
+  { href: "/", label: "Inicio" },
   { href: "/catalogo", label: "Catálogo" },
   { href: "/nosotros", label: "Nosotros" },
   { href: "/contacto", label: "Contacto" },
 ];
 
+const ease = [0.22, 1, 0.36, 1] as const;
+
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const { data } = useContactInfo();
+  const pathname = usePathname();
 
   const whatsappNumber = data?.whatsappNumber || "5491112345678";
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-    window.addEventListener("scroll", handleScroll);
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Cerrar menú al cambiar de ruta
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [pathname]);
+
+  const isActive = (href: string) =>
+    href === "/" ? pathname === "/" : pathname.startsWith(href);
 
   return (
     <header
@@ -34,7 +44,7 @@ export function Header() {
         isScrolled
           ? "bg-white/95 backdrop-blur-xl shadow-premium-sm"
           : "bg-crema/95 backdrop-blur-md border-b border-black/5"
-      } ${isMenuOpen ? "h-auto bg-white" : ""}`}
+      }`}
     >
       <div className="w-full max-w-[1600px] mx-auto px-6 md:px-10 lg:px-16">
         <div className="flex items-center justify-between h-20 md:h-24">
@@ -43,32 +53,39 @@ export function Header() {
             <Image
               src="/logo.png"
               alt="Decor Rent Lab"
-              width={160} // Dimensión base recomendada
+              width={160}
               height={60}
-              priority // Asegura que el logo cargue de primero
-              className="h-12 lg:h-18 w-auto object-contain" // "h-14" lo hace encajar perfecto en el header de "h-20"
+              priority
+              className="h-12 lg:h-18 w-auto object-contain"
             />
-            <h1 className="text-[25px]! lg:text-[35px]! font-serif font-bold text-carbon tracking-tight hidden">
-              Decor<span className="text-dorado">Rent</span>Lab
-            </h1>
           </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden xl:flex items-center gap-12">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={`relative text-[10px] uppercase tracking-[0.25em] font-bold transition-all duration-300 group ${
-                  isScrolled
-                    ? "text-gris-calido hover:text-carbon"
-                    : "text-carbon/70 hover:text-carbon"
-                }`}
-              >
-                {link.label}
-                <span className="absolute -bottom-1.5 left-0 w-0 h-0.5 bg-dorado transition-all duration-300 group-hover:w-full" />
-              </Link>
-            ))}
+            {navLinks.map((link) => {
+              const active = isActive(link.href);
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={`relative text-[10px] uppercase tracking-[0.25em] font-bold transition-colors duration-300 group ${
+                    active
+                      ? "text-carbon"
+                      : isScrolled
+                      ? "text-gris-calido hover:text-carbon"
+                      : "text-carbon/70 hover:text-carbon"
+                  }`}
+                >
+                  {link.label}
+                  {/* Indicador de ruta activa */}
+                  <span
+                    className={`absolute -bottom-1.5 left-0 h-0.5 bg-dorado transition-all duration-300 ${
+                      active ? "w-full" : "w-0 group-hover:w-full"
+                    }`}
+                  />
+                </Link>
+              );
+            })}
           </nav>
 
           {/* CTA WhatsApp Desktop */}
@@ -86,48 +103,108 @@ export function Header() {
             </a>
           </div>
 
-          {/* Mobile Menu Button */}
+          {/* Mobile Menu Button — ícono animado */}
           <button
-            className="md:hidden p-2 text-carbon hover:bg-crema-oscuro rounded-xl transition-colors"
+            className="xl:hidden p-2 text-carbon hover:bg-crema-oscuro rounded-xl transition-colors"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label="Toggle menu"
+            aria-label={isMenuOpen ? "Cerrar menú" : "Abrir menú"}
+            aria-expanded={isMenuOpen}
           >
-            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            <motion.div
+              animate={{ rotate: isMenuOpen ? 45 : 0 }}
+              transition={{ duration: 0.3, ease }}
+              className="relative w-6 h-6 flex flex-col justify-center gap-[5px]"
+            >
+              {/* Línea 1 */}
+              <motion.span
+                animate={{
+                  rotate: isMenuOpen ? 45 : 0,
+                  y: isMenuOpen ? 7 : 0,
+                }}
+                transition={{ duration: 0.3, ease }}
+                className="block h-0.5 w-6 bg-current rounded-full origin-center"
+              />
+              {/* Línea 2 */}
+              <motion.span
+                animate={{ opacity: isMenuOpen ? 0 : 1, scaleX: isMenuOpen ? 0 : 1 }}
+                transition={{ duration: 0.2 }}
+                className="block h-0.5 w-6 bg-current rounded-full"
+              />
+              {/* Línea 3 */}
+              <motion.span
+                animate={{
+                  rotate: isMenuOpen ? -45 : 0,
+                  y: isMenuOpen ? -7 : 0,
+                }}
+                transition={{ duration: 0.3, ease }}
+                className="block h-0.5 w-6 bg-current rounded-full origin-center"
+              />
+            </motion.div>
           </button>
         </div>
 
-        {/* Mobile Menu */}
-        <div
-          className={`md:hidden overflow-hidden transition-all duration-500 ease-in-out ${
-            isMenuOpen ? "max-h-[500px] opacity-100 mb-6" : "max-h-0 opacity-0"
-          }`}
-        >
-          <nav className="flex flex-col gap-1 border-t border-borde pt-4">
-            {navLinks.map((link, index) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="text-gris-calido hover:text-carbon hover:bg-crema-oscuro py-3 px-4 rounded-xl transition-all duration-300"
-                onClick={() => setIsMenuOpen(false)}
-                style={{ animationDelay: `${index * 50}ms` }}
-              >
-                {link.label}
-              </Link>
-            ))}
-            <a
-              href={`https://wa.me/${whatsappNumber}?text=Hola%20Decor%20Rent%20Lab,%20quiero%20cotizar`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 bg-whatsapp text-white px-6 py-3 rounded-full text-sm font-medium mt-2"
-              onClick={() => setIsMenuOpen(false)}
+        {/* Mobile Menu — con AnimatePresence */}
+        <AnimatePresence initial={false}>
+          {isMenuOpen && (
+            <motion.div
+              key="mobile-menu"
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{
+                height: { duration: 0.4, ease },
+                opacity: { duration: 0.25, ease: "easeOut" },
+              }}
+              style={{ overflow: "hidden" }}
             >
-              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
-              </svg>
-              Cotizar por WhatsApp
-            </a>
-          </nav>
-        </div>
+              <nav className="flex flex-col gap-1 border-t border-borde pt-4 pb-6">
+                {navLinks.map((link, index) => {
+                  const active = isActive(link.href);
+                  return (
+                    <motion.div
+                      key={link.href}
+                      initial={{ x: -16, opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      transition={{ delay: index * 0.05, duration: 0.3, ease }}
+                    >
+                      <Link
+                        href={link.href}
+                        className={`flex items-center gap-3 py-3 px-4 rounded-xl transition-all duration-300 ${
+                          active
+                            ? "text-carbon bg-crema-oscuro font-semibold"
+                            : "text-gris-calido hover:text-carbon hover:bg-crema-oscuro"
+                        }`}
+                      >
+                        {active && (
+                          <span className="w-1.5 h-1.5 rounded-full bg-dorado shrink-0" />
+                        )}
+                        {link.label}
+                      </Link>
+                    </motion.div>
+                  );
+                })}
+                <motion.div
+                  initial={{ x: -16, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  transition={{ delay: navLinks.length * 0.05, duration: 0.3, ease }}
+                  className="mt-2"
+                >
+                  <a
+                    href={`https://wa.me/${whatsappNumber}?text=Hola%20Decor%20Rent%20Lab,%20quiero%20cotizar`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2 bg-whatsapp text-white w-full px-6 py-3 rounded-full text-sm font-medium"
+                  >
+                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                    </svg>
+                    Cotizar por WhatsApp
+                  </a>
+                </motion.div>
+              </nav>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </header>
   );
