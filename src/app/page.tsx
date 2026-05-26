@@ -92,7 +92,7 @@ export default function Home() {
             className="object-cover"
             priority
           />
-          <div className="absolute inset-0 bg-linear-to-b from-black/70 via-black/40 to-crema/20" />
+          <div className="absolute inset-0 bg-linear-to-b from-black/50 via-black/20 to-crema/20" />
           <div className="absolute inset-0 bg-black/20" />
         </motion.div>
 

@@ -130,7 +130,7 @@ export const homeContent: HomeContent = {
     subtitle: "Premium para Eventos",
     description:
       "Mobiliario exclusivo, ambientación de lujo y piezas curadas para que tu celebración sea inolvidable.",
-    backgroundImage: "/hero.png",
+    backgroundImage: "/hero.webp",
     primaryButtonText: "Explorar Catálogo",
     whatsappMessage: "Hola Decor Rent Lab, quiero cotizar",
   },
