@@ -99,17 +99,21 @@ export default function AdminLayout({
     <div className="flex h-screen overflow-hidden w-full bg-crema text-carbon font-sans relative">
       {/* Mobile Sidebar Overlay */}
       {isSidebarOpen && (
-        <div 
+        <div
           className="lg:hidden fixed inset-0 bg-carbon/40 backdrop-blur-sm z-40 transition-opacity duration-300"
           onClick={() => setIsSidebarOpen(false)}
         />
       )}
 
       {/* Sidebar (30% Dark) */}
-      <aside className={cn(
-        "fixed lg:relative w-72 h-full bg-carbon flex flex-col shadow-2xl z-50 transition-transform duration-300 ease-in-out transform",
-        isSidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
-      )}>
+      <aside
+        className={cn(
+          "fixed lg:relative w-72 h-full bg-carbon flex flex-col shadow-2xl z-50 transition-transform duration-300 ease-in-out transform",
+          isSidebarOpen
+            ? "translate-x-0"
+            : "-translate-x-full lg:translate-x-0",
+        )}
+      >
         <div className="h-20 flex items-center justify-between px-8 border-b border-white/5">
           <Link
             href="/admin"
@@ -117,7 +121,7 @@ export default function AdminLayout({
           >
             Decor<span className="text-dorado">Admin</span>
           </Link>
-          <button 
+          <button
             className="lg:hidden text-white/60 hover:text-white"
             onClick={() => setIsSidebarOpen(false)}
           >
@@ -138,14 +142,12 @@ export default function AdminLayout({
                   "flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-2xl transition-all duration-300",
                   isActive
                     ? "bg-dorado text-white shadow-glow-sm"
-                    : "text-white/60 hover:bg-white/5 hover:text-white"
+                    : "text-white/60 hover:bg-white/5 hover:text-white",
                 )}
               >
                 <item.icon
                   size={20}
-                  className={cn(
-                    isActive ? "text-white" : "text-white/40"
-                  )}
+                  className={cn(isActive ? "text-white" : "text-white/40")}
                 />
                 {item.label}
               </Link>
@@ -154,8 +156,12 @@ export default function AdminLayout({
         </nav>
         <div className="p-6 border-t border-white/5">
           <div className="mb-4 px-4 py-3 bg-white/5 rounded-2xl border border-white/5">
-            <p className="text-[10px] uppercase tracking-widest text-white/40 mb-1 font-bold">Sesión activa</p>
-            <p className="truncate text-xs text-white font-medium">{user.email}</p>
+            <p className="text-[10px] uppercase tracking-widest text-white/40 mb-1 font-bold">
+              Sesión activa
+            </p>
+            <p className="truncate text-xs text-white font-medium">
+              {user.email}
+            </p>
           </div>
           <button
             onClick={handleLogout}
@@ -171,7 +177,7 @@ export default function AdminLayout({
       <main className="flex-1 overflow-y-auto w-full bg-crema relative h-full">
         {/* Mobile Header Trigger */}
         <div className="lg:hidden h-16 px-6 border-b border-slate-100 flex items-center bg-white sticky top-0 z-30 shadow-sm">
-          <button 
+          <button
             onClick={() => setIsSidebarOpen(true)}
             className="p-2 -ml-2 text-carbon hover:bg-slate-50 rounded-xl transition-colors"
           >
@@ -182,9 +188,7 @@ export default function AdminLayout({
           </span>
         </div>
 
-        <div className="p-4 md:p-8 lg:p-10 w-full mx-auto">
-          {children}
-        </div>
+        <div className="p-4 md:p-8 lg:p-10 w-full mx-auto">{children}</div>
       </main>
     </div>
   );

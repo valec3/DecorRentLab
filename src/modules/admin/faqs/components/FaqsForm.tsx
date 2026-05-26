@@ -2,7 +2,15 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowDown, ArrowUp, HelpCircle, Loader2, Plus, Save, Trash2 } from "lucide-react";
+import {
+  ArrowDown,
+  ArrowUp,
+  HelpCircle,
+  Loader2,
+  Plus,
+  Save,
+  Trash2,
+} from "lucide-react";
 import { FaqItem } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -177,7 +185,9 @@ export function FaqsForm({ initialData }: FaqsFormProps) {
 
               <FieldGroup className="gap-5">
                 <Field>
-                  <FieldLabel htmlFor={`faq-question-${index}`}>Pregunta</FieldLabel>
+                  <FieldLabel htmlFor={`faq-question-${index}`}>
+                    Pregunta
+                  </FieldLabel>
                   <Input
                     id={`faq-question-${index}`}
                     value={item.question}
@@ -190,7 +200,9 @@ export function FaqsForm({ initialData }: FaqsFormProps) {
                 </Field>
 
                 <Field>
-                  <FieldLabel htmlFor={`faq-answer-${index}`}>Respuesta</FieldLabel>
+                  <FieldLabel htmlFor={`faq-answer-${index}`}>
+                    Respuesta
+                  </FieldLabel>
                   <Textarea
                     id={`faq-answer-${index}`}
                     value={item.answer}

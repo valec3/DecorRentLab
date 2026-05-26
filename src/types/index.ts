@@ -16,7 +16,7 @@ export interface AtributoValor {
 export interface AtributoGrupo {
   id?: string;
   nombre: string;
-  tipoUi: 'text' | 'color_picker' | 'select';
+  tipoUi: "text" | "color_picker" | "select";
   opciones: AtributoValor[];
 }
 

@@ -56,13 +56,13 @@ export function FAQ({ items }: FAQProps) {
               <motion.div
                 key="content"
                 initial={{ height: 0, opacity: 0 }}
-                animate={{ height: 'auto', opacity: 1 }}
+                animate={{ height: "auto", opacity: 1 }}
                 exit={{ height: 0, opacity: 0 }}
                 transition={{
                   height: { duration: 0.45, ease: [0.22, 1, 0.36, 1] },
-                  opacity: { duration: 0.3, ease: 'easeOut' },
+                  opacity: { duration: 0.3, ease: "easeOut" },
                 }}
-                style={{ overflow: 'hidden' }}
+                style={{ overflow: "hidden" }}
               >
                 <div className="pb-5 pl-12 pr-4 text-gris-calido leading-relaxed">
                   {faq.answer}

@@ -8,13 +8,13 @@ Este archivo sirve como el "cerebro" del proyecto, registrando el por qué de la
 
 Las siguientes migraciones han sido aplicadas al entorno de base de datos:
 
-| Versión | Nombre                      | Estado       | Motivo                                                                                  |
-| :------ | :-------------------------- | :----------- | :-------------------------------------------------------------------------------------- |
-| **V1**  | `init_schema`               | ✅ Ejecutado | Creación del esquema base (`decor_store`), tablas de productos, categorías y atributos. |
-| **V2**  | `add_admin_rls_policies`    | ✅ Ejecutado | Implementación de Row Level Security (RLS) para proteger el acceso administrativo.      |
-| **V3**  | `create_testimonials_table` | ✅ Ejecutado | Creación de la tabla de testimonios con RLS y triggers de actualización.                |
+| Versión | Nombre                      | Estado       | Motivo                                                                                     |
+| :------ | :-------------------------- | :----------- | :----------------------------------------------------------------------------------------- |
+| **V1**  | `init_schema`               | ✅ Ejecutado | Creación del esquema base (`decor_store`), tablas de productos, categorías y atributos.    |
+| **V2**  | `add_admin_rls_policies`    | ✅ Ejecutado | Implementación de Row Level Security (RLS) para proteger el acceso administrativo.         |
+| **V3**  | `create_testimonials_table` | ✅ Ejecutado | Creación de la tabla de testimonios con RLS y triggers de actualización.                   |
 | **V5**  | `create_contact_info_table` | ✅ Ejecutado | Creación de la tabla `contact_info` para gestión dinámica de datos de contacto y WhatsApp. |
-| **V6**  | `create_faqs_table`         | 🟡 Pendiente | Nueva tabla `faqs` para administrar preguntas frecuentes desde el panel.                |
+| **V6**  | `create_faqs_table`         | 🟡 Pendiente | Nueva tabla `faqs` para administrar preguntas frecuentes desde el panel.                   |
 
 ---
 
@@ -28,6 +28,7 @@ Las siguientes migraciones han sido aplicadas al entorno de base de datos:
 - **Motivo**: Establecer una fuente de verdad única para la arquitectura `Client -> API -> Service -> Repository` y asegurar que cualquier agente de IA siga estos patrones.
 
 #### 2. Implementación de Gestión de Testimonios (Finalizado)
+
 - **Acción**: CRUD completo de testimonios en el panel admin e integración en la navegación.
 - **Motivo**: Permitir al administrador gestionar las reseñas de los clientes de forma dinámica y accesible.
 - **Detalle Técnico**:
@@ -40,6 +41,7 @@ Las siguientes migraciones han sido aplicadas al entorno de base de datos:
 ### 2026-04-12
 
 #### Resolviendo Errores de Build (Finalizado)
+
 - **Acción**: Ejecución de `npm run build` y corrección de errores de tipado.
 - **Motivo**: Asegurar que la aplicación sea desplegable y cumpla con los estándares de Next.js 15+.
 - **Detalle Técnico**:
@@ -48,6 +50,7 @@ Las siguientes migraciones han sido aplicadas al entorno de base de datos:
   - Los cambios fueron pusheados después de verificar que el build finalizara exitosamente.
 
 #### Consumo de Testimonios Reales (Finalizado)
+
 - **Acción**: Migración de testimonios mockeados a datos reales de Supabase en la Landing Page.
 - **Motivo**: Requerimiento del usuario para mostrar contenido dinámico gestionado desde el panel admin.
 - **Detalle Técnico**:
@@ -59,6 +62,7 @@ Las siguientes migraciones han sido aplicadas al entorno de base de datos:
 ### 2026-04-16
 
 #### 1. Sistema Dinámico de Contacto (Finalizado)
+
 - **Acción**: Implementación completa de gestión de contacto desde el Admin Panel.
 - **Motivo**: Requerimiento para centralizar el número de WhatsApp y datos de contacto en una sola fuente de verdad (DB).
 - **Detalle Técnico**:
@@ -68,6 +72,7 @@ Las siguientes migraciones han sido aplicadas al entorno de base de datos:
   - Integración global en Header, Footer, Hero, CTA y botones de WhatsApp.
 
 #### 2. Mejoras en Buscador y Catálogo (Finalizado)
+
 - **Acción**: Refactorización del sistema de filtros y ordenamiento.
 - **Motivo**: El usuario reportó que los filtros no funcionaban y eran confusos.
 - **Detalle Técnico**:
@@ -76,6 +81,7 @@ Las siguientes migraciones han sido aplicadas al entorno de base de datos:
   - Corrección de bugs de React Hooks en el componente de Catálogo.
 
 #### 3. Refinamientos UI/UX y Branding
+
 - **Acción**: Mejoras visuales y corrección de bugs menores.
 - **Detalle Técnico**:
   - Ajuste de responsive 2-columnas para móviles en "Piezas Destacadas".
@@ -83,6 +89,7 @@ Las siguientes migraciones han sido aplicadas al entorno de base de datos:
   - Solución de errores de consola (Image src vacío y props no válidas en Button).
 
 #### 5. Corrección de errores de Build (Finalizado)
+
 - **Acción**: Resolución de errores de tipado que bloqueaban el despliegue.
 - **Motivo**: `npm run build` fallaba debido a inconsistencias de tipos en el Sitemap y el Cliente de Supabase.
 - **Detalle Técnico**:
@@ -91,6 +98,7 @@ Las siguientes migraciones han sido aplicadas al entorno de base de datos:
   - Se verificó el éxito del build localmente.
 
 #### 4. Optimización SEO (Finalizado)
+
 - **Acción**: Refactorización de páginas críticas (Catálogo, Producto, Contacto) a Server Components.
 - **Motivo**: Mejorar el indexado por motores de búsqueda y el rendimiento de carga inicial.
 - **Detalle Técnico**:
@@ -99,10 +107,10 @@ Las siguientes migraciones han sido aplicadas al entorno de base de datos:
   - Separación de lógica interactiva en componentes cliente bajo `src/modules`.
   - Configuración de metadatos globales (OpenGraph, Twitter, Authors) en `layout.tsx`.
 
-
 ### 2026-05-20
 
 #### Migración de Moneda a Euros (Finalizado)
+
 - **Acción**: Actualización de la visualización y formateo de precios de Pesos (ARS/$) a Euros (€).
 - **Motivo**: Requerimiento del usuario para adaptar la tienda al mercado europeo.
 - **Detalle Técnico**:
@@ -114,6 +122,7 @@ Las siguientes migraciones han sido aplicadas al entorno de base de datos:
 ### 2026-05-26
 
 #### FAQs editables desde Admin (En progreso)
+
 - **Acción**: Se agregó una nueva tabla de FAQs y endpoints para edición desde el panel.
 - **Motivo**: Permitir administrar preguntas frecuentes y reflejarlas en la web pública.
 

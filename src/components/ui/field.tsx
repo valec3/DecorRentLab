@@ -4,7 +4,10 @@ import { cn } from "@/lib/utils";
 
 type FieldOrientation = "vertical" | "horizontal";
 
-function FieldGroup({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+function FieldGroup({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
       data-slot="field-group"
@@ -41,7 +44,10 @@ const FieldLabel = React.forwardRef<
   <label
     ref={ref}
     data-slot="field-label"
-    className={cn("text-xs font-bold uppercase tracking-widest text-gris-calido", className)}
+    className={cn(
+      "text-xs font-bold uppercase tracking-widest text-gris-calido",
+      className,
+    )}
     {...props}
   />
 ));
@@ -60,7 +66,10 @@ const FieldDescription = React.forwardRef<
 ));
 FieldDescription.displayName = "FieldDescription";
 
-function FieldSet({ className, ...props }: React.HTMLAttributes<HTMLFieldSetElement>) {
+function FieldSet({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLFieldSetElement>) {
   return (
     <fieldset
       data-slot="field-set"

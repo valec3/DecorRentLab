@@ -1,20 +1,15 @@
-'use client';
+"use client";
 
-import { useState, useMemo } from 'react';
-import Image from 'next/image';
-import { 
-  Minus, 
-  Plus, 
-  ZoomIn, 
-  MessageCircle
-} from 'lucide-react';
-import { motion } from 'framer-motion';
-import { Producto } from '@/types';
-import Link from 'next/link';
-import { ProductCard } from '@/components/custom/ProductCard';
-import { Lightbox } from '@/components/custom/Lightbox';
-import { VariantSelector } from '@/components/custom/VariantSelector';
-import { useContactInfo } from '@/hooks/use-contact-info';
+import { useState, useMemo } from "react";
+import Image from "next/image";
+import { Minus, Plus, ZoomIn, MessageCircle } from "lucide-react";
+import { motion } from "framer-motion";
+import { Producto } from "@/types";
+import Link from "next/link";
+import { ProductCard } from "@/components/custom/ProductCard";
+import { Lightbox } from "@/components/custom/Lightbox";
+import { VariantSelector } from "@/components/custom/VariantSelector";
+import { useContactInfo } from "@/hooks/use-contact-info";
 
 interface ProductDetailProps {
   producto: Producto;
@@ -26,22 +21,27 @@ export function ProductDetail({ producto, relacionados }: ProductDetailProps) {
   const [selectedImage, setSelectedImage] = useState(0);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [cantidad, setCantidad] = useState(1);
-  const [mode, setMode] = useState<'alquiler' | 'venta'>(producto.precioAlquiler ? 'alquiler' : 'venta');
-  const [selectedVariants, setSelectedVariants] = useState<{ [key: string]: string }>({});
+  const [mode, setMode] = useState<"alquiler" | "venta">(
+    producto.precioAlquiler ? "alquiler" : "venta",
+  );
+  const [selectedVariants, setSelectedVariants] = useState<{
+    [key: string]: string;
+  }>({});
   const { data: contactInfo } = useContactInfo();
 
   const whatsappNumber = contactInfo?.whatsappNumber || "5491112345678";
 
   // Cálculo de precio total
-  const precioBase = mode === 'alquiler' ? producto.precioAlquiler : producto.precioVenta;
-  
+  const precioBase =
+    mode === "alquiler" ? producto.precioAlquiler : producto.precioVenta;
+
   const precioTotal = useMemo(() => {
     let total = (precioBase || 0) * cantidad;
-    
+
     if (producto.atributos && producto.atributos.length > 0) {
       Object.entries(selectedVariants).forEach(([grupoNombre, valor]) => {
-        const grupo = producto.atributos?.find(g => g.nombre === grupoNombre);
-        const opcion = grupo?.opciones.find(o => o.valor === valor);
+        const grupo = producto.atributos?.find((g) => g.nombre === grupoNombre);
+        const opcion = grupo?.opciones.find((o) => o.valor === valor);
         if (opcion?.precioAdicional) {
           total += opcion.precioAdicional * cantidad;
         }
@@ -54,34 +54,52 @@ export function ProductDetail({ producto, relacionados }: ProductDetailProps) {
   const whatsappUrl = useMemo(() => {
     let message = `Hola Decor Rent Lab, me interesa cotizar:\n\n`;
     message += `📦 *${producto.nombre}*\n`;
-    message += `🏷️ Modo: *${mode === 'alquiler' ? 'Alquiler' : 'Compra/Venta'}*\n`;
-    message += `💰 Precio base: ${precioBase?.toLocaleString('es-ES')} €${mode === 'alquiler' ? '/evento' : ''}\n`;
-    
+    message += `🏷️ Modo: *${mode === "alquiler" ? "Alquiler" : "Compra/Venta"}*\n`;
+    message += `💰 Precio base: ${precioBase?.toLocaleString("es-ES")} €${mode === "alquiler" ? "/evento" : ""}\n`;
+
     if (Object.keys(selectedVariants).length > 0) {
       message += `\n✨ Opciones seleccionadas:\n`;
       Object.entries(selectedVariants).forEach(([tipo, valor]) => {
         message += `- ${tipo.charAt(0).toUpperCase() + tipo.slice(1)}: ${valor}\n`;
       });
     }
-    
-    message += `\n📅 Cantidad: ${cantidad} unidad${cantidad > 1 ? 'es' : ''}`;
-    
+
+    message += `\n📅 Cantidad: ${cantidad} unidad${cantidad > 1 ? "es" : ""}`;
+
     if (precioTotal > 0 && (producto.atributos?.length || 0) > 0) {
-      message += `\n💵 Total estimado: ${precioTotal.toLocaleString('es-ES')} €`;
+      message += `\n💵 Total estimado: ${precioTotal.toLocaleString("es-ES")} €`;
     }
-    
+
     message += `\n\nPor favor confirmen disponibilidad y detalles. ¡Gracias!`;
     return `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
-  }, [producto, mode, precioBase, selectedVariants, cantidad, precioTotal, whatsappNumber]);
+  }, [
+    producto,
+    mode,
+    precioBase,
+    selectedVariants,
+    cantidad,
+    precioTotal,
+    whatsappNumber,
+  ]);
 
   return (
     <div className="min-h-screen bg-crema">
       <div className="max-w-7xl mx-auto px-6 py-12 md:py-20">
         {/* Breadcrumbs */}
         <nav className="flex items-center space-x-2 text-xs uppercase tracking-widest text-gris-calido mb-8">
-          <Link href="/catalogo" className="hover:text-dorado transition-colors">Catálogo</Link>
+          <Link
+            href="/catalogo"
+            className="hover:text-dorado transition-colors"
+          >
+            Catálogo
+          </Link>
           <span className="text-gris-calido/50">/</span>
-          <Link href={`/catalogo?categoria=${producto.categoriaSlug}`} className="hover:text-dorado transition-colors">{producto.categoriaSlug.replace(/-/g, ' ')}</Link>
+          <Link
+            href={`/catalogo?categoria=${producto.categoriaSlug}`}
+            className="hover:text-dorado transition-colors"
+          >
+            {producto.categoriaSlug.replace(/-/g, " ")}
+          </Link>
           <span className="text-gris-calido/50">/</span>
           <span className="text-carbon">{producto.nombre}</span>
         </nav>
@@ -90,12 +108,12 @@ export function ProductDetail({ producto, relacionados }: ProductDetailProps) {
           {/* Imágenes */}
           <div className="lg:col-span-1">
             <div className="flex gap-4">
-              <div 
+              <div
                 className="flex-1 aspect-3/4 relative overflow-hidden rounded-sm bg-crema-oscuro cursor-zoom-in group"
                 onClick={() => setIsLightboxOpen(true)}
               >
                 <Image
-                  src={producto.imagenes[selectedImage] || ''}
+                  src={producto.imagenes[selectedImage] || ""}
                   alt={producto.nombre}
                   fill
                   className="object-cover hover:scale-105 transition-transform duration-700"
@@ -122,9 +140,9 @@ export function ProductDetail({ producto, relacionados }: ProductDetailProps) {
                       key={index}
                       onClick={() => setSelectedImage(index)}
                       className={`relative w-full aspect-square rounded-sm overflow-hidden border-2 transition-all duration-300 ${
-                        selectedImage === index 
-                          ? 'border-dorado shadow-md' 
-                          : 'border-transparent hover:border-borde'
+                        selectedImage === index
+                          ? "border-dorado shadow-md"
+                          : "border-transparent hover:border-borde"
                       }`}
                     >
                       <Image
@@ -146,9 +164,9 @@ export function ProductDetail({ producto, relacionados }: ProductDetailProps) {
                     key={index}
                     onClick={() => setSelectedImage(index)}
                     className={`relative w-16 h-16 shrink-0 rounded-sm overflow-hidden border-2 transition-all duration-300 ${
-                      selectedImage === index 
-                        ? 'border-dorado' 
-                        : 'border-transparent'
+                      selectedImage === index
+                        ? "border-dorado"
+                        : "border-transparent"
                     }`}
                   >
                     <Image
@@ -167,57 +185,85 @@ export function ProductDetail({ producto, relacionados }: ProductDetailProps) {
           <div className="lg:col-span-1 flex flex-col pt-10 lg:pt-0">
             <div className="sticky top-32">
               <div className="mb-2 inline-block px-3 py-1 bg-dorado/10 text-dorado text-xs uppercase tracking-widest rounded-sm">
-                {producto.categoriaSlug.replace(/-/g, ' ')}
+                {producto.categoriaSlug.replace(/-/g, " ")}
               </div>
-              
+
               <h1 className="font-serif text-5xl md:text-6xl text-carbon mb-4 leading-tight">
                 {producto.nombre}
               </h1>
-              
+
               {/* Selectores de Modo y Promociones */}
               <div className="flex flex-col gap-4 mb-8">
                 <div className="flex gap-4">
                   {producto.precioAlquiler && (
-                    <button 
-                      onClick={() => setMode('alquiler')}
-                      className={`flex-1 p-5 rounded-2xl border-2 transition-all text-left relative overflow-hidden ${mode === 'alquiler' ? 'border-dorado bg-dorado/5 shadow-premium-sm' : 'border-borde bg-white hover:border-dorado/30'}`}
+                    <button
+                      onClick={() => setMode("alquiler")}
+                      className={`flex-1 p-5 rounded-2xl border-2 transition-all text-left relative overflow-hidden ${mode === "alquiler" ? "border-dorado bg-dorado/5 shadow-premium-sm" : "border-borde bg-white hover:border-dorado/30"}`}
                     >
                       <div className="flex justify-between items-start mb-2">
-                        <span className="text-[10px] uppercase tracking-widest text-gris-calido">Alquiler</span>
+                        <span className="text-[10px] uppercase tracking-widest text-gris-calido">
+                          Alquiler
+                        </span>
                         {producto.promocion?.precioOriginalAlquiler && (
                           <span className="bg-red-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-sm">
-                            -{Math.round((1 - producto.precioAlquiler / producto.promocion.precioOriginalAlquiler) * 100)}%
+                            -
+                            {Math.round(
+                              (1 -
+                                producto.precioAlquiler /
+                                  producto.promocion.precioOriginalAlquiler) *
+                                100,
+                            )}
+                            %
                           </span>
                         )}
                       </div>
                       <div className="flex items-baseline gap-2">
-                        <span className="text-2xl font-serif text-carbon">{producto.precioAlquiler.toLocaleString('es-ES')} €</span>
+                        <span className="text-2xl font-serif text-carbon">
+                          {producto.precioAlquiler.toLocaleString("es-ES")} €
+                        </span>
                         {producto.promocion?.precioOriginalAlquiler && (
                           <span className="text-xs text-gris-calido line-through opacity-60">
-                            {producto.promocion.precioOriginalAlquiler.toLocaleString('es-ES')} €
+                            {producto.promocion.precioOriginalAlquiler.toLocaleString(
+                              "es-ES",
+                            )}{" "}
+                            €
                           </span>
                         )}
                       </div>
                     </button>
                   )}
                   {producto.precioVenta && (
-                    <button 
-                      onClick={() => setMode('venta')}
-                      className={`flex-1 p-5 rounded-2xl border-2 transition-all text-left relative overflow-hidden ${mode === 'venta' ? 'border-dorado bg-dorado/5 shadow-premium-sm' : 'border-borde bg-white hover:border-dorado/30'}`}
+                    <button
+                      onClick={() => setMode("venta")}
+                      className={`flex-1 p-5 rounded-2xl border-2 transition-all text-left relative overflow-hidden ${mode === "venta" ? "border-dorado bg-dorado/5 shadow-premium-sm" : "border-borde bg-white hover:border-dorado/30"}`}
                     >
                       <div className="flex justify-between items-start mb-2">
-                        <span className="text-[10px] uppercase tracking-widest text-gris-calido">Compra</span>
+                        <span className="text-[10px] uppercase tracking-widest text-gris-calido">
+                          Compra
+                        </span>
                         {producto.promocion?.precioOriginalVenta && (
                           <span className="bg-red-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-sm">
-                            -{Math.round((1 - producto.precioVenta / producto.promocion.precioOriginalVenta) * 100)}%
+                            -
+                            {Math.round(
+                              (1 -
+                                producto.precioVenta /
+                                  producto.promocion.precioOriginalVenta) *
+                                100,
+                            )}
+                            %
                           </span>
                         )}
                       </div>
                       <div className="flex items-baseline gap-2">
-                        <span className="text-2xl font-serif text-carbon">{producto.precioVenta.toLocaleString('es-ES')} €</span>
+                        <span className="text-2xl font-serif text-carbon">
+                          {producto.precioVenta.toLocaleString("es-ES")} €
+                        </span>
                         {producto.promocion?.precioOriginalVenta && (
                           <span className="text-xs text-gris-calido line-through opacity-60">
-                            {producto.promocion.precioOriginalVenta.toLocaleString('es-ES')} €
+                            {producto.promocion.precioOriginalVenta.toLocaleString(
+                              "es-ES",
+                            )}{" "}
+                            €
                           </span>
                         )}
                       </div>
@@ -227,24 +273,26 @@ export function ProductDetail({ producto, relacionados }: ProductDetailProps) {
 
                 {/* Banner de Oferta Detallado */}
                 {(() => {
-                  const pOriginal = mode === 'alquiler' 
-                    ? producto.promocion?.precioOriginalAlquiler 
-                    : producto.promocion?.precioOriginalVenta;
-                  
+                  const pOriginal =
+                    mode === "alquiler"
+                      ? producto.promocion?.precioOriginalAlquiler
+                      : producto.promocion?.precioOriginalVenta;
+
                   if (!pOriginal || !precioBase) return null;
 
                   return (
                     <div className="bg-red-50 border border-red-100 p-4 rounded-xl flex items-center justify-between">
                       <div className="flex-1">
                         <span className="text-[10px] uppercase tracking-widest text-red-500 font-bold block mb-1">
-                          {producto.promocion?.etiqueta || 'Precio Especial'}
+                          {producto.promocion?.etiqueta || "Precio Especial"}
                         </span>
                         <div className="flex items-center gap-3">
                           <span className="text-gris-calido line-through text-sm">
-                            {pOriginal.toLocaleString('es-ES')} €
+                            {pOriginal.toLocaleString("es-ES")} €
                           </span>
                           <span className="text-red-600 font-bold text-lg">
-                            -${Math.round((1 - precioBase / pOriginal) * 100)}% OFF
+                            -${Math.round((1 - precioBase / pOriginal) * 100)}%
+                            OFF
                           </span>
                         </div>
                       </div>
@@ -257,9 +305,11 @@ export function ProductDetail({ producto, relacionados }: ProductDetailProps) {
               <div className="space-y-10">
                 {producto.atributos && producto.atributos.length > 0 && (
                   <div className="space-y-4">
-                    <span className="text-xs uppercase tracking-widest text-gris-calido font-bold">Personaliza tu pieza</span>
-                    <VariantSelector 
-                      atributos={producto.atributos} 
+                    <span className="text-xs uppercase tracking-widest text-gris-calido font-bold">
+                      Personaliza tu pieza
+                    </span>
+                    <VariantSelector
+                      atributos={producto.atributos}
                       onSelectionChange={setSelectedVariants}
                     />
                   </div>
@@ -267,7 +317,9 @@ export function ProductDetail({ producto, relacionados }: ProductDetailProps) {
 
                 <div className="flex gap-4 items-end">
                   <div className="space-y-4 flex-1">
-                    <span className="text-xs uppercase tracking-widest text-gris-calido">Cantidad</span>
+                    <span className="text-xs uppercase tracking-widest text-gris-calido">
+                      Cantidad
+                    </span>
                     <div className="flex items-center bg-white border border-borde rounded-md w-fit overflow-hidden h-14">
                       <button
                         onClick={() => setCantidad(Math.max(1, cantidad - 1))}
@@ -275,7 +327,9 @@ export function ProductDetail({ producto, relacionados }: ProductDetailProps) {
                       >
                         <Minus className="w-4 h-4" />
                       </button>
-                      <span className="px-6 font-medium text-carbon">{cantidad}</span>
+                      <span className="px-6 font-medium text-carbon">
+                        {cantidad}
+                      </span>
                       <button
                         onClick={() => setCantidad(cantidad + 1)}
                         className="px-4 hover:bg-crema-oscuro text-carbon transition-colors h-full flex items-center"
@@ -290,30 +344,40 @@ export function ProductDetail({ producto, relacionados }: ProductDetailProps) {
                 <div className="pt-6 border-t border-borde">
                   <div className="flex items-end justify-between mb-6">
                     <div className="flex flex-col">
-                      <span className="text-xs uppercase tracking-widest text-gris-calido mb-1">Total Estimado</span>
+                      <span className="text-xs uppercase tracking-widest text-gris-calido mb-1">
+                        Total Estimado
+                      </span>
                       <span className="text-sm text-gris-calido italic">
-                        {cantidad} x {mode === 'alquiler' ? 'Alquiler' : 'Venta'}
+                        {cantidad} x{" "}
+                        {mode === "alquiler" ? "Alquiler" : "Venta"}
                       </span>
                     </div>
                     <div className="text-right">
-                      <motion.span 
+                      <motion.span
                         key={precioTotal}
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
                         className="text-4xl font-serif text-carbon block"
                       >
-                        {precioTotal.toLocaleString('es-ES')} €
+                        {precioTotal.toLocaleString("es-ES")} €
                       </motion.span>
                     </div>
                   </div>
 
-                  <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="block">
+                  <a
+                    href={whatsappUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block"
+                  >
                     <button className="w-full py-5 bg-dorado hover:bg-dorado/80 text-white rounded-xl shadow-premium hover:shadow-glow transition-all active:scale-[0.98] flex flex-col items-center justify-center">
                       <span className="flex items-center font-bold text-lg">
                         <MessageCircle className="w-5 h-5 mr-2" />
                         Solicitar Presupuesto
                       </span>
-                      <span className="text-[10px] uppercase tracking-widest opacity-80 mt-1">Respuesta inmediata vía WhatsApp</span>
+                      <span className="text-[10px] uppercase tracking-widest opacity-80 mt-1">
+                        Respuesta inmediata vía WhatsApp
+                      </span>
                     </button>
                   </a>
                 </div>
@@ -327,13 +391,18 @@ export function ProductDetail({ producto, relacionados }: ProductDetailProps) {
           <h3 className="font-serif text-3xl md:text-4xl text-carbon mb-8 italic">
             {producto.descripcionCorta}
           </h3>
-          <div className="prose-premium max-w-none text-gris-calido" dangerouslySetInnerHTML={{ __html: producto.descripcionLarga }} />
+          <div
+            className="prose-premium max-w-none text-gris-calido"
+            dangerouslySetInnerHTML={{ __html: producto.descripcionLarga }}
+          />
         </div>
 
         {/* Relacionados */}
         {relacionados.length > 0 && (
           <div className="mt-20">
-            <h2 className="font-serif text-3xl text-carbon mb-10 text-center">También te puede gustar</h2>
+            <h2 className="font-serif text-3xl text-carbon mb-10 text-center">
+              También te puede gustar
+            </h2>
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
               {relacionados.map((prod) => (
                 <ProductCard key={prod.id} producto={prod} />

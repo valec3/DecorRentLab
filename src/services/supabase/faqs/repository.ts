@@ -1,7 +1,9 @@
 import { createClient } from "@/services/supabase/server";
 import { FaqFilters, FaqRow } from "./interfaces";
 
-export type FaqUpsertRow = Partial<Omit<FaqRow, "created_at" | "updated_at">> & {
+export type FaqUpsertRow = Partial<
+  Omit<FaqRow, "created_at" | "updated_at">
+> & {
   question: string;
   answer: string;
   order_index: number;
@@ -21,7 +23,9 @@ export class FaqRepository {
       query = query.eq("active", filters.active);
     }
 
-    const { data, error } = await query.order("order_index", { ascending: true });
+    const { data, error } = await query.order("order_index", {
+      ascending: true,
+    });
 
     if (error) {
       console.error("Error fetching faqs:", error);
@@ -41,9 +45,14 @@ export class FaqRepository {
 
     if (existingIds.length > 0) {
       if (incomingIds.length > 0) {
-        const idsToDelete = existingIds.filter((id) => !incomingIds.includes(id));
+        const idsToDelete = existingIds.filter(
+          (id) => !incomingIds.includes(id),
+        );
         if (idsToDelete.length > 0) {
-          const { error } = await db.from("faqs").delete().in("id", idsToDelete);
+          const { error } = await db
+            .from("faqs")
+            .delete()
+            .in("id", idsToDelete);
           if (error) throw error;
         }
       } else {

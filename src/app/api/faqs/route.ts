@@ -26,10 +26,7 @@ export async function PUT(request: NextRequest) {
     const body = await request.json();
 
     if (!Array.isArray(body)) {
-      return NextResponse.json(
-        { message: "Invalid payload" },
-        { status: 400 },
-      );
+      return NextResponse.json({ message: "Invalid payload" }, { status: 400 });
     }
 
     const updatedFaqs = await faqService.replaceAll(body);
