@@ -14,6 +14,7 @@ Las siguientes migraciones han sido aplicadas al entorno de base de datos:
 | **V2**  | `add_admin_rls_policies`    | ✅ Ejecutado | Implementación de Row Level Security (RLS) para proteger el acceso administrativo.      |
 | **V3**  | `create_testimonials_table` | ✅ Ejecutado | Creación de la tabla de testimonios con RLS y triggers de actualización.                |
 | **V5**  | `create_contact_info_table` | ✅ Ejecutado | Creación de la tabla `contact_info` para gestión dinámica de datos de contacto y WhatsApp. |
+| **V6**  | `create_faqs_table`         | 🟡 Pendiente | Nueva tabla `faqs` para administrar preguntas frecuentes desde el panel.                |
 
 ---
 
@@ -109,6 +110,12 @@ Las siguientes migraciones han sido aplicadas al entorno de base de datos:
   - Actualizados los componentes `ProductCard`, `ProductDetail` y `VariantSelector` para colocar el símbolo `€` pospuesto al valor numérico.
   - Actualizado el panel de administración (`ProductForm` y `ProductTable`) para dar consistencia al ingreso y visualización de adicionales y precios en Euros (`EUR`).
   - Adaptado el mensaje generado para WhatsApp en el detalle del producto para que envíe las cotizaciones estimadas en Euros.
+
+### 2026-05-26
+
+#### FAQs editables desde Admin (En progreso)
+- **Acción**: Se agregó una nueva tabla de FAQs y endpoints para edición desde el panel.
+- **Motivo**: Permitir administrar preguntas frecuentes y reflejarlas en la web pública.
 
 ---
 

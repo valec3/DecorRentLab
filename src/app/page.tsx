@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, Truck, Sparkles, MessageSquare, Loader2 } from "lucide-react";
-import { Producto, Categoria, TestimonialItem } from "@/types";
+import { Producto, Categoria, FaqItem, TestimonialItem } from "@/types";
 import { CategoryCarousel } from "@/components/custom/CategoryCarousel";
 import { ProductCard } from "@/components/custom/ProductCard";
 import { Button } from "@/components/custom/Button";
@@ -19,6 +19,7 @@ export default function Home() {
   const [productosDestacados, setProductosDestacados] = useState<Producto[]>([]);
   const [categorias, setCategorias] = useState<Categoria[]>([]);
   const [testimonios, setTestimonios] = useState<TestimonialItem[]>([]);
+  const [faqs, setFaqs] = useState<FaqItem[]>([]);
   const [loading, setLoading] = useState(true);
   const { data: contactInfo } = useContactInfo();
   const whatsappNumber = contactInfo?.whatsappNumber || "5491112345678";
@@ -27,21 +28,24 @@ export default function Home() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [resDestacados, resCats, resTestimonios] = await Promise.all([
+        const [resDestacados, resCats, resTestimonios, resFaqs] = await Promise.all([
           fetch('/api/products?destacado=true&perPage=4'),
           fetch('/api/categories'),
-          fetch('/api/testimonials?active=true')
+          fetch('/api/testimonials?active=true'),
+          fetch('/api/faqs?active=true')
         ]);
         
-        const [destacados, cats, listTestimonios] = await Promise.all([
+        const [destacados, cats, listTestimonios, listFaqs] = await Promise.all([
           resDestacados.json(),
           resCats.json(),
-          resTestimonios.json()
+          resTestimonios.json(),
+          resFaqs.json()
         ]);
 
         if (destacados.data) setProductosDestacados(destacados.data);
         if (Array.isArray(cats)) setCategorias(cats);
         if (Array.isArray(listTestimonios)) setTestimonios(listTestimonios);
+        if (Array.isArray(listFaqs)) setFaqs(listFaqs);
       } catch (err) {
         console.error("Error fetching homepage data:", err);
       } finally {
@@ -336,7 +340,7 @@ export default function Home() {
             </div>
           </ScrollReveal>
           <ScrollReveal delay={0.2} width="100%">
-            <FAQ />
+            <FAQ items={faqs} />
           </ScrollReveal>
         </div>
       </section>

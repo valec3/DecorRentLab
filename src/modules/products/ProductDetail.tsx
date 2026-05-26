@@ -14,7 +14,6 @@ import Link from 'next/link';
 import { ProductCard } from '@/components/custom/ProductCard';
 import { Lightbox } from '@/components/custom/Lightbox';
 import { VariantSelector } from '@/components/custom/VariantSelector';
-import { Button } from '@/components/custom/Button';
 import { useContactInfo } from '@/hooks/use-contact-info';
 
 interface ProductDetailProps {

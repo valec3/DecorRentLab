@@ -32,8 +32,10 @@ export function Header() {
 
   // Cerrar menú al cambiar de ruta
   useEffect(() => {
-    setIsMenuOpen(false);
-  }, [pathname]);
+    if (!isMenuOpen) return;
+    const frame = requestAnimationFrame(() => setIsMenuOpen(false));
+    return () => cancelAnimationFrame(frame);
+  }, [pathname, isMenuOpen]);
 
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);

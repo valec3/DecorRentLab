@@ -1,18 +1,28 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { ChevronDown, HelpCircle } from 'lucide-react';
-import { AnimatePresence, motion } from 'framer-motion';
-import { faqs } from '@/data/content';
+import { useMemo, useState } from "react";
+import { ChevronDown, HelpCircle } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
+import { faqs as fallbackFaqs } from "@/data/content";
+import { FaqItem } from "@/types";
+import { cn } from "@/lib/utils";
 
-export function FAQ() {
+interface FAQProps {
+  items?: FaqItem[];
+}
+
+export function FAQ({ items }: FAQProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
+  const faqs = useMemo(() => {
+    const list = items && items.length > 0 ? items : fallbackFaqs;
+    return list.filter((item) => item.active ?? true);
+  }, [items]);
 
   return (
     <div className="max-w-3xl mx-auto">
       {faqs.map((faq, index) => (
         <div
-          key={index}
+          key={faq.id ?? `faq-${index}`}
           className="border-b border-borde last:border-b-0"
         >
           <button
@@ -20,8 +30,8 @@ export function FAQ() {
             className="w-full flex items-center justify-between py-5 text-left hover:bg-crema-oscuro/30 -mx-4 px-4 rounded-xl transition-colors duration-300"
           >
             <div className="flex items-center gap-4">
-              <div className="w-8 h-8 bg-dorado/10 rounded-full flex items-center justify-center shrink-0">
-                <HelpCircle className="w-4 h-4 text-dorado" />
+              <div className="size-8 bg-dorado/10 rounded-full flex items-center justify-center shrink-0">
+                <HelpCircle className="size-4 text-dorado" />
               </div>
               <span className="font-medium text-carbon">{faq.question}</span>
             </div>
@@ -32,7 +42,12 @@ export function FAQ() {
               transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
               className="shrink-0"
             >
-              <ChevronDown className={`w-5 h-5 transition-colors duration-300 ${openIndex === index ? 'text-dorado' : 'text-gris-calido'}`} />
+              <ChevronDown
+                className={cn(
+                  "size-5 transition-colors duration-300",
+                  openIndex === index ? "text-dorado" : "text-gris-calido",
+                )}
+              />
             </motion.div>
           </button>
 

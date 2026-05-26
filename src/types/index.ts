@@ -63,8 +63,11 @@ export interface ContactoForm {
 }
 
 export interface FaqItem {
+  id?: string;
   question: string;
   answer: string;
+  orderIndex?: number;
+  active?: boolean;
 }
 
 export interface TestimonialItem {
