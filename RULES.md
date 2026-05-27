@@ -38,7 +38,7 @@ El proyecto sigue un flujo de datos estructurado para garantizar la mantenibilid
 
 ### 2. Autenticación y Seguridad
 -   Se utiliza `@supabase/ssr` para la gestión de sesiones en el servidor y el cliente.
--   La protección de rutas se gestiona mediante el middleware y la lógica en `src/proxy.ts`.
+-   La protección de rutas se gestiona mediante el middleware y la lógica en `src/middleware.ts`.
 
 ### 3. Estilo y UI
 -   **Tailwind CSS**: Uso obligatorio de Tailwind para el diseño.

@@ -126,6 +126,17 @@ Las siguientes migraciones han sido aplicadas al entorno de base de datos:
 - **Acción**: Se agregó una nueva tabla de FAQs y endpoints para edición desde el panel.
 - **Motivo**: Permitir administrar preguntas frecuentes y reflejarlas en la web pública.
 
+### 2026-05-27
+
+#### Configuración de OpenNext para Cloudflare (Finalizado)
+
+- **Acción**: Instalación y migración exitosa a `@opennextjs/cloudflare` para despliegue en Cloudflare Pages/Workers.
+- **Motivo**: Habilitar el despliegue optimizado de Next.js 16 en la infraestructura de Cloudflare.
+- **Detalle Técnico**:
+  - Se ejecutó el asistente de migración de OpenNext, creando `wrangler.jsonc`, `open-next.config.ts`, `.dev.vars` y configurando los scripts de despliegue.
+  - Se corrigió un error de build de Next.js 16: Next.js 16 obliga a que `src/proxy.ts` corra estrictamente en el **Node.js runtime** (prohibiendo configuraciones de segmento como `runtime = 'edge'`), lo cual choca con la restricción de Edge de OpenNext. Se migró de forma limpia a `src/middleware.ts` (exclusivo para Edge por defecto), renombrando la función exportada a `middleware`. Esto resolvió por completo la incompatibilidad de compilación.
+  - Se solucionó un error 500 silencioso en local y producción desactivando **Turbopack** para la compilación (`next build --webpack`). OpenNext tiene incompatibilidades conocidas con los bundles generados por Turbopack (que es el compilador por defecto en Next 16), por lo que forzar el compilador clásico de Webpack estabilizó por completo la ejecución del Worker.
+
 ---
 
 ## 🧠 Decisiones Arquitectónicas
