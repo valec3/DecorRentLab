@@ -136,6 +136,7 @@ Las siguientes migraciones han sido aplicadas al entorno de base de datos:
   - Se ejecutó el asistente de migración de OpenNext, creando `wrangler.jsonc`, `open-next.config.ts`, `.dev.vars` y configurando los scripts de despliegue.
   - Se corrigió un error de build de Next.js 16: Next.js 16 obliga a que `src/proxy.ts` corra estrictamente en el **Node.js runtime** (prohibiendo configuraciones de segmento como `runtime = 'edge'`), lo cual choca con la restricción de Edge de OpenNext. Se migró de forma limpia a `src/middleware.ts` (exclusivo para Edge por defecto), renombrando la función exportada a `middleware`. Esto resolvió por completo la incompatibilidad de compilación.
   - Se solucionó un error 500 silencioso en local y producción desactivando **Turbopack** para la compilación (`next build --webpack`). OpenNext tiene incompatibilidades conocidas con los bundles generados por Turbopack (que es el compilador por defecto en Next 16), por lo que forzar el compilador clásico de Webpack estabilizó por completo la ejecución del Worker.
+  - Se corrigió el error de despliegue 10143 en la CI de Cloudflare. El nombre de proyecto en Cloudflare es `decorentlab`, por lo que el sistema de CI sobreescribía el nombre del Worker pero dejaba roto el binding de servicio `WORKER_SELF_REFERENCE` que seguía apuntando a `decoracion-tienda`. Se homogeneizó el nombre del Worker y del binding en `wrangler.jsonc` a `decorentlab` para resolver la subida.
 
 ---
 
