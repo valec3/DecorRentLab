@@ -35,5 +35,5 @@ CREATE TRIGGER update_contact_info_updated_at
 
 -- 5. Insertar datos iniciales (opcional, para que no esté vacío)
 INSERT INTO decor_store.contact_info (phone, email, address, hours, whatsapp_number)
-VALUES ('+54 9 11 1234-5678', 'info@decorentlab.com', 'Buenos Aires, Argentina', 'Lun - Sáb: 9:00 - 19:00', '5491112345678')
+VALUES ('+54 9 11 1234-5678', 'info@decorentlab.es', 'Buenos Aires, Argentina', 'Lun - Sáb: 9:00 - 19:00', '5491112345678')
 ON CONFLICT DO NOTHING;

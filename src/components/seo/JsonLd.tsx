@@ -14,7 +14,7 @@ export function LocalBusinessSchema() {
     logo: 'https://decorentlab.com.ar/logo.png',
     image: 'https://decorentlab.com.ar/og-image.jpg',
     telephone: '+5491112345678',
-    email: 'info@decorentlab.com',
+    email: 'info@decorentlab.es',
     address: {
       '@type': 'PostalAddress',
       addressLocality: 'Buenos Aires',

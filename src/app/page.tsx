@@ -344,7 +344,7 @@ export default function Home() {
                     .split(" que ")
                     .map((text, i) => (
                       <span key={i}>
-                        {i === 1 && "que "}
+                        {i === 1 && " que "}
                         <span className={i === 1 ? "italic font-display" : ""}>
                           {text}
                         </span>

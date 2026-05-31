@@ -19,7 +19,7 @@ export function ContactForm() {
   const { data: contactInfo } = useContactInfo();
 
   const phone = contactInfo?.phone || "+54 9 11 1234-5678";
-  const email = contactInfo?.email || "info@decorentlab.com";
+  const email = contactInfo?.email || "info@decorentlab.es";
   const address = contactInfo?.address || "Buenos Aires, Argentina";
   const hours = contactInfo?.hours || "Lun - Sáb: 9:00 - 19:00";
   const whatsappNumber = contactInfo?.whatsappNumber || "5491112345678";
@@ -68,7 +68,7 @@ Mensaje: ${formData.mensaje}`;
             Contactanos
           </h1>
           <p className="text-gris-calido text-lg max-w-2xl mx-auto">
-            Estamos aquí para ayudarte a crear el evento de tus sueños. Escribinos y cotizá tu decoración ideal.
+            Estamos aquí para ayudarte a crear el evento de tus sueños. Escribenos y cotiza tu decoración ideal.
           </p>
         </div>
 
@@ -142,6 +142,55 @@ Mensaje: ${formData.mensaje}`;
                   Escribir por WhatsApp
                 </Button>
               </a>
+            </div>
+            
+            {/* Redes Sociales */}
+            <div className="mt-8 bg-white p-6 rounded-2xl border border-borde">
+              <h3 className="font-serif text-xl text-carbon mb-4">
+                Seguinos en nuestras Redes
+              </h3>
+              <div className="flex gap-4">
+                <a
+                  href="https://www.facebook.com/profile.php?id=61588359792881"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 px-4 py-3 border border-borde rounded-xl text-gris-calido hover:text-carbon hover:border-carbon hover:bg-crema/20 transition-all duration-300 flex-1 justify-center font-medium text-sm"
+                >
+                  <svg
+                    className="w-5 h-5 text-[#1877F2]"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+                  </svg>
+                  <span>Facebook</span>
+                </a>
+                <a
+                  href="https://www.instagram.com/decorent.lab?igsh=YXdweXFsdzhqaDR3&utm_source=qr"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 px-4 py-3 border border-borde rounded-xl text-gris-calido hover:text-carbon hover:border-carbon hover:bg-crema/20 transition-all duration-300 flex-1 justify-center font-medium text-sm"
+                >
+                  <svg
+                    className="w-5 h-5 text-[#E4405F]"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                  </svg>
+                  <span>Instagram</span>
+                </a>
+              </div>
             </div>
           </div>
 

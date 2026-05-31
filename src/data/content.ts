@@ -126,10 +126,10 @@ export const aboutContent: AboutContent = {
 
 export const homeContent: HomeContent = {
   hero: {
-    title: "Alquiler de Decoración",
+    title: "Diseño - Venta - Alquiler",
     subtitle: "Premium para Eventos",
     description:
-      "Mobiliario exclusivo, ambientación de lujo y piezas curadas para que tu celebración sea inolvidable.",
+      "Mobiliario exclusivo, ambientación de lujo y piezas exclusivas para que tu celebración sea inolvidable.",
     backgroundImage: "/hero.webp",
     primaryButtonText: "Explorar Catálogo",
     whatsappMessage: "Hola Decor Rent Lab, quiero cotizar",
@@ -140,9 +140,9 @@ export const homeContent: HomeContent = {
       "Un proceso impecable diseñado para que solo te preocupes por disfrutar.",
     steps: [
       {
-        title: "Selección Curada",
+        title: "Selección Exclusiva",
         description:
-          "Explora elementos seleccionados bajo los más altos estándares de estética premium.",
+          "Explora elementos seleccionados bajo estándares de calidad",
       },
       {
         title: "Asesoría Experta",
@@ -167,27 +167,27 @@ export const homeContent: HomeContent = {
     },
     items: [
       {
-        title: "Curaduría",
-        description: "Objetos seleccionados por su valor estético y calidad.",
+        title: "Personalización",
+        description: "Trabajamos estrechamente contigo para dar vida a tu vision unica, adaptando cada detalle con precision y coche",
       },
       {
-        title: "Excelencia",
-        description: "Compromiso total con la puntualidad y el detalle.",
+        title: "Fiabilidad",
+        description: "Cuenta con nuestra experiencia y compromiso inquebrantable para ofrecer la excelencia en todo momento",
       },
       {
         title: "Pasión",
         description: "Amamos el diseño y se nota en cada montaje.",
       },
       {
-        title: "Personalización",
-        description: "Buscamos la pieza exacta que tu evento requiere.",
+        title: "Innovación",
+        description: "Combinamos tecnicas de diseño modernas con herramientas avanzadas para crear piezas de eventos y decoracion",
       },
     ],
   },
   cta: {
     title: "¿Hacemos realidad tu próximo gran evento?",
     description:
-      "No dejes tu visión al azar. Consultá disponibilidad y obtené una cotización personalizada hoy mismo.",
+      "No dejes tu visión al azar. Consulta disponibilidad y obten una cotización personalizada hoy mismo.",
     whatsappMessage: "Hola Decor Rent Lab, quiero cotizar",
   },
 };

@@ -58,13 +58,17 @@ export function Testimonials({ testimonials }: TestimonialsProps) {
               </p>
 
               <div className="flex items-center gap-4 pt-4 border-t border-borde">
-                <div className="relative w-12 h-12 rounded-full overflow-hidden">
-                  <Image
-                    src={testimonial.image}
-                    alt={testimonial.name}
-                    fill
-                    className="object-cover"
-                  />
+                <div className="relative w-12 h-12 rounded-full overflow-hidden bg-dorado/10 border border-dorado/20 flex items-center justify-center text-dorado font-serif text-base font-bold shrink-0">
+                  {testimonial.image && testimonial.image.trim() !== "" ? (
+                    <Image
+                      src={testimonial.image}
+                      alt={testimonial.name}
+                      fill
+                      className="object-cover"
+                    />
+                  ) : (
+                    testimonial.name.charAt(0).toUpperCase()
+                  )}
                 </div>
                 <div>
                   <p className="font-medium text-carbon">{testimonial.name}</p>

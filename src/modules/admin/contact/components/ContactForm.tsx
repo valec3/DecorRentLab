@@ -94,7 +94,7 @@ export function ContactForm({ initialData }: ContactFormProps) {
                   type="email"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  placeholder="info@decorentlab.com"
+                  placeholder="info@decorentlab.es"
                   className="h-14 pl-12 rounded-2xl border-slate-100 bg-slate-50/50 focus:bg-white focus:border-dorado focus:ring-dorado/10 transition-all font-medium"
                   required
                 />
