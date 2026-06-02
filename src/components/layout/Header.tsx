@@ -30,12 +30,9 @@ export function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Cerrar menú al cambiar de ruta
   useEffect(() => {
-    if (!isMenuOpen) return;
-    const frame = requestAnimationFrame(() => setIsMenuOpen(false));
-    return () => cancelAnimationFrame(frame);
-  }, [pathname, isMenuOpen]);
+    setIsMenuOpen(false);
+  }, [pathname]);
 
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
@@ -112,11 +109,7 @@ export function Header() {
             aria-label={isMenuOpen ? "Cerrar menú" : "Abrir menú"}
             aria-expanded={isMenuOpen}
           >
-            <motion.div
-              animate={{ rotate: isMenuOpen ? 45 : 0 }}
-              transition={{ duration: 0.3, ease }}
-              className="relative w-6 h-6 flex flex-col justify-center gap-[5px]"
-            >
+            <div className="relative w-6 h-6 flex flex-col justify-center gap-[5px]">
               {/* Línea 1 */}
               <motion.span
                 animate={{
@@ -144,7 +137,7 @@ export function Header() {
                 transition={{ duration: 0.3, ease }}
                 className="block h-0.5 w-6 bg-current rounded-full origin-center"
               />
-            </motion.div>
+            </div>
           </button>
         </div>
 
@@ -174,6 +167,7 @@ export function Header() {
                     >
                       <Link
                         href={link.href}
+                        onClick={() => setIsMenuOpen(false)}
                         className={`flex items-center gap-3 py-3 px-4 rounded-xl transition-all duration-300 ${
                           active
                             ? "text-carbon bg-crema-oscuro font-semibold"
