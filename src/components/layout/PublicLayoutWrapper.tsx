@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
 import { WhatsAppFloat } from "./WhatsAppFloat";
+import { ContactInfoProvider } from "@/context/ContactInfoContext";
 import React from "react";
 
 export function PublicLayoutWrapper({ children }: { children: React.ReactNode }) {
@@ -15,11 +16,11 @@ export function PublicLayoutWrapper({ children }: { children: React.ReactNode })
   }
 
   return (
-    <>
+    <ContactInfoProvider>
       <Header />
       <main className="flex-1">{children}</main>
       <Footer />
       <WhatsAppFloat />
-    </>
+    </ContactInfoProvider>
   );
 }
