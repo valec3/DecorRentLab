@@ -100,6 +100,7 @@ export function CategoryCarousel({ categorias, selectedSlug, onSelect }: Categor
                 }
                 alt={categoria.nombre}
                 fill
+                sizes="150px"
                 className="object-cover"
                 draggable={false}
               />

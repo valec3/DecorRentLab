@@ -89,6 +89,7 @@ export default function Home() {
             src={homeContent.hero.backgroundImage}
             alt={homeContent.hero.title}
             fill
+            sizes="100vw"
             className="object-cover"
             priority
           />

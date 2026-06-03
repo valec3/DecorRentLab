@@ -149,6 +149,7 @@ export function ProductDetail({ producto, relacionados }: ProductDetailProps) {
                         src={img}
                         alt={`${producto.nombre} - ${index + 1}`}
                         fill
+                        sizes="80px"
                         className="object-cover"
                       />
                     </button>
@@ -173,6 +174,7 @@ export function ProductDetail({ producto, relacionados }: ProductDetailProps) {
                       src={img}
                       alt={`${producto.nombre} - ${index + 1}`}
                       fill
+                      sizes="64px"
                       className="object-cover"
                     />
                   </button>

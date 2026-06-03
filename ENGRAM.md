@@ -138,6 +138,16 @@ Las siguientes migraciones han sido aplicadas al entorno de base de datos:
   - Se solucionó un error 500 silencioso en local y producción desactivando **Turbopack** para la compilación (`next build --webpack`). OpenNext tiene incompatibilidades conocidas con los bundles generados por Turbopack (que es el compilador por defecto en Next 16), por lo que forzar el compilador clásico de Webpack estabilizó por completo la ejecución del Worker.
   - Se corrigió el error de despliegue 10143 en la CI de Cloudflare. El nombre de proyecto en Cloudflare es `decorentlab`, por lo que el sistema de CI sobreescribía el nombre del Worker pero dejaba roto el binding de servicio `WORKER_SELF_REFERENCE` que seguía apuntando a `decoracion-tienda`. Se homogeneizó el nombre del Worker y del binding en `wrangler.jsonc` a `decorentlab` para resolver la subida.
 
+### 2026-06-03
+
+#### Desactivación de la optimización de imágenes (Finalizado)
+
+- **Acción**: Se configuró `unoptimized: true` en `next.config.ts` y se resolvieron advertencias de dimensiones y `sizes` en múltiples componentes de imagen.
+- **Motivo**: Corregir errores HTTP 500 en producción debido a que el plan/zona de Cloudflare no cuenta con el servicio de Image Resizing.
+- **Detalle Técnico**:
+  - Se deshabilitó la optimización automática al vuelo de Next.js, logrando que el sitio en producción cargue los recursos multimedia directamente desde su origen.
+  - Se emprolijaron warnings de consola en desarrollo, agregando `sizes` a imágenes con `fill` en `page.tsx`, `CategoryCard.tsx`, `CategoryCarousel.tsx`, y `ProductDetail.tsx`, y asignando `style={{ width: "auto" }}` al logo en `Header.tsx`.
+
 ---
 
 ## 🧠 Decisiones Arquitectónicas
