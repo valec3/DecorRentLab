@@ -6,10 +6,10 @@ import { Geist } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { LocalBusinessSchema } from "@/components/seo/JsonLd";
 
-const geist = Geist({subsets:['latin'],variable:'--font-sans'});
+const geist = Geist({ subsets: ['latin'], variable: '--font-sans' });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://decorentlab.com.ar'),
+  metadataBase: new URL('https://decorentlab.es'),
   title: {
     default: "Decor Rent Lab | Alquiler de Decoración Premium para Eventos",
     template: "%s | Decor Rent Lab"
@@ -22,15 +22,15 @@ export const metadata: Metadata = {
     canonical: '/',
   },
   openGraph: {
-    title: "Decor Rent Lab | Alquiler de Decoración Premium",
+    title: "Decor Rent Lab | Venta y Alquiler de Mobiliario Premium para eventos",
     description: "Transformamos tus eventos con decoración de alta gama. Elegancia y estilo en cada detalle.",
-    url: 'https://decorentlab.com.ar',
+    url: 'https://decorentlab.es',
     siteName: 'Decor Rent Lab',
-    locale: 'es_AR',
+    locale: 'es_ES',
     type: 'website',
     images: [
       {
-        url: '/og-image.jpg',
+        url: '/hero-img.png',
         width: 1200,
         height: 630,
         alt: 'Decor Rent Lab — Alquiler de Decoración Premium para Eventos',
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Decor Rent Lab | Decoración Premium',
     description: 'Alquiler de elementos decorativos únicos para eventos memorables.',
-    images: ['/og-image.jpg'],
+    images: ['/hero-img.png'],
   },
   robots: {
     index: true,
