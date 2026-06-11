@@ -71,8 +71,9 @@ export async function middleware(request: NextRequest) {
     }
 
     return response
-  } catch (error: any) {
-    return new Response(`Middleware Exception: ${error.message}\nStack: ${error.stack}`, {
+  } catch (error: unknown) {
+    const err = error as { message?: string; stack?: string };
+    return new Response(`Middleware Exception: ${err.message}\nStack: ${err.stack}`, {
       status: 500,
       headers: { 'Content-Type': 'text/plain; charset=utf-8' }
     })
