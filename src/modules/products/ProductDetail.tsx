@@ -224,7 +224,7 @@ export function ProductDetail({ producto, relacionados }: ProductDetailProps) {
                           {producto.precioAlquiler.toLocaleString("es-ES")} €
                         </span>
                         {producto.promocion?.precioOriginalAlquiler && (
-                          <span className="text-xs text-gris-calido line-through opacity-60">
+                          <span className="text-base text-gris-calido line-through font-light">
                             {producto.promocion.precioOriginalAlquiler.toLocaleString(
                               "es-ES",
                             )}{" "}
@@ -261,7 +261,7 @@ export function ProductDetail({ producto, relacionados }: ProductDetailProps) {
                           {producto.precioVenta.toLocaleString("es-ES")} €
                         </span>
                         {producto.promocion?.precioOriginalVenta && (
-                          <span className="text-xs text-gris-calido line-through opacity-60">
+                          <span className="text-base text-gris-calido line-through font-light">
                             {producto.promocion.precioOriginalVenta.toLocaleString(
                               "es-ES",
                             )}{" "}
@@ -289,7 +289,7 @@ export function ProductDetail({ producto, relacionados }: ProductDetailProps) {
                           {producto.promocion?.etiqueta || "Precio Especial"}
                         </span>
                         <div className="flex items-center gap-3">
-                          <span className="text-gris-calido line-through text-sm">
+                          <span className="text-gris-calido line-through text-base font-light">
                             {pOriginal.toLocaleString("es-ES")} €
                           </span>
                           <span className="text-red-600 font-bold text-lg">
